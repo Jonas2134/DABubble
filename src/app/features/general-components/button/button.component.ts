@@ -7,7 +7,7 @@ type ButtonColor = 'blue' | 'white' | 'gray' | 'transparent' | 'sky-grey';
   imports: [],
   template: `
     <button
-      class="font-nuninto"
+      class="font-nunito"
       [class]="getButtonClasses()"
       [type]="type"
       [disabled]="disabled"

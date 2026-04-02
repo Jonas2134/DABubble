@@ -368,9 +368,7 @@ app-add-new-members {
 
 @media (max-width: 600px) {
   .openAddMemberPopUpButton.addButtonBefore {
-    @media (max-width: 600px) {
-      display: none;  
-    }
+    display: none;
   }
 
   .channel-header {
