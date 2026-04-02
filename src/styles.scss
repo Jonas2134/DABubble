@@ -1,3 +1,4 @@
+@use "app/shared/scss/variables" as vari;
 @import "@fontsource/nunito/400.css";
 @import "@fontsource/nunito/600.css";
 @import "@fontsource/nunito/700.css";
@@ -17,19 +18,19 @@
 html,
 body {
   font-family: "Nunito", sans-serif;
-  background-color: rgb(236, 238, 254);
+  background-color: vari.$sky-grey;
 }
 
 h1 {
   font-size: clamp(20px, calc(20px + 4 * (100vw - 450px) / 550), 24px);
   font-weight: 700;
-  color: #000000;
+  color: vari.$black;
 }
 
 h2 {
   font-size: 20px;
   font-weight: 700;
-  color: #000000;
+  color: vari.$black;
 }
 
 h3 {
@@ -38,7 +39,7 @@ h3 {
 }
 
 h4 {
-  color: #444df2;
+  color: vari.$dark-blue;
   font-size: 18px;
   font-weight: 400;
 }
@@ -118,19 +119,6 @@ textarea {
   background-color: #92c83e;
 }
 
-@mixin fontStyle($size, $fontColor, $fontWeight) {
-  font-size: $size;
-  color: $fontColor;
-  font-weight: $fontWeight;
-}
-@mixin flexBox($direction, $justify, $align, $gap) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
-  gap: $gap + px;
-}
-
 .font-figtree {
   font-family: "Figtree";
 }
@@ -147,7 +135,9 @@ textarea {
   font-size: 24px;
   font-weight: 400;
   border-radius: 50%;
-  @include flexBox(row, center, center, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 button {
@@ -155,16 +145,16 @@ button {
 }
 
 .primary-btn {
-  background-color: #444df2;
+  background-color: vari.$dark-blue;
   color: #ffffff;
-  border: 1px solid #444df2;
+  border: 1px solid vari.$dark-blue;
   &:hover {
     background-color: #797ef3;
     border: 1px solid #797ef3;
   }
   &:active {
-    background-color: #444df2;
-    border: 1px solid #444df2;
+    background-color: vari.$dark-blue;
+    border: 1px solid vari.$dark-blue;
   }
   &:disabled {
     background-color: #686868;
@@ -175,7 +165,7 @@ button {
 
 .secondary-btn {
   background-color: #ffffff;
-  color: #444df2;
+  color: vari.$dark-blue;
   border: 1px solid #797ef3;
   &:hover {
     background-color: #535af1;
@@ -183,8 +173,8 @@ button {
     border: 1px solid #535af1;
   }
   &:active {
-    background-color: #444df2;
-    border: 1px solid #444df2;
+    background-color: vari.$dark-blue;
+    border: 1px solid vari.$dark-blue;
   }
   &:disabled {
     color: #686868;

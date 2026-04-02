@@ -1,24 +1,24 @@
-@import "../../../../styles.scss";
+@use "../../../shared/scss/mixins" as mixins;
 
 
 
 .addMemberChannel {
-  @include flexBox("", left, center, 15);
+  @include mixins.dFlex($justify: left, $gap: 15px);
   color: #797ef3;
 }
 
 .addMemberHeader {
-  @include flexBox(column, left, space-between, 5);
+  @include mixins.dFlex($justify: left, $align: space-between, $gap: 5px, $direction: column);
   height: fit-content;
   width: 100%;
   div {
-    @include flexBox("", space-between, center, "");
+    @include mixins.dFlex($justify: space-between);
     height: 40px;
   }
 }
 
 .closeIconButton {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   height: 40px;
   width: 40px;
   background-color: white;
@@ -36,20 +36,24 @@
 }
 
 .devspaceElement {
-    @include fontStyle(18px, #444df2, 400);
+    font-size: 18px;
+    color: #444df2;
+    font-weight: 400;
     text-decoration: none;
     cursor: pointer;
 }
 
 .addNewMember {
-  @include flexBox("", right, center, "");
+  @include mixins.dFlex($justify: right);
   width: 100%;
   height: 50px;
 }
 
 .addNewMemberButton {
-  @include flexBox("", center, center, "");
-  @include fontStyle(18px, white, 700);
+  @include mixins.dFlex();
+  font-size: 18px;
+  color: white;
+  font-weight: 700;
   width: 150px;
   height: 50px;
   border-radius: 25px;
@@ -88,7 +92,7 @@
 }
 
 .custom-radio {
-  @include flexBox("", left, center, 10);
+  @include mixins.dFlex($justify: left, $gap: 10px);
   position: relative;
   width: 100%;
   input[type="radio"] {
@@ -96,7 +100,7 @@
   }
 
   .radio-mark {
-    @include flexBox("", center, center, "");
+    @include mixins.dFlex();
     width: 20px;
     height: 20px;
     aspect-ratio: 1 / 1;
@@ -130,7 +134,7 @@
 }
 
 .addEveryOrOneMember {
-  @include flexBox(column, center, left, 20);
+  @include mixins.dFlex($align: flex-start, $gap: 20px, $direction: column);
   width: 100%;
   height: 70px;
 }
@@ -143,16 +147,18 @@
 
 
 .addInputField {
-  @include flexBox("", left, center, "");
+  @include mixins.dFlex($justify: left);
   width: 100%;
   padding: 15px 20px;
   position: relative;
   height: 60px;
   border-radius: 30px;
   border: 1px solid #adb0d9;
-  z-index: 1001; 
+  z-index: 1001;
   input {
-    @include fontStyle(18px, #686868, 400);
+    font-size: 18px;
+    color: #686868;
+    font-weight: 400;
     width: 100%;
     height: 40px;
     outline: none;
@@ -161,7 +167,7 @@
 }
 
 .showMembers {
-  @include flexBox(column, '', '', 15);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 15px, $direction: column);
   background-color: white;
   top: 50px;
   height: 200px;
@@ -181,7 +187,7 @@
 
 
 .memberItem {
-  @include flexBox("", left, center, 15);
+  @include mixins.dFlex($justify: left, $gap: 15px);
   border: none;
   width: 100%;
   padding: 4px 16px;
@@ -198,12 +204,12 @@
 }
 
 .inputNamePush {
-  @include flexBox("", '', center, 10);
-  
+  @include mixins.dFlex($justify: flex-start, $gap: 10px);
+
 }
 
 .containerDelete{
-  @include flexBox("", left, center, 15);
+  @include mixins.dFlex($justify: left, $gap: 15px);
   background-color: #eceefe;
   width: fit-content;
   border-radius: 25px;
@@ -212,7 +218,7 @@
 }
 
 .inputNameImgPush {
-  @include flexBox("", left, center, 15);
+  @include mixins.dFlex($justify: left, $gap: 15px);
   img {
     border-radius: 50%;
     height: 32px;
@@ -221,7 +227,7 @@
 }
 
 .inputNamePushClose {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   background-color: #eceefe;
   border: none;
   height: 32px;
@@ -240,7 +246,7 @@
 
 @media(max-width: 600px){
   .greyxLineContainer{
-    @include flexBox('', center, center, '');
+    @include mixins.dFlex();
     height: 6px;
     width: 100%;
   }
@@ -267,7 +273,7 @@
     margin-left: -20px;
     border-radius: 30px;
   }
- 
+
 }
 
 @media (max-width: 400px) {
@@ -276,6 +282,6 @@
   }
   .memberItem {
     border-radius: 0;
-    padding: 4px px;
+    padding: 4px 8px;
   }
 }

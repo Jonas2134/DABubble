@@ -1,4 +1,4 @@
-@import "../../../../styles.scss";
+@use "../../../shared/scss/mixins" as mixins;
 
 .memberlist {
   width: 100%;
@@ -10,7 +10,7 @@
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
-  @include flexBox(column, initial, flex-start, 16);
+  @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 16px, $direction: column);
 }
 
 .members {
@@ -18,11 +18,11 @@
   height: 200px;
   padding: 8px 4px;
   overflow-y: auto;
-  @include flexBox(column, initial, initial, 16);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 16px, $direction: column);
   div {
     cursor: pointer;
     padding: 4px 24px;
-    @include flexBox(row, initial, center, 16);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
     div {
       padding: 0;
     }
@@ -37,7 +37,7 @@
   cursor: pointer;
   width: 100%;
   padding: 12px 24px;
-  @include flexBox(row, initial, center, 16);
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
   &:hover {
     background-color: #eceefe;
     border-radius: 30px;

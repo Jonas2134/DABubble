@@ -1,15 +1,17 @@
-@import "../../../../../styles.scss";
+@use "../../../../shared/scss/mixins" as mixins;
 
 main {
-  @include flexBox("", right, center, 0);
+  @include mixins.dFlex($justify: right, $align: center);
   height: 100%;
   position: relative;
 }
 
 .avatar {
-  @include flexBox("", end, center, 20);
+  @include mixins.dFlex($justify: end, $align: center, $gap: 20px);
   span {
-    @include fontStyle(32px, black, 700);
+    font-size: 32px;
+    color: black;
+    font-weight: 700;
     white-space: nowrap;
   }
   img {
@@ -39,7 +41,7 @@ main {
 }
 
 .openLogOut {
-  @include flexBox("", right, center, "");
+  @include mixins.dFlex($justify: right, $align: center);
   border: none;
   padding-inline: 0;
   padding-block: 0;
@@ -76,7 +78,7 @@ section {
 }
 
 .logOut {
-  @include flexBox(column, center, center, 15);
+  @include mixins.dFlex($gap: 15px, $direction: column);
   height: 180px;
   width: 260px;
   top: 104px;
@@ -88,8 +90,10 @@ section {
   z-index: 15;
   button {
     all: unset;
-    @include fontStyle(24px, black, 600);
-    @include flexBox("", center, center, 15);
+    font-size: 24px;
+    color: black;
+    font-weight: 600;
+    @include mixins.dFlex($gap: 15px);
     background-color: white;
     width: 220px;
     height: 50px;
@@ -148,7 +152,7 @@ section {
   }
 
   .logOut {
-    @include flexBox("", center, start, "");
+    @include mixins.dFlex($align: flex-start);
     width: 380px;
     height: 180px;
     bottom: 0px;
@@ -179,7 +183,7 @@ section {
 
   .slide-down {
     animation: slideDownToBottom 0.8s ease-out forwards;
-  } 
+  }
 }
 
 @media(max-width: 600px){
@@ -198,7 +202,7 @@ section {
   main{
     width: 60px;
   }
-  
+
   .avatar img,
   .userStatus
   {

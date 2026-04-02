@@ -1,9 +1,9 @@
-@import "../../../../../styles.scss";
+@use "../../../../shared/scss/mixins" as mixins;
 
 :host {
   position: relative;
   width: 100%;
-  @include flexBox(column, initial, initial, 15);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 15px, $direction: column);
 }
 
 emoji-mart {
@@ -29,13 +29,13 @@ emoji-mart {
   background-color: #ffffff;
   border: 1px solid #adb0d9;
   border-radius: 20px 20px 20px 0px;
-  @include flexBox(column, initial, initial, 16);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 16px, $direction: column);
   z-index: 98;
 
   div {
     cursor: pointer;
     padding: 4px 24px;
-    @include flexBox(row, initial, center, 16);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
     div {
       padding: 0;
     }
@@ -47,9 +47,9 @@ emoji-mart {
 }
 
 .textfield-buttons {
-  @include flexBox(row, space-between, center, 0);
+  @include mixins.dFlex($justify: space-between, $align: center);
   div {
-    @include flexBox(row, center, center, 5);
+    @include mixins.dFlex($gap: 5px);
   }
 }
 
@@ -71,7 +71,7 @@ emoji-mart {
   background-color: transparent;
   border: none;
   border-radius: 50px;
-  @include flexBox(row, center, center, 0);
+  @include mixins.dFlex();
   &:disabled {
     .send-icon {
       color: #686868;

@@ -1,9 +1,9 @@
-@import "../../../../styles.scss";
+@use "../../../shared/scss/mixins" as mixins;
 
 .loading-screen {
   height: 100%;
   width: 100%;
-  @include flexBox(column, center, center, 0);
+  @include mixins.dFlex($direction: column);
 }
 
 section {
@@ -12,7 +12,7 @@ section {
   overflow: hidden;
   background-color: #ffffff;
   border-radius: 30px;
-  @include flexBox(column, initial, initial, 0);
+  @include mixins.dFlex($justify: initial, $align: initial, $direction: column);
 
   .chatbox-header {
     width: 100%;
@@ -21,7 +21,7 @@ section {
     padding-inline: clamp(32px, calc(32px + 16 * (100vw - 1000px) / 920), 48px);
     border-radius: 30px 30px 0px 0px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
-    @include flexBox(row, initial, center, 0);
+    @include mixins.dFlex($justify: initial, $align: center);
   }
 
   .chatbox-messages {
@@ -34,7 +34,7 @@ section {
     }
     -ms-overflow-style: none;
     scrollbar-width: none;
-    @include flexBox(column, initial, flex-start, 20);
+    @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 20px, $direction: column);
   }
 
   .chatbox-textfield {
@@ -48,7 +48,7 @@ section {
     padding: 20px;
     border: 1px solid #adb0d9;
     border-radius: 20px;
-    @include flexBox(column, initial, initial, 15);
+    @include mixins.dFlex($justify: initial, $align: initial, $gap: 15px, $direction: column);
 
     &:focus-within {
       border-color: #444df2;
@@ -59,27 +59,27 @@ section {
 .private-header {
   cursor: pointer;
   height: 100%;
-  @include flexBox(row, initial, center, 16);
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
 }
 
 .channel-header {
   width: 100%;
   height: 100%;
-  @include flexBox(row, space-between, center, 0);
+  @include mixins.dFlex($justify: space-between, $align: center);
 
   .channel-name {
     cursor: pointer;
-    @include flexBox(row, initial, center, 10);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
   }
 
   .channel-members {
     cursor: pointer;
     height: 100%;
-    @include flexBox(row, initial, center, 10);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
     div {
       height: 100%;
       padding-inline: 12px;
-      @include flexBox(row, center, center, 0);
+      @include mixins.dFlex();
       &:hover {
         background-color: #eceefe;
         border-radius: 30px;
@@ -110,15 +110,15 @@ section {
 .thread-header {
   width: 100%;
   height: 100%;
-  @include flexBox(row, space-between, center, 0);
+  @include mixins.dFlex($justify: space-between, $align: center);
 
   div {
-    @include flexBox(row, initial, center, 10);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
     span {
       color: rgb(121, 126, 243);
       font-size: 14px;
       text-decoration: none;
-      @include flexBox(row, initial, center, 5);
+      @include mixins.dFlex($justify: initial, $align: center, $gap: 5px);
       &:first-child {
         font-size: 20px;
       }
@@ -130,7 +130,7 @@ section {
   width: 100%;
   height: 100%;
   padding: 24px 40px;
-  @include flexBox(column, initial, initial, 20);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
   > input {
     width: 100%;
     padding: 15px 20px;
@@ -148,11 +148,11 @@ section {
 }
 
 .new-suggestions {
-  @include flexBox(column, initial, initial, 10);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 10px, $direction: column);
   > div {
     cursor: pointer;
     padding: 8px 24px;
-    @include flexBox(row, initial, center, 10);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
     &:hover {
       color: #535af1;
       font-weight: 700;
@@ -206,9 +206,9 @@ section {
   width: 100%;
   height: 100%;
   padding-left: 46px;
-  @include flexBox(column, flex-end, initial, 24);
+  @include mixins.dFlex($justify: flex-end, $align: initial, $gap: 24px, $direction: column);
   div {
-    @include flexBox(row, initial, flex-end, 16);
+    @include mixins.dFlex($justify: initial, $align: flex-end, $gap: 16px);
     img {
       width: 100px;
       height: 100px;
@@ -229,9 +229,9 @@ section {
   width: 100%;
   height: 100%;
   padding-left: 46px;
-  @include flexBox(column, flex-end, initial, 8);
+  @include mixins.dFlex($justify: flex-end, $align: initial, $gap: 8px, $direction: column);
   div {
-    @include flexBox(row, initial, center, 16);
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
   }
   p {
     color: #686868;
@@ -305,7 +305,7 @@ main {
 }
 
 app-add-new-members {
-  @include flexBox(column, "", "", 20);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 20px, $direction: column);
   position: absolute;
   right: 20px;
   top: 192px;
@@ -318,7 +318,7 @@ app-add-new-members {
 }
 
 .openAddMemberPopUpButton {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   border: none;
   width: 40px;
   height: 40px;

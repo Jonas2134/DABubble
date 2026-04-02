@@ -1,4 +1,5 @@
-@import "../../../../../styles.scss";
+@use "../../../../shared/scss/mixins" as mixins;
+@use "../../../../shared/scss/variables" as vari;
 
 main {
   width: 300px;
@@ -6,13 +7,13 @@ main {
 }
 
 header {
-  @include flexBox("", space-between, center, "");
+  @include mixins.dFlex($justify: space-between, $align: center);
   height: 46px;
   width: 100%;
 }
 
 .showChannels {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   height: 30px;
   width: 30px;
   background-color: white;
@@ -26,14 +27,14 @@ header {
 
 .channelHeadShow {
   all: unset;
-  @include flexBox("", left, center, 15);
+  @include mixins.dFlex($justify: left, $align: center, $gap: 15px);
   width: 180px;
   height: 40px;
   cursor: pointer;
 }
 
 .workSpaceText {
-  @include flexBox("", left, center, 10);
+  @include mixins.dFlex($justify: left, $align: center, $gap: 10px);
 }
 
 .workSpaceIcon,
@@ -54,7 +55,7 @@ header {
 }
 
 .addButton {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   height: 30px;
   width: 30px;
   border: none;
@@ -66,12 +67,12 @@ header {
 }
 
 section {
-  @include flexBox(column, center, left, 25);
+  @include mixins.dFlex($justify: center, $align: left, $gap: 25px, $direction: column);
   width: 310px;
 }
 
 .addChannel {
-  @include flexBox("", center, center, 9);
+  @include mixins.dFlex($gap: 9px);
   width: 220px;
   height: 32px;
   margin-left: 32px;
@@ -79,12 +80,14 @@ section {
   border: none;
   cursor: pointer;
   span {
-    @include fontStyle(18px, black, 400);
+    font-size: 18px;
+    color: black;
+    font-weight: 400;
   }
 }
 
 .deleteChannel{
-  @include flexBox("", center, center, '');
+  @include mixins.dFlex();
   height: 32px;
   width: 32px;
   border: none;
@@ -105,7 +108,7 @@ section {
 }
 
 .everyChannel {
-  @include flexBox("", space-between, center, '');
+  @include mixins.dFlex($justify: space-between, $align: center);
   height: 35px;
   margin-left: 25px;
   width: 275px;
@@ -115,7 +118,9 @@ section {
   background-color: white;
   border: none;
   span {
-    @include fontStyle(18px, black, 400);
+    font-size: 18px;
+    color: black;
+    font-weight: 400;
   }
   &:hover {
     background-color: #eceefe;
@@ -123,14 +128,14 @@ section {
 }
 
 .tagImage {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
 }
 .tagName{
-  @include flexBox("", left, center, 15);
+  @include mixins.dFlex($justify: left, $align: center, $gap: 15px);
 }
 
 .newChannels {
-  @include flexBox(column, "", "", 25);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 25px, $direction: column);
   margin-top: 25px;
 }
 

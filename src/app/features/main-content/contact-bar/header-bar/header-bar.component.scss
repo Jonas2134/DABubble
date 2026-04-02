@@ -1,16 +1,17 @@
-@import '../../../../../styles.scss';
+@use "../../../../shared/scss/mixins" as mixins;
+
 header{
     width: 310px;
     padding-top: 30px
 }
 
 section{
-    @include flexBox('', space-between, center, '');
+    @include mixins.dFlex($justify: space-between, $align: center);
     height: 60px;
 }
 
 .logoText{
-    @include flexBox('', left, center, 15);
+    @include mixins.dFlex($justify: left, $align: center, $gap: 15px);
     width: 250px;
     img{
         height: 60px;
@@ -24,7 +25,7 @@ section{
     border-radius: 50%;
     background-color: white;
     border: none;
-    cursor: pointer;    
+    cursor: pointer;
     position: relative;
 }
 
@@ -43,9 +44,9 @@ section{
     header{
         display: none;
     }
-    
+
     .squareImageNewPosition{
-        @include flexBox('', center, center, '');
+        @include mixins.dFlex();
         position: absolute;
         height: 60px;
         width: 60px;
@@ -58,11 +59,11 @@ section{
             opacity: 0.8;
         }
     }
-    
+
     .icon{
         color: white;
     }
-    
+
     .squareImage:hover .icon{
         color: none;
     }
@@ -73,4 +74,3 @@ section{
         right: 8px;
     }
   }
-  

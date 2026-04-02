@@ -1,7 +1,7 @@
-@import "../../../../styles.scss";
+@use "../../../shared/scss/mixins" as mixins;
 
 header {
-  @include flexBox("", space-between, center, 45);
+  @include mixins.dFlex($justify: space-between, $align: center, $gap: 45px);
   padding-inline: 25px;
   height: 100%;
 }
@@ -26,13 +26,13 @@ app-device-visible {
     }
 
   .messageInWorkspace {
-    @include flexBox("", space-between, center, 10);
+    @include mixins.dFlex($justify: space-between, $align: center, $gap: 10px);
     height: 50px;
     margin-left: -8px
   }
 
   button {
-    @include flexBox("", space-between, center, 2);
+    @include mixins.dFlex($justify: space-between, $align: center, $gap: 2px);
     background-color: #eceefe;
     cursor: pointer;
     border: none;
@@ -52,10 +52,10 @@ app-device-visible {
 }
 @media (max-width: 600px) {
   header {
-    @include flexBox("", space-between, center, 0);
+    @include mixins.dFlex($justify: space-between, $align: center);
     padding-inline: 0px;
   }
-  
+
   app-device-visible{
     width: 0px;
     margin-left: 0px;

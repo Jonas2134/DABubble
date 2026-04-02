@@ -1,4 +1,5 @@
-@import "../../../../styles.scss";
+@use "../../../shared/scss/mixins" as mixins;
+
 main {
   position: absolute;
   top: 0;
@@ -10,7 +11,7 @@ main {
 }
 
 section {
-  @include flexBox(column, "", "", 20);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 20px, $direction: column);
   position: absolute;
   left: 50%;
   top: 50%;
@@ -23,11 +24,11 @@ section {
 }
 
 header {
-  @include flexBox("", space-between, center, "");
+  @include mixins.dFlex($justify: space-between);
   height: 40px;
   width: 100%;
   div {
-    @include flexBox("", left, center, 15);
+    @include mixins.dFlex($justify: left, $gap: 15px);
     height: 100%;
     width: 220px;
     img {
@@ -38,7 +39,7 @@ header {
 }
 
 .scrollContainer{
-  @include flexBox(column, "", "", 20);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 20px, $direction: column);
 }
 
 .memberListMobile{
@@ -46,19 +47,21 @@ header {
 }
 
 .channelHashtagName {
-  @include flexBox("", left, center, 10);
+  @include mixins.dFlex($justify: left, $gap: 10px);
   width: auto;
   img {
     height: 24px;
     width: 24px;
   }
   span {
-    @include fontStyle(18px, black, 400);
+    font-size: 18px;
+    color: black;
+    font-weight: 400;
   }
 }
 
 .closeChannelLeave {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   height: 40px;
   width: 40px;
   border: none;
@@ -66,7 +69,7 @@ header {
   background-color: white;
   cursor: pointer;
   div {
-    @include flexBox("", center, center, "");
+    @include mixins.dFlex();
     font-size: 24px;
   }
   &:hover {
@@ -79,7 +82,7 @@ header {
 }
 
 .nameBox {
-  @include flexBox(column, space-between, "", 20);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 20px, $direction: column);
   height: 110px;
   width: 100%;
   border-radius: 20px;
@@ -88,23 +91,25 @@ header {
 }
 
 .nameSaveBox {
-  @include flexBox(column, space-between, "", 15);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 15px, $direction: column);
   height: 110px;
   width: 100%;
   border: none;
 }
 
 .boxEdit {
-  @include flexBox("", space-between, center, "");
+  @include mixins.dFlex($justify: space-between);
   height: 25px;
 }
 
 .saveBox {
-  @include flexBox("", space-between, center, "");
+  @include mixins.dFlex($justify: space-between);
   height: 25px;
   width: 770px;
   button {
-    @include fontStyle(18px, #535af1, 600);
+    font-size: 18px;
+    color: #535af1;
+    font-weight: 600;
     background-color: white;
     border: none;
     padding: 4px 8px;
@@ -117,18 +122,20 @@ header {
 }
 
 .channelHashtagName {
-  @include flexBox("", left, center, 10);
+  @include mixins.dFlex($justify: left, $gap: 10px);
   img {
     height: 24px;
     width: 24px;
   }
   span {
-    @include fontStyle(18px, black, 400);
+    font-size: 18px;
+    color: black;
+    font-weight: 400;
   }
 }
 
 .editChannelName {
-  @include flexBox("", center, center, 15);
+  @include mixins.dFlex($gap: 15px);
   width: 100%;
   height: 60px;
   padding: 0px 20px;
@@ -148,7 +155,7 @@ header {
 }
 
 .descriptionBox {
-  @include flexBox(column, space-between, "", 20);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 20px, $direction: column);
   height: 280px;
   width: 100%;
   padding: 20px;
@@ -157,19 +164,19 @@ header {
 }
 
 .descriptionSaveBox {
-  @include flexBox(column, space-between, "", 25);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 25px, $direction: column);
   height: 250px;
   width: 100%;
 }
 
 .descriptionSaveOutBox {
-  @include flexBox(column, space-between, "", 25);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 25px, $direction: column);
   height: 280px;
   width: 100%;
 }
 
 .inputDescription {
-  @include flexBox("", "", center, "");
+  @include mixins.dFlex($justify: flex-start);
   width: 100%;
   height: 60px;
   border: 1px solid #adb0d9;
@@ -190,11 +197,13 @@ header {
 }
 
 .editOverMobil{
-  @include flexBox("", "", "", "");
+  @include mixins.dFlex($justify: flex-start, $align: stretch);
 }
 
 .editButton{
-  @include fontStyle(18px, #535af1, 600);
+  font-size: 18px;
+  color: #535af1;
+  font-weight: 600;
   background-color: white;
   border: none;
   padding: 4px 8px;
@@ -212,7 +221,7 @@ header {
 
 .editOverTablet{
   height: 40px;
-  width: 40px; 
+  width: 40px;
 }
 
 .descriptionBoxText {
@@ -221,12 +230,12 @@ header {
 }
 
 .descriptionText {
-  @include flexBox(column, space-between, "", 20);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 20px, $direction: column);
   height: 110px;
 }
 
 .creatorXLine {
-  @include flexBox(column, "", "", 20);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 20px, $direction: column);
 }
 
 .creatorBox {
@@ -245,20 +254,24 @@ header {
 }
 
 .userCreator {
-  @include flexBox(column, space-between, "", "");
+  @include mixins.dFlex($justify: space-between, $align: stretch, $direction: column);
   height: 80px;
   width: 100%;
   span {
-    @include fontStyle(24px, #535af1, 400);
+    font-size: 24px;
+    color: #535af1;
+    font-weight: 400;
   }
 }
 
 .channelLeaveButton {
-  @include flexBox("", end, center, "");
+  @include mixins.dFlex($justify: end);
   width: 100%;
   height: 50px;
   button {
-    @include fontStyle(18px, white, 700);
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
     border-radius: 25px;
     width: 200px;
     height: 50px;
@@ -315,11 +328,11 @@ header {
 
 @media (max-width: 600px) {
   main {
-    @include flexBox(column, "", "", "");
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $direction: column);
     height: 100vh;
   }
   .scrollContainer {
-    @include flexBox(column, initial, initial, 20);
+    @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
     overflow-y: auto;
     flex: 1;
     min-height: 0;
@@ -330,9 +343,9 @@ header {
   }
 
   .editOverTablet{
-    @include flexBox("", center, center, "");
+    @include mixins.dFlex();
     height: 40px;
-    width: 40px; 
+    width: 40px;
   }
 
   .editOverMobil{
@@ -345,7 +358,7 @@ header {
   }
 
   section {
-    @include flexBox(column, initial, initial, 20);
+    @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
     height: 100%;
     flex: 1;
     min-height: 0;
@@ -359,7 +372,7 @@ header {
   header{
     padding: 0 40px;
   }
- 
+
   .scrollContainer{
     padding: 0 40px;
   }
@@ -383,7 +396,7 @@ header {
   }
 
   app-add-new-members {
-    @include flexBox(column, '', '',  25);
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 25px, $direction: column);
     position: absolute;
     top: auto;
     right: auto;
@@ -397,7 +410,7 @@ header {
   }
 
   .memberListMobile {
-    @include flexBox("", left, center, "");
+    @include mixins.dFlex($justify: left);
     width: 100%;
     border: 1px solid #adb0d9;
     border-radius: 20px;
@@ -413,8 +426,8 @@ header {
     padding: 0 8px;
   }
   .memberListMobile{
-    @include flexBox("", center, center, "");
-   
+    @include mixins.dFlex();
+
     padding: 20px 0;
   }
   .mobileHeadlineMember{

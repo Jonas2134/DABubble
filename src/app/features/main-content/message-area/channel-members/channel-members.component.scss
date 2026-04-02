@@ -1,4 +1,4 @@
-@import "../../../../../styles.scss";
+@use "../../../../shared/scss/mixins" as mixins;
 
 section {
   position: absolute;
@@ -9,7 +9,7 @@ section {
   padding: 40px;
   background-color: #ffffff;
   border-radius: 30px 0px 30px 30px;
-  @include flexBox(column, initial, initial, 20);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
 }
 
 .overlay{
@@ -35,11 +35,11 @@ app-add-new-members{
   padding: 40px;
   background-color: #ffffff;
   border-radius: 30px 0px 30px 30px;
-  @include flexBox(column, initial, initial, 20);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
 }
 
 .closeChannelMember{
-  @include flexBox('', center, center, '');
+  @include mixins.dFlex();
   height: 40px;
   width: 40px;
   border-radius: 50%;
@@ -56,7 +56,7 @@ app-add-new-members{
 
 .memberlist-header {
   width: 100%;
-  @include flexBox(row, space-between, center, 0);
+  @include mixins.dFlex($justify: space-between, $align: center);
 }
 
 @media (max-width: 600px) {
@@ -73,4 +73,3 @@ app-add-new-members{
     padding: 40px 20px;
   }
 }
-

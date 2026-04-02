@@ -1,11 +1,11 @@
-@import '../../../../../styles.scss';
+@use "../../../../shared/scss/mixins" as mixins;
 
 main{
     width: 300px;
     margin: 0 auto;
 }
 .directMessageButton{
-    @include flexBox('', left, center, 13);
+    @include mixins.dFlex($justify: left, $align: center, $gap: 13px);
     width: 260px;
     background-color: white;
     border: none;
@@ -22,10 +22,10 @@ main{
     font-size: 24px
 }
 .directMessage{
-    @include flexBox('', space-between, center, 10);
+    @include mixins.dFlex($justify: space-between, $align: center, $gap: 10px);
 }
 .keyDownUser{
-    @include flexBox('', center, center, '');
+    @include mixins.dFlex();
     width: 32px;
     height: 32px;
     background-color: white;
@@ -35,14 +35,14 @@ main{
     font-size: 30px
 }
 section{
-    @include flexBox(column, center, left, 13);
+    @include mixins.dFlex($justify: center, $align: left, $gap: 13px, $direction: column);
     margin-top: 25px;
     width: 270px;
     padding-left: 32px;
-    
+
 }
 .directUser{
-    @include flexBox('', left, center, 15);
+    @include mixins.dFlex($justify: left, $align: center, $gap: 15px);
     height: 60px;
     width: 270px;
     padding-left: 16px;
@@ -52,7 +52,7 @@ section{
     cursor: pointer;
     &:hover{
         background-color: #ECEEFE;
-    }    
+    }
 }
 .userImage{
     height: 50px;

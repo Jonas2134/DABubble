@@ -1,4 +1,5 @@
-@import "../../../styles.scss";
+@use "../../shared/scss/mixins" as mixins;
+
 main {
   width: 100svw;
   height: 100svh;
@@ -25,7 +26,7 @@ section{
 }
 
 .toogleBar {
-  @include flexBox("", center, left, "");
+  @include mixins.dFlex($align: left);
   width: 60px;
   height: 350px;
   position: absolute;
@@ -39,7 +40,9 @@ section{
   color: black;
   cursor: pointer;
   span {
-    @include fontStyle(20px, black, 500);
+    font-size: 20px;
+    color: black;
+    font-weight: 500;
     background-color: white;
     display: inline-block;
     white-space: nowrap;
@@ -77,7 +80,7 @@ section{
   height: 100%;
   display: flex;
   gap: 20px;
-  
+
   app-contact-bar {
     width: 390px;
   }
@@ -102,7 +105,7 @@ section{
   .toogleBar{
     display: none;
   }
-  
+
 }
 
 @media (max-width: 1600px) {
@@ -137,20 +140,20 @@ section{
       width: 100%;
     }
   }
-  
+
   .toogleBar{
     display: none;
   }
-  
+
   .messageIn{
     height: 100%;
   }
-  
+
   app-message-area{
     height: 100%;
     display: contents;
   }
-  
+
   app-device-visible{
     height: 60px;
     margin-top: 16px;

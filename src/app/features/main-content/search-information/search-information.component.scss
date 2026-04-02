@@ -1,4 +1,4 @@
-@import '../../../../styles.scss';
+@use "../../../shared/scss/mixins" as mixins;
 
 main {
     position: absolute;
@@ -24,11 +24,11 @@ main::-webkit-scrollbar-track{
 }
 
 section{
-    @include flexBox(column, center, left, 30);
+    @include mixins.dFlex($justify: center, $align: left, $gap: 30px, $direction: column);
 }
 
 .userPhoto{
-    @include flexBox('', left, center, 8);
+    @include mixins.dFlex($justify: left, $align: center, $gap: 8px);
     background-color: white;
     padding: 0px 24px;
     min-width: 250px;
@@ -45,12 +45,14 @@ section{
         background-color: #ECEEFE;
     }
     span{
-        @include fontStyle(20px, black, 500);
+        font-size: 20px;
+        color: black;
+        font-weight: 500;
     }
 }
 
 .channelName{
-    @include flexBox("", left, center, 4);
+    @include mixins.dFlex($justify: left, $align: center, $gap: 4px);
     background-color: white;
     width: 220px;
     padding: 8px 24px;
@@ -63,7 +65,7 @@ section{
 }
 
 .messagesInChannels{
-    @include flexBox("", left, center, 4);
+    @include mixins.dFlex($justify: left, $align: center, $gap: 4px);
     background-color: white;
     width: fit-content;
     padding: 8px 24px;
@@ -76,11 +78,11 @@ section{
 }
 
 .everyChannelButton{
-    @include flexBox(column, center, left, 10);
+    @include mixins.dFlex($justify: center, $align: left, $gap: 10px, $direction: column);
 }
 
 .everyInfo{
-    @include flexBox(column, center, left, 4);
+    @include mixins.dFlex($justify: center, $align: left, $gap: 4px, $direction: column);
     background-color: white;
     padding: 4px 16px;
     border: none;
@@ -90,17 +92,19 @@ section{
 }
 
 .headline{
-    @include flexBox('', left, top, '');
-    @include fontStyle(16px, black, 400);
+    @include mixins.dFlex($justify: left, $align: flex-start);
+    font-size: 16px;
+    color: black;
+    font-weight: 400;
 }
 
 .messageButton span{
-    display: block; 
+    display: block;
     text-align: left;
 }
 
 .messageButton{
-    @include flexBox(column, '', '', 4);
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 4px, $direction: column);
     background-color: white;
     width: fit-content;
     padding: 8px 24px;

@@ -1,4 +1,5 @@
-@import "../../../../../../styles.scss";
+@use "../../../../../shared/scss/mixins" as mixins;
+
 main {
   position: absolute;
   top: 0;
@@ -10,7 +11,7 @@ main {
 }
 
 .sectionMain {
-  @include flexBox(column, top, left, 20);
+  @include mixins.dFlex($justify: flex-start, $align: flex-start, $gap: 20px, $direction: column);
   width: 870px;
   height: 540px;
   position: absolute;
@@ -39,7 +40,7 @@ main {
 }
 
 app-add-new-members {
-  @include flexBox(column, top, left, 20);
+  @include mixins.dFlex($justify: flex-start, $align: flex-start, $gap: 20px, $direction: column);
   width: 710px;
   background-color: white;
   border-radius: 30px;
@@ -61,20 +62,22 @@ app-add-new-members {
 }
 
 header {
-  @include flexBox(column, "", "", 20);
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 20px, $direction: column);
 }
 
 .headlineClose {
-  @include flexBox("", space-between, center, "");
+  @include mixins.dFlex($justify: space-between, $align: center);
   width: 800px;
   height: 40px;
   span {
-    @include fontStyle(24px, black, 700);
+    font-size: 24px;
+    color: black;
+    font-weight: 700;
   }
 }
 
 .closeButton {
-  @include flexBox("", center, center, "");
+  @include mixins.dFlex();
   height: 40px;
   width: 40px;
   background-color: white;
@@ -95,13 +98,15 @@ header {
 }
 
 .addChannelText {
-  @include fontStyle(18px, black, 400);
+  font-size: 18px;
+  color: black;
+  font-weight: 400;
   height: 50px;
   width: 800px;
 }
 
 .channelFields {
-  @include flexBox(column, space-between, "", 10);
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 10px, $direction: column);
   height: fit-content;
   width: 800px;
 }
@@ -118,16 +123,20 @@ header {
 }
 
 .channelField {
-  @include fontStyle(18px, black, 700);
+  font-size: 18px;
+  color: black;
+  font-weight: 700;
 }
 
 .channelFieldOptional {
-  @include fontStyle(18px, #686868, 400);
+  font-size: 18px;
+  color: #686868;
+  font-weight: 400;
   margin-left: 4px;
 }
 
 .inputSpan {
-  @include flexBox("", "", center, 15);
+  @include mixins.dFlex($justify: flex-start, $align: center, $gap: 15px);
   padding: 18px 20px;
   width: 800px;
   height: 60px;
@@ -145,7 +154,9 @@ header {
 }
 
 input::placeholder {
-  @include fontStyle(18px, #686868, 400);
+  font-size: 18px;
+  color: #686868;
+  font-weight: 400;
 }
 
 .channelTextArea {
@@ -167,17 +178,21 @@ input::placeholder {
 }
 
 textarea::placeholder {
-  @include fontStyle(18px, #686868, 400);
+  font-size: 18px;
+  color: #686868;
+  font-weight: 400;
 }
 
 .addChannel {
-  @include flexBox("", right, center, "");
+  @include mixins.dFlex($justify: right, $align: center);
   height: 50px;
   width: 800px;
 }
 
 .addChannelButton {
-  @include fontStyle(18px, white, 700);
+  font-size: 18px;
+  color: white;
+  font-weight: 700;
   height: 50px;
   width: 130px;
   background-color: #444df2;
@@ -205,7 +220,7 @@ textarea::placeholder {
     width: 100%;
   }
   .popup-wrapper {
-    @include flexBox('', center, center, '');
+    @include mixins.dFlex();
     width: 100%;
   }
   app-add-new-members {
@@ -221,7 +236,7 @@ textarea::placeholder {
     border-radius: 0px;
     animation: none;
   }
-  
+
   app-add-new-members {
     width: 100%;
     border-radius: 30px 30px 0px 0px;
@@ -249,8 +264,7 @@ textarea::placeholder {
     padding: 40px 16px;
   }
   app-add-new-members {
-    @include flexBox(column, top, left, 20);
+    @include mixins.dFlex($justify: flex-start, $align: flex-start, $gap: 20px, $direction: column);
     padding: 32px 16px;
   }
 }
-

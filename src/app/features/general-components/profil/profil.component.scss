@@ -1,4 +1,4 @@
-@import '../../../../styles.scss';
+@use '../../../shared/scss/mixins' as mixins;
 
 main{
     position: absolute;
@@ -11,13 +11,12 @@ main{
 }
 
 section{
-    @include flexBox("", "", center, 40);
+    @include mixins.dFlex($justify: flex-start, $align: center, $gap: 40px, $direction: column);
     position: absolute;
-    flex-direction: column;
     background-color: white;
     width: 500px;
     &.small {
-        @include flexBox("", "", center, 40);
+        @include mixins.dFlex($justify: flex-start, $align: center, $gap: 40px);
         height: 640px;
         padding: 30px 40px;
         top: 104px;
@@ -25,7 +24,7 @@ section{
         border-radius: 30px 0px 30px 30px;
       }
       &.big {
-        @include flexBox("", "", center, 45);
+        @include mixins.dFlex($justify: flex-start, $align: center, $gap: 45px);
         top: 50%;
         right: auto;
         left: 50%;
@@ -53,7 +52,7 @@ img{
 }
 
 .avatarButtons{
-    @include flexBox('', center, center, 10);
+    @include mixins.dFlex($gap: 10px);
     height: 48px;
     width: 48px;
     border-radius: 50%;
@@ -68,31 +67,31 @@ img{
 }
 
 .avatarsMain{
-    @include flexBox(column, center, center, 10);
+    @include mixins.dFlex($gap: 10px, $direction: column);
     position: relative;
 }
 
 .avatarChoice{
-    @include flexBox('', center, center, 10);
+    @include mixins.dFlex($gap: 10px);
     position: absolute;
     top: 210px;
     background-color: white;
     padding: 8px 24px;
     border-radius: 50px;
-    box-shadow: 
-    -3px -3px 6px rgba(255, 255, 255, 0.6), 
-    6px 6px 16px rgba(0, 0, 0, 0.2), 
+    box-shadow:
+    -3px -3px 6px rgba(255, 255, 255, 0.6),
+    6px 6px 16px rgba(0, 0, 0, 0.2),
     0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 header{
-    @include flexBox("", space-between, center, "");
+    @include mixins.dFlex($justify: space-between);
     height: 40px;
     width: 100%;
 }
 
 .closeProfil{
-    @include flexBox("", center, center, "");
+    @include mixins.dFlex();
     height: 40px;
     width: 40px;
     border: none;
@@ -124,14 +123,18 @@ header{
 }
 
 .nameEdit{
-    @include flexBox("", space-between, center, "");
+    @include mixins.dFlex($justify: space-between);
     height: 45px;
     width: 100%;
     span{
-        @include fontStyle(32px, black, 700);
+        font-size: 32px;
+        color: black;
+        font-weight: 700;
     }
     a{
-        @include fontStyle(18px, #535AF1, 600);
+        font-size: 18px;
+        color: #535AF1;
+        font-weight: 600;
         text-decoration: none;
         border-radius: 25px;
         cursor: pointer;
@@ -143,7 +146,7 @@ header{
 }
 
 .status{
-    @include flexBox("", left, center, 15);
+    @include mixins.dFlex($justify: left, $gap: 15px);
     width: 80px;
     height: 30px;
     img{
@@ -161,11 +164,11 @@ header{
 }
 
 .mailAdress{
-    @include flexBox(column, '', '', 10);
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 10px, $direction: column);
     width: 100%;
     height: 60px;
     div{
-        @include flexBox("", left, center, 20);
+        @include mixins.dFlex($justify: left, $gap: 20px);
         height: 30px;
         width: 200px;
         img{
@@ -174,26 +177,28 @@ header{
         }
     }
     span{
-        @include fontStyle(18px, #1381FF, 400);
+        font-size: 18px;
+        color: #1381FF;
+        font-weight: 400;
         height: 20px;
         margin-left: 50px;
     }
 }
 
 .messageArea{
-    @include flexBox('', center, center, '');
+    @include mixins.dFlex();
     height: 50px;
     width: 100%;
 }
 
 .messageButton{
-    @include flexBox('', center, center, 10);
-    @include fontStyle(18px, black, 700);
+    @include mixins.dFlex($gap: 10px);
+    font-size: 18px;
+    font-weight: 700;
     border-radius: 50px;
     height: 100%;
     width: 160px;
     padding: 12px 25px;
-    
     color: white;
     border: none;
     cursor: pointer;
@@ -215,11 +220,11 @@ header{
 }
 
 .editSaveButtons{
-    @include flexBox('', center, center, 10);
+    @include mixins.dFlex($gap: 10px);
 }
 
 .editAccountText{
-    @include flexBox("", left, center, 20);
+    @include mixins.dFlex($justify: left, $gap: 20px);
     height: 30px;
     width: 100%;
     img{
@@ -229,21 +234,23 @@ header{
 }
 
 .editInput{
-    @include flexBox(column, '', '', 15);
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 15px, $direction: column);
     height: 90px;
     width: 100%;
     input{
-        @include fontStyle(18px, #686868, 500);
+        font-size: 18px;
+        color: #686868;
+        font-weight: 500;
         width: 100%;
         height: 50px;
         border-radius: 30px;
         border: 1px solid #ADB0D9;
-        padding: 15px 20px;   
+        padding: 15px 20px;
     }
 }
 
 .editButton{
-    @include flexBox('', center, center, '');
+    @include mixins.dFlex();
     height: 50px;
     width: 140px;
     border-radius: 50px;
@@ -252,7 +259,9 @@ header{
 }
 
 .stopButton{
-    @include fontStyle(18px, #444DF2, 700);
+    font-size: 18px;
+    color: #444DF2;
+    font-weight: 700;
     background-color: white;
     border: 1px solid #797ef3;
     &:hover{
@@ -263,7 +272,9 @@ header{
 
 .saveButton{
     background-color: #444DF2;
-    @include fontStyle(18px, white, 700);
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
     border: none;
     &:hover{
         opacity: 0.8;
@@ -272,7 +283,7 @@ header{
 
 @media(max-width: 600px){
     .editIconShow{
-        @include flexBox("", center, center, "");
+        @include mixins.dFlex();
         height: 40px;
         width: 40px;
         background-color: white;
@@ -304,7 +315,7 @@ header{
 
 @media(max-width: 450px){
     section{
-        &.small, 
+        &.small,
         &.big
          {
             padding: 30px 24px;
@@ -317,8 +328,6 @@ header{
 }
 @media(max-width: 350px){
     .editSaveButtons{
-        @include flexBox(column-reverse, center, center, 15);
+        @include mixins.dFlex($gap: 15px, $direction: column-reverse);
     }
 }
-
-

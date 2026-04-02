@@ -1,7 +1,7 @@
-@import "../../../../styles.scss";
+@use "../../../shared/scss/mixins" as mixins;
 
 main {
-  @include flexBox(column, initial, initial, 25);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 25px, $direction: column);
   width: 390px;
   height: 100%;
   min-height: 0;
@@ -14,8 +14,8 @@ main {
 section {
   flex: 1 1 0;
   min-height: 0;
-  overflow-y: auto; 
-  @include flexBox(column, initial, initial, 25);
+  overflow-y: auto;
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 25px, $direction: column);
 }
 
 section::-webkit-scrollbar-track{
@@ -25,7 +25,7 @@ section::-webkit-scrollbar-track{
 
 @media (max-width: 1000px) {
   main {
-    @include flexBox(column, top, left, 16);
+    @include mixins.dFlex($justify: flex-start, $align: flex-start, $gap: 16px, $direction: column);
     width: 100%;
     padding: 0 24px 24px 24px;
   }
