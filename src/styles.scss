@@ -45,7 +45,7 @@ h4 {
 }
 
 h5 {
-  color: #686868;
+  color: vari.$gray;
   font-size: 14px;
   font-weight: 400;
 }
@@ -92,7 +92,7 @@ textarea {
     right: 0;
     width: 14px;
     height: 14px;
-    border: 2px solid #ffffff;
+    border: 2px solid vari.$white;
     border-radius: 50%;
   }
 }
@@ -112,11 +112,11 @@ textarea {
 }
 
 .offline {
-  background-color: #686868;
+  background-color: vari.$gray;
 }
 
 .online {
-  background-color: #92c83e;
+  background-color: vari.$online-green;
 }
 
 .font-figtree {
@@ -146,39 +146,39 @@ button {
 
 .primary-btn {
   background-color: vari.$dark-blue;
-  color: #ffffff;
+  color: vari.$white;
   border: 1px solid vari.$dark-blue;
   &:hover {
-    background-color: #797ef3;
-    border: 1px solid #797ef3;
+    background-color: vari.$light-blue;
+    border: 1px solid vari.$light-blue;
   }
   &:active {
     background-color: vari.$dark-blue;
     border: 1px solid vari.$dark-blue;
   }
   &:disabled {
-    background-color: #686868;
-    border: 1px solid #686868;
+    background-color: vari.$gray;
+    border: 1px solid vari.$gray;
     cursor: not-allowed;
   }
 }
 
 .secondary-btn {
-  background-color: #ffffff;
+  background-color: vari.$white;
   color: vari.$dark-blue;
-  border: 1px solid #797ef3;
+  border: 1px solid vari.$light-blue;
   &:hover {
-    background-color: #535af1;
-    color: #ffffff;
-    border: 1px solid #535af1;
+    background-color: vari.$purple;
+    color: vari.$white;
+    border: 1px solid vari.$purple;
   }
   &:active {
     background-color: vari.$dark-blue;
     border: 1px solid vari.$dark-blue;
   }
   &:disabled {
-    color: #686868;
-    border: 1px solid #686868;
+    color: vari.$gray;
+    border: 1px solid vari.$gray;
     cursor: not-allowed;
   }
 }
@@ -205,7 +205,7 @@ button {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: vari.$bp-tablet) {
   body {
     overflow: hidden;
   }

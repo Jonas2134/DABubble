@@ -1,4 +1,5 @@
 @use "../../../../../shared/scss/mixins" as mixins;
+@use "../../../../../shared/scss/variables" as vari;
 
 main {
   position: absolute;
@@ -85,16 +86,16 @@ header {
   border: none;
   cursor: pointer;
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
 .closeButton:hover img {
-  background-color: #eceefe;
+  background-color: vari.$sky-grey;
 }
 
 .closeButton:hover div {
-  color: #535af1;
+  color: vari.$purple;
 }
 
 .addChannelText {
@@ -112,12 +113,12 @@ header {
 }
 
 .errorText{
-  color: rgb(237, 30, 121)
+  color: vari.$rose
 }
 
 .addChannelButton.disabled,
 .addChannelButton[disabled] {
-  background-color: #686868;
+  background-color: vari.$gray;
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -130,7 +131,7 @@ header {
 
 .channelFieldOptional {
   font-size: 18px;
-  color: #686868;
+  color: vari.$gray;
   font-weight: 400;
   margin-left: 4px;
 }
@@ -141,7 +142,7 @@ header {
   width: 800px;
   height: 60px;
   border-radius: 40px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   input {
     height: 25px;
     width: 800px;
@@ -149,13 +150,13 @@ header {
     outline: none;
   }
   &:focus-within {
-    border: 1px solid blue;
+    border: 1px solid vari.$dark-blue;
   }
 }
 
 input::placeholder {
   font-size: 18px;
-  color: #686868;
+  color: vari.$gray;
   font-weight: 400;
 }
 
@@ -164,7 +165,7 @@ input::placeholder {
   width: 800px;
   height: 60px;
   border-radius: 40px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   textarea {
     height: 25px;
     width: 100%;
@@ -173,13 +174,13 @@ input::placeholder {
     resize: none;
   }
   &:focus-within {
-    border: 1px solid blue;
+    border: 1px solid vari.$dark-blue;
   }
 }
 
 textarea::placeholder {
   font-size: 18px;
-  color: #686868;
+  color: vari.$gray;
   font-weight: 400;
 }
 
@@ -195,7 +196,7 @@ textarea::placeholder {
   font-weight: 700;
   height: 50px;
   width: 130px;
-  background-color: #444df2;
+  background-color: vari.$dark-blue;
   border-radius: 25px;
   border: none;
   cursor: pointer;
@@ -204,7 +205,7 @@ textarea::placeholder {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: vari.$bp-tablet) {
   .sectionMain {
     width: 90%;
   }
@@ -228,7 +229,7 @@ textarea::placeholder {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: vari.$bp-mobile) {
   .sectionMain {
     width: 100%;
     height: 100%;
@@ -259,7 +260,7 @@ textarea::placeholder {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: vari.$bp-mobile-xs) {
   .sectionMain {
     padding: 40px 16px;
   }

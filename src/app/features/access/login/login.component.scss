@@ -33,7 +33,7 @@ form {
 
   &::before {
     content: "";
-    background-color: #adb0d9;
+    background-color: vari.$hover-border;
     height: 1px;
     width: 100%;
     position: absolute;

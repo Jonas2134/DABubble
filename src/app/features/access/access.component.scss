@@ -22,7 +22,7 @@
     margin-left: 10px;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: vari.$bp-mobile-lg) {
     top: 24px;
     left: 50%;
     transform: translate(-50%, 0) scale(1);
@@ -45,7 +45,7 @@
     font-size: clamp(16px, 4vw, 18px);
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: vari.$bp-mobile-lg) {
     @include mixin.dFlex($gap: clamp(2px, 0.5vw, 10px), $direction: row);
     margin: 0;
     top: auto;
@@ -72,7 +72,7 @@ footer {
   margin-bottom: clamp(12px, calc(12px + 56 * (100vw - 350px) / 350), 48px);
 }
 
-@media (min-width: 1920px) {
+@media (min-width: vari.$bp-max) {
   :host {
     width: 1770px;
     margin-inline: auto;

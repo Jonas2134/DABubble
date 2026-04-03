@@ -75,7 +75,7 @@ button {
   @include mixin.btnColor($bg-color: transparent, $bor-color: transparent, $text-color: vari.$light-blue);
 
   &:hover:not(:disabled) {
-    @include mixin.btnColor($bg-color: transparent, $bor-color: #adb0d9, $text-color: vari.$dark-blue);
+    @include mixin.btnColor($bg-color: transparent, $bor-color: vari.$hover-border, $text-color: vari.$dark-blue);
   }
 
   &:disabled {

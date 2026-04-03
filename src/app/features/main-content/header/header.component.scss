@@ -1,4 +1,5 @@
 @use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
 
 header {
   @include mixins.dFlex($justify: space-between, $align: center, $gap: 45px);
@@ -20,7 +21,7 @@ app-device-visible {
   margin-left: 96px;
 }
 
-@media (max-width: 999px) {
+@media (max-width: vari.$bp-tablet) {
     header{
         padding-inline: 12px
     }
@@ -33,7 +34,7 @@ app-device-visible {
 
   button {
     @include mixins.dFlex($justify: space-between, $align: center, $gap: 2px);
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
     cursor: pointer;
     border: none;
     img {
@@ -47,10 +48,10 @@ app-device-visible {
   }
 
   button:hover .arrowLeft {
-    color: #535af1;
+    color: vari.$purple;
   }
 }
-@media (max-width: 600px) {
+@media (max-width: vari.$bp-mobile) {
   header {
     @include mixins.dFlex($justify: space-between, $align: center);
     padding-inline: 0px;
@@ -61,7 +62,7 @@ app-device-visible {
     margin-left: 0px;
   }
 }
-@media (max-width: 450px) {
+@media (max-width: vari.$bp-mobile-sm) {
   img {
     width: 200px;
   }

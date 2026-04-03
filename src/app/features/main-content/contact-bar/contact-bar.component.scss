@@ -1,4 +1,5 @@
 @use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
 
 main {
   @include mixins.dFlex($justify: initial, $align: initial, $gap: 25px, $direction: column);
@@ -23,14 +24,14 @@ section::-webkit-scrollbar-track{
   margin-bottom: 40px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: vari.$bp-tablet) {
   main {
     @include mixins.dFlex($justify: flex-start, $align: flex-start, $gap: 16px, $direction: column);
     width: 100%;
     padding: 0 24px 24px 24px;
   }
 }
-@media (max-width: 450px) {
+@media (max-width: vari.$bp-mobile-sm) {
   main {
     padding: 0;
   }

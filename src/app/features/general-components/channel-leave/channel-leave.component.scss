@@ -1,3 +1,4 @@
+@use "../../../shared/scss/variables" as vari;
 @use "../../../shared/scss/mixins" as mixins;
 
 main {
@@ -73,12 +74,12 @@ header {
     font-size: 24px;
   }
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
 .closeChannelLeave:hover div {
-  color: #535af1;
+  color: vari.$purple;
 }
 
 .nameBox {
@@ -86,7 +87,7 @@ header {
   height: 110px;
   width: 100%;
   border-radius: 20px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   padding: 20px;
 }
 
@@ -108,7 +109,7 @@ header {
   width: 770px;
   button {
     font-size: 18px;
-    color: #535af1;
+    color: vari.$purple;
     font-weight: 600;
     background-color: white;
     border: none;
@@ -116,7 +117,7 @@ header {
     border-radius: 50px;
     cursor: pointer;
     &:hover {
-      background-color: #eceefe;
+      background-color: vari.$sky-grey;
     }
   }
 }
@@ -140,7 +141,7 @@ header {
   height: 60px;
   padding: 0px 20px;
   border-radius: 40px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   img {
     height: 24px;
     width: 24px;
@@ -159,7 +160,7 @@ header {
   height: 280px;
   width: 100%;
   padding: 20px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   border-radius: 20px;
 }
 
@@ -179,7 +180,7 @@ header {
   @include mixins.dFlex($justify: flex-start);
   width: 100%;
   height: 60px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   padding: 0 20px;
   border-radius: 30px;
   textarea {
@@ -193,7 +194,7 @@ header {
 }
 
 .errorText{
-  color: rgb(237, 30,121);
+  color: vari.$rose;
 }
 
 .editOverMobil{
@@ -202,7 +203,7 @@ header {
 
 .editButton{
   font-size: 18px;
-  color: #535af1;
+  color: vari.$purple;
   font-weight: 600;
   background-color: white;
   border: none;
@@ -211,7 +212,7 @@ header {
 
   cursor: pointer;
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
@@ -244,12 +245,12 @@ header {
 
 .xLine {
   width: 100%;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
 }
 
 .xLineSave {
   width: 740px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   margin: 0 auto;
 }
 
@@ -259,7 +260,7 @@ header {
   width: 100%;
   span {
     font-size: 24px;
-    color: #535af1;
+    color: vari.$purple;
     font-weight: 400;
   }
 }
@@ -275,7 +276,7 @@ header {
     border-radius: 25px;
     width: 200px;
     height: 50px;
-    background-color: #444df2;
+    background-color: vari.$dark-blue;
     border: none;
     cursor: pointer;
     &:hover {
@@ -314,7 +315,7 @@ header {
   animation: fadeOutSlide 200ms ease-in forwards;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: vari.$bp-tablet) {
   section {
     width: 90%;
   }
@@ -326,7 +327,7 @@ header {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: vari.$bp-mobile) {
   main {
     @include mixins.dFlex($justify: flex-start, $align: stretch, $direction: column);
     height: 100vh;
@@ -412,13 +413,13 @@ header {
   .memberListMobile {
     @include mixins.dFlex($justify: left);
     width: 100%;
-    border: 1px solid #adb0d9;
+    border: 1px solid vari.$hover-border;
     border-radius: 20px;
     padding: 30px 20px;
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: vari.$bp-mobile-sm) {
   .scrollContainer {
     padding: 0 8px;
   }

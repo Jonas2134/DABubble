@@ -1,10 +1,11 @@
 @use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
 
 
 
 .addMemberChannel {
   @include mixins.dFlex($justify: left, $gap: 15px);
-  color: #797ef3;
+  color: vari.$light-blue;
 }
 
 .addMemberHeader {
@@ -27,17 +28,17 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
 .closeIconButton:hover .closeIcon {
-  color: #444df2;
+  color: vari.$dark-blue;
 }
 
 .devspaceElement {
     font-size: 18px;
-    color: #444df2;
+    color: vari.$dark-blue;
     font-weight: 400;
     text-decoration: none;
     cursor: pointer;
@@ -58,7 +59,7 @@
   height: 50px;
   border-radius: 25px;
   border: none;
-  background-color: #686868;
+  background-color: vari.$gray;
   position: absolute;
   bottom: 24px;
   z-index: 100;
@@ -66,7 +67,7 @@
     opacity: 0.8;
   }
   &.active {
-    background-color: #444df2;
+    background-color: vari.$dark-blue;
     cursor: pointer;
   }
 
@@ -105,20 +106,20 @@
     height: 20px;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    border: 2px solid #adb0d9;
+    border: 2px solid vari.$hover-border;
     transition: 0.2s ease;
     cursor: pointer;
   }
 
   input[type="radio"]:checked + .radio-mark {
-    border-color: #535af1;
+    border-color: vari.$purple;
   }
 
   .radio-mark::after {
     content: "";
     width: 12px;
     height: 12px;
-    background-color: #535af1;
+    background-color: vari.$purple;
     border-radius: 50%;
     opacity: 0;
     transition: 0.2s ease;
@@ -153,11 +154,11 @@
   position: relative;
   height: 60px;
   border-radius: 30px;
-  border: 1px solid #adb0d9;
+  border: 1px solid vari.$hover-border;
   z-index: 1001;
   input {
     font-size: 18px;
-    color: #686868;
+    color: vari.$gray;
     font-weight: 400;
     width: 100%;
     height: 40px;
@@ -195,12 +196,12 @@
   background-color: white;
   cursor: pointer;
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
 .memberItem.selected {
-  background-color: #eceefe;
+  background-color: vari.$sky-grey;
 }
 
 .inputNamePush {
@@ -210,7 +211,7 @@
 
 .containerDelete{
   @include mixins.dFlex($justify: left, $gap: 15px);
-  background-color: #eceefe;
+  background-color: vari.$sky-grey;
   width: fit-content;
   border-radius: 25px;
   padding: 0 20px;
@@ -228,7 +229,7 @@
 
 .inputNamePushClose {
   @include mixins.dFlex();
-  background-color: #eceefe;
+  background-color: vari.$sky-grey;
   border: none;
   height: 32px;
   width: 32px;
@@ -244,7 +245,7 @@
 
 
 
-@media(max-width: 600px){
+@media(max-width: vari.$bp-mobile){
   .greyxLineContainer{
     @include mixins.dFlex();
     height: 6px;
@@ -262,7 +263,7 @@
   }
 }
 
-@media(max-width: 450px){
+@media(max-width: vari.$bp-mobile-sm){
   .addEveryOrOneMember{
     height: fit-content;
   }
@@ -276,7 +277,7 @@
 
 }
 
-@media (max-width: 400px) {
+@media (max-width: vari.$bp-mobile-xs) {
   .showMembers {
     padding: 16px 0px;
   }

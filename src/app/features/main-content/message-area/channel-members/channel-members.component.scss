@@ -1,4 +1,5 @@
 @use "../../../../shared/scss/mixins" as mixins;
+@use "../../../../shared/scss/variables" as vari;
 
 section {
   position: absolute;
@@ -46,12 +47,12 @@ app-add-new-members{
   background-color: white;
   border: none;
   &:hover{
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
 .closeChannelMember:hover .closeButton{
-  color: #535AF1;
+  color: vari.$purple;
 }
 
 .memberlist-header {
@@ -59,14 +60,14 @@ app-add-new-members{
   @include mixins.dFlex($justify: space-between, $align: center);
 }
 
-@media (max-width: 600px) {
+@media (max-width: vari.$bp-mobile) {
   section {
     right: 50%;
     transform: translateX(50%);
   }
 }
 
-@media (max-width: 450px) {
+@media (max-width: vari.$bp-mobile-sm) {
   section{
     border-radius: 0px;
     width: 100%;

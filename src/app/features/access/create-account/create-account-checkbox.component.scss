@@ -20,7 +20,7 @@
       }
     }
   }
-  @media (max-width: 700px) {
+  @media (max-width: vari.$bp-mobile-lg) {
     padding-top: 32px;
     }
 }

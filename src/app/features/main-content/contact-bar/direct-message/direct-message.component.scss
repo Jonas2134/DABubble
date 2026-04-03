@@ -1,4 +1,5 @@
 @use "../../../../shared/scss/mixins" as mixins;
+@use "../../../../shared/scss/variables" as vari;
 
 main{
     width: 300px;
@@ -16,7 +17,7 @@ main{
 .directMessageButton:hover .showMessagesIcon,
 .directMessageButton:hover h2
 {
-    color: #535AF1;
+    color: vari.$purple;
 }
 .accountCircle{
     font-size: 24px
@@ -51,7 +52,7 @@ section{
     border: none;
     cursor: pointer;
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
 }
 .userImage{
@@ -59,7 +60,7 @@ section{
     width: 50px;
     border-radius: 50%;
 }
-@media(max-width: 1000px){
+@media(max-width: vari.$bp-tablet){
     main{
         margin: 0 0;
     }

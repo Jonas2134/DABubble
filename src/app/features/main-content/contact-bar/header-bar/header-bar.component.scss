@@ -1,4 +1,5 @@
 @use "../../../../shared/scss/mixins" as mixins;
+@use "../../../../shared/scss/variables" as vari;
 
 header{
     width: 310px;
@@ -37,10 +38,10 @@ section{
 }
 
 .squareImage:hover .icon{
-    color: blue;
+    color: vari.$purple;
 }
 
-@media(max-width: 1000px){
+@media(max-width: vari.$bp-tablet){
     header{
         display: none;
     }
@@ -53,7 +54,7 @@ section{
         border-radius: 50%;
         bottom: 64px;
         right: 40px;
-        background-color: #444DF2;
+        background-color: vari.$dark-blue;
         border: none;
         &:hover{
             opacity: 0.8;
@@ -69,7 +70,7 @@ section{
     }
 }
 
-@media(max-width: 450px){
+@media(max-width: vari.$bp-mobile-sm){
     .squareImageNewPosition{
         right: 8px;
     }

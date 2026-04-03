@@ -50,7 +50,7 @@ header {
 .addChannel:hover span,
 .everyChannel:hover span,
 .everyChannel:hover .hashtagIcon {
-  color: #535af1;
+  color: vari.$purple;
   cursor: pointer;
 }
 
@@ -62,7 +62,7 @@ header {
   background-color: white;
   border-radius: 50%;
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
@@ -94,7 +94,7 @@ section {
   background-color: white;
   border-radius: 50%;
   &:hover{
-    background-color: rgb(237, 30, 121) !important;
+    background-color: vari.$rose !important;
     color: white;
   }
 }
@@ -104,7 +104,7 @@ section {
 }
 
 .everyChannel:hover .deleteChannel{
-  background-color: #eceefe;
+  background-color: vari.$sky-grey;
 }
 
 .everyChannel {
@@ -123,7 +123,7 @@ section {
     font-weight: 400;
   }
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
   }
 }
 
@@ -147,18 +147,18 @@ section {
 }
 
 .addChannel:hover .addIconChannel {
-  color: #535af1;
-  border-color: #535af1;
+  color: vari.$purple;
+  border-color: vari.$purple;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: vari.$bp-tablet) {
   main {
     margin: 0 0;
     width: 100%;
   }
 }
 
-@media(max-width: 450px){
+@media(max-width: vari.$bp-mobile-sm){
   .addButton{
     margin-right: 12px;
   }

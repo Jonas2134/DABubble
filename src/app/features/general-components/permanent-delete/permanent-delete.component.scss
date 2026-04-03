@@ -1,15 +1,16 @@
+@use '../../../shared/scss/mixins' as mixins;
+@use '../../../shared/scss/variables' as vari;
+
 .overlay {
+  @include mixins.dFlex();
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 100;
 }
 
 .modal {
-  background: #ffffff;
+  background: vari.$white;
   border-radius: 30px;
   padding: 45px 40px;
   width: min(90%, 480px);
@@ -21,9 +22,7 @@
   }
 
   .button-row {
-    display: flex;
-    gap: 24px;
-    justify-content: center;
+    @include mixins.dFlex($gap: 24px);
 
     .btn {
       cursor: pointer;
@@ -40,18 +39,18 @@
     }
 
     .cancel {
-      background: #ffffff;
-      color: #686868;
-      border: 1px solid #686868;
+      background: vari.$white;
+      color: vari.$gray;
+      border: 1px solid vari.$gray;
       &:hover {
-        background: #eceefe;
-        color: #444df2;
-        border: 1px solid #797ef3;
+        background: vari.$sky-grey;
+        color: vari.$dark-blue;
+        border: 1px solid vari.$light-blue;
       }
     }
     .confirm {
-      background: #ed1d79;
-      color: #ffffff;
+      background: vari.$rose;
+      color: vari.$white;
       &:hover {
         background: #d71a6b;
       }

@@ -20,7 +20,7 @@ form {
     font-size: clamp(16px, 2.5vw, 20px);
     text-align: center;
   }
-  @media (max-width: 700px) {
+  @media (max-width: vari.$bp-mobile-lg) {
     @include mixin.dFlex($gap: 16px, $direction: column);
     }
 }

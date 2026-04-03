@@ -1,4 +1,5 @@
 @use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
 
 .memberlist {
   width: 100%;
@@ -27,7 +28,7 @@
       padding: 0;
     }
     &:hover {
-      background-color: #eceefe;
+      background-color: vari.$sky-grey;
       border-radius: 30px;
     }
   }
@@ -39,17 +40,17 @@
   padding: 12px 24px;
   @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
   &:hover {
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
     border-radius: 30px;
-    color: #444df2;
+    color: vari.$dark-blue;
     .add-person-icon {
-      color: #444df2;
+      color: vari.$dark-blue;
     }
   }
   .add-person-icon {
     width: 40px;
     height: 40px;
-    background-color: #eceefe;
+    background-color: vari.$sky-grey;
     border: none;
     border-radius: 50px;
   }

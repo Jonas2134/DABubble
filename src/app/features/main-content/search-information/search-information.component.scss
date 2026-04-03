@@ -1,4 +1,5 @@
 @use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
 
 main {
     position: absolute;
@@ -42,7 +43,7 @@ section{
         border-radius: 50%;
     }
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
     span{
         font-size: 20px;
@@ -60,7 +61,7 @@ section{
     border-radius: 25px;
     cursor: pointer;
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
 }
 
@@ -73,7 +74,7 @@ section{
     border-radius: 25px;
     cursor: pointer;
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
 }
 
@@ -87,7 +88,7 @@ section{
     padding: 4px 16px;
     border: none;
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
 }
 
@@ -112,11 +113,11 @@ section{
     border-radius: 25px;
     cursor: pointer;
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
 }
 
-@media(max-width: 1000px){
+@media(max-width: vari.$bp-tablet){
     main {
         top: -8px;
         left: 1%;
@@ -125,7 +126,7 @@ section{
     }
 }
 
-@media(max-width: 450px){
+@media(max-width: vari.$bp-mobile-sm){
     main{
         padding: 40px 24px;
     }

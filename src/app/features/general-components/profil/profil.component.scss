@@ -1,3 +1,4 @@
+@use '../../../shared/scss/variables' as vari;
 @use '../../../shared/scss/mixins' as mixins;
 
 main{
@@ -99,7 +100,7 @@ header{
     background-color: white;
     cursor: pointer;
     &:hover{
-        background-color: #ECEEFE;
+        background-color: vari.$sky-grey;
     }
 }
 
@@ -110,7 +111,7 @@ header{
 .closeProfil:hover .closeIcon,
 .editIconShow:hover .editIcon
 {
-    color: #535AF1;
+    color: vari.$purple;
 }
 
 .editIconShow{
@@ -133,14 +134,14 @@ header{
     }
     a{
         font-size: 18px;
-        color: #535AF1;
+        color: vari.$purple;
         font-weight: 600;
         text-decoration: none;
         border-radius: 25px;
         cursor: pointer;
         padding: 6px 12px;
         &:hover{
-            background-color: #ECEEFE
+            background-color: vari.$sky-grey
         }
     }
 }
@@ -156,11 +157,11 @@ header{
 }
 
 .statusActive{
-    color:#92C83E;
+    color:vari.$online-green;
 }
 
 .statusAbsent{
-    color: #686868;
+    color: vari.$gray;
 }
 
 .mailAdress{
@@ -212,11 +213,11 @@ header{
 }
 
 .messageButtonBackgroundBlue{
-    background-color: #444DF2;
+    background-color: vari.$dark-blue;
 }
 
 .messageButtonBackgroundPink{
-    background-color: rgb(237, 30, 121);
+    background-color: vari.$rose;
 }
 
 .editSaveButtons{
@@ -239,12 +240,12 @@ header{
     width: 100%;
     input{
         font-size: 18px;
-        color: #686868;
+        color: vari.$gray;
         font-weight: 500;
         width: 100%;
         height: 50px;
         border-radius: 30px;
-        border: 1px solid #ADB0D9;
+        border: 1px solid vari.$hover-border;
         padding: 15px 20px;
     }
 }
@@ -260,18 +261,18 @@ header{
 
 .stopButton{
     font-size: 18px;
-    color: #444DF2;
+    color: vari.$dark-blue;
     font-weight: 700;
     background-color: white;
-    border: 1px solid #797ef3;
+    border: 1px solid vari.$light-blue;
     &:hover{
-        background-color: #444DF2;
+        background-color: vari.$dark-blue;
         color: white;
     }
 }
 
 .saveButton{
-    background-color: #444DF2;
+    background-color: vari.$dark-blue;
     font-size: 18px;
     color: white;
     font-weight: 700;
@@ -281,7 +282,7 @@ header{
     }
 }
 
-@media(max-width: 600px){
+@media(max-width: vari.$bp-mobile){
     .editIconShow{
         @include mixins.dFlex();
         height: 40px;
@@ -290,7 +291,7 @@ header{
         border: none;
         border-radius: 50%;
         &:hover{
-            background-color: #ECEEFE;
+            background-color: vari.$sky-grey;
         }
     }
 
@@ -313,7 +314,7 @@ header{
     }
 }
 
-@media(max-width: 450px){
+@media(max-width: vari.$bp-mobile-sm){
     section{
         &.small,
         &.big

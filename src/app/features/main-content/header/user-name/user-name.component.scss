@@ -1,4 +1,5 @@
 @use "../../../../shared/scss/mixins" as mixins;
+@use "../../../../shared/scss/variables" as vari;
 
 main {
   @include mixins.dFlex($justify: right, $align: center);
@@ -50,7 +51,7 @@ main {
   height: 40px;
   width: 40px;
   border-radius: 50%;
-  background-color: #eceefe;
+  background-color: vari.$sky-grey;
 }
 
 .arrowDown{
@@ -64,7 +65,7 @@ main {
 }
 
 .openLogOut:hover .arrowDown{
-  color: #535af1;
+  color: vari.$purple;
 }
 
 section {
@@ -101,8 +102,8 @@ section {
     cursor: pointer;
     position: relative;
     &:hover {
-      background-color: #eceefe;
-      color: #535af1;
+      background-color: vari.$sky-grey;
+      color: vari.$purple;
     }
     span{
       width: 80px;
@@ -120,7 +121,7 @@ section {
   transition: opacity 0.3s ease;
 }
 
-@media(max-width: 1200px){
+@media(max-width: vari.$bp-desktop){
   .avatarNameText{
     display: none;
   }
@@ -134,7 +135,7 @@ section {
   }
 }
 
-@media(max-width: 1000px){
+@media(max-width: vari.$bp-tablet){
   .openLogOut{
     display: none;
   }
@@ -186,7 +187,7 @@ section {
   }
 }
 
-@media(max-width: 600px){
+@media(max-width: vari.$bp-mobile){
   .logOut {
     button {
       width: 180px;
@@ -198,7 +199,7 @@ section {
   }
 }
 
-@media(max-width: 450px){
+@media(max-width: vari.$bp-mobile-sm){
   main{
     width: 60px;
   }
