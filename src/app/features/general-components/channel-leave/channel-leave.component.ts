@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, inject} from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, inject} from '@angular/core';
 import { Channel } from '../../../shared/interfaces/channel.interface';
 import { Firestore} from '@angular/fire/firestore';
 import {map, takeUntil } from 'rxjs/operators';
@@ -12,6 +12,7 @@ import { MemberListComponent } from '../member-list/member-list.component';
 import { ProfilComponent } from '../profil/profil.component';
 import { AddNewMembersComponent } from '../add-new-members/add-new-members.component';
 import { Subject } from 'rxjs';
+import { fadeSlide, slideUpDown } from '../../../shared/animations/animations';
 
 @Component({
   selector: 'app-channel-leave',
@@ -19,6 +20,7 @@ import { Subject } from 'rxjs';
   imports: [CommonModule, FormsModule, DeviceVisibleComponent, MemberListComponent, ProfilComponent, AddNewMembersComponent],
   templateUrl: './channel-leave.component.html',
   styleUrl: './channel-leave.component.scss',
+  animations: [fadeSlide, slideUpDown],
 })
 
 export class ChannelLeaveComponent implements OnInit{
@@ -43,13 +45,11 @@ export class ChannelLeaveComponent implements OnInit{
   descriptionSave: boolean = false;
   editedChannelName: string = '';
   editMode: boolean = true;
-  isVisibleName: boolean = false;
   hasInteractedName: boolean = false;
   editDescription: boolean = true;
   editedDescription: string = '';
-  isVisible: boolean = false;
   hasInteracted: boolean = false;
-  animateOut = false;
+  isMobile = window.innerWidth <= 600;
   nameExists = false;
   createdByUserName: string = 'Unbekannt';
 
@@ -98,29 +98,24 @@ export class ChannelLeaveComponent implements OnInit{
   }
 
 
+  @HostListener('window:resize')
+  onResize() { this.isMobile = window.innerWidth <= 600; }
+
   toggleEdit() {
     this.hasInteractedName = true;
-    this.isVisibleName = false;
-    setTimeout(() => {
-      this.editMode = !this.editMode;
-      if (!this.editMode && this.channelData?.cName) {
-        this.editedChannelName = this.channelData.cName;
-      }
-      this.isVisibleName = true;
-    }, 200);
+    this.editMode = !this.editMode;
+    if (this.editMode && this.channelData?.cName) {
+      this.editedChannelName = this.channelData.cName;
+    }
   }
 
 
   toggleDescription() {
     this.hasInteracted = true;
-    this.isVisible = false;
-    setTimeout(() => {
-      this.editDescription = !this.editDescription;
-      if (!this.editDescription && this.channelData?.cDescription) {
-        this.editedDescription = this.channelData.cDescription;
-      }
-      this.isVisible = true;
-    }, 200);
+    this.editDescription = !this.editDescription;
+    if (this.editDescription && this.channelData?.cDescription) {
+      this.editedDescription = this.channelData.cDescription;
+    }
   }
 
 
@@ -166,11 +161,7 @@ export class ChannelLeaveComponent implements OnInit{
 
 
   closeAddMember() {
-    this.animateOut = true;
-    setTimeout(() => {
-      this.newChannelMembers = false;
-      this.animateOut = false;
-      this.newChannelMembersChange.emit(this.newChannelMembers);
-    }, 800);
+    this.newChannelMembers = false;
+    this.newChannelMembersChange.emit(false);
   }
 }

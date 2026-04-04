@@ -124,28 +124,6 @@ button {
   font-family: "Nunito", sans-serif;
 }
 
-@keyframes slideUpFromBottom {
-  0% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-
-@keyframes slideDownToBottom {
-  0% {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-}
-
 @media (max-width: vari.$bp-tablet) {
   body {
     overflow: hidden;

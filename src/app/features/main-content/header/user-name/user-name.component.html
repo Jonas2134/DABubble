@@ -17,7 +17,7 @@
 </main>
 @if (isLogOutVisible) {
   <section>
-    <div class="popUpStyle"  [ngClass]="{ 'slide-down': animateOut }">
+    <div class="popUpStyle" @slideUpDown [@.disabled]="windowSize > 1000">
       <app-device-visible mode="tabletBig">
           <div class="popUpXLine"></div>
       </app-device-visible>

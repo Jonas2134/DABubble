@@ -1,6 +1,6 @@
 <main>
   @if (showAddMember) {
-  <section class="sectionMain" #addChannel>
+  <section class="sectionMain" @sectionEnter [@.disabled]="isMobile" #addChannel>
     <header>
       <div class="headlineClose">
         <span>Channel erstellen</span>
@@ -55,11 +55,7 @@
   } @else {
     @if (isVisible) {
       <section #addChannelAll class="add-member-wrapper">
-        <div  
-          [ngClass]="{
-          'slide-out-left': animateOut,
-          'slide-down': animateOut 
-          }"  class="popup-wrapper">
+        <div [@popupAnim]="animMode" (@popupAnim.done)="onAnimDone($event)" class="popup-wrapper">
           <app-add-new-members
               [activeUserId]="activeUserId"
               (close)="triggerSlideOut()"

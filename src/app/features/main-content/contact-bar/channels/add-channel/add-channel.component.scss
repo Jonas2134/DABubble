@@ -18,22 +18,6 @@ main {
   background-color: white;
   border-radius: 30px;
   padding: 40px;
-  animation: slideInFromLeft 0.8s ease-out forwards;
-}
-
-@keyframes slideInFromLeft {
-    0% {
-      transform: translate(-100%, -50%);
-      opacity: 0;
-    }
-    100% {
-      transform: translate(-50%, -50%);
-      opacity: 1;
-    }
-}
-
-.slide-in-left {
-  animation: slideInFromLeft 0.5s ease-in-out forwards;
 }
 
 app-add-new-members {
@@ -49,13 +33,7 @@ app-add-new-members {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  transition: transform 0.8s ease, opacity 0.5s ease;
   z-index: 9999;
-}
-
-.slide-out-left {
-  transform: translate(-150%, -50%);
-  opacity: 0;
 }
 
 header {
@@ -214,7 +192,6 @@ textarea::placeholder {
     height: 100%;
     padding: 40px 24px;
     border-radius: 0px;
-    animation: none;
   }
 
   app-add-new-members {
@@ -230,12 +207,7 @@ textarea::placeholder {
     left: auto;
     width: 100%;
     bottom: 0px;
-    animation: slideUpFromBottom 0.8s ease-out forwards;
     z-index: 9999;
-  }
-
-  .slide-down {
-    animation: slideDownToBottom 0.8s ease-out forwards;
   }
 }
 

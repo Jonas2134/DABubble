@@ -16,6 +16,7 @@ import { AuthentificationService } from '../../../../shared/services/authentific
 import { UserService } from '../../../../shared/services/user.service';
 import { ChannelService } from '../../../../shared/services/channel.service';
 import { MessageService } from '../../../../shared/services/message.service';
+import { slideUpDown } from '../../../../shared/animations/animations';
 
 @Component({
   selector: 'app-user-name',
@@ -23,6 +24,7 @@ import { MessageService } from '../../../../shared/services/message.service';
   imports: [CommonModule, ProfilComponent, DeviceVisibleComponent],
   templateUrl: './user-name.component.html',
   styleUrl: './user-name.component.scss',
+  animations: [slideUpDown],
 })
 export class UserNameComponent {
   private authService = inject(AuthentificationService);
@@ -36,7 +38,6 @@ export class UserNameComponent {
   userEmail: string = '';
   userImage: string = '';
   userId: string | undefined = '';
-  animateOut = false;
   windowSize = window.innerWidth;
   @ViewChild('tabletToggleBtn') tabletToggleBtn?: ElementRef;
   @ViewChild('arrowToggleBtn') arrowToggleBtn?: ElementRef;
@@ -69,22 +70,7 @@ export class UserNameComponent {
   }
 
   toggleLogOut() {
-    if (this.isLogOutVisible) {
-      if (this.windowSize <= 1000) {
-        this.animateOut = true;
-
-        setTimeout(() => {
-          this.isLogOutVisible = false;
-          this.animateOut = false;
-        }, 800);
-      } else {
-        console.log('nicht drin');
-        this.isLogOutVisible = false;
-        this.animateOut = false;
-      }
-    } else {
-      this.isLogOutVisible = true;
-    }
+    this.isLogOutVisible = !this.isLogOutVisible;
   }
 
   toggleImage() {
@@ -111,15 +97,7 @@ export class UserNameComponent {
       !clickedArrow &&
       !clickedInsideProfil;
     if (this.isLogOutVisible && clickedOutside) {
-      if (this.windowSize <= 1000) {
-        this.animateOut = true;
-        setTimeout(() => {
-          this.isLogOutVisible = false;
-          this.animateOut = false;
-        }, 800);
-      } else {
-        this.isLogOutVisible = false;
-      }
+      this.isLogOutVisible = false;
     }
   }
 

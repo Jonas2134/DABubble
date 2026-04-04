@@ -252,36 +252,6 @@ header {
   }
 }
 
-@keyframes fadeInSlide {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeOutSlide {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-}
-
-.fade-in {
-  animation: fadeInSlide 200ms ease-out forwards;
-}
-
-.fade-out {
-  animation: fadeOutSlide 200ms ease-in forwards;
-}
-
 @media (max-width: vari.$bp-tablet) {
   section {
     width: 90%;
@@ -343,14 +313,6 @@ header {
 
   .scrollContainer{
     padding: 0 40px;
-  }
-
-  .slide-up {
-    animation: slideUpFromBottom 0.8s ease-out forwards;
-  }
-
-  .slide-down {
-    animation: slideDownToBottom 0.8s ease-out forwards;
   }
 
   .memberAdd{

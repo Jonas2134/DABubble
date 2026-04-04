@@ -279,14 +279,6 @@ app-message {
 main {
   @include overlays.overlay(0.4, 90);
 }
-.slide-up {
-  animation: slideUpFromBottom 0.8s ease-out forwards;
-}
-
-.slide-down {
-  animation: slideDownToBottom 0.8s ease-out forwards;
-}
-
 .memberAddMessage {
   position: absolute;
   top: 0;

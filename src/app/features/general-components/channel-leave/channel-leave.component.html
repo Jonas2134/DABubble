@@ -11,7 +11,7 @@
         </header>
         <div class="scrollContainer">
             @if (editMode) {
-                <div [ngClass]="{ 'fade-in': hasInteractedName && isVisibleName, 'fade-out': hasInteractedName && !isVisibleName }" class="nameBox">
+                <div @fadeSlide class="nameBox">
                     <div class="boxEdit">
                         <h3>Channel-Name</h3>
                         <button class="editOverMobil editButton" (click)="toggleEdit()">Bearbeiten</button>
@@ -26,7 +26,7 @@
                 </div>
             }
             @else{
-                <div [ngClass]="{ 'fade-in': hasInteractedName && isVisibleName, 'fade-out': hasInteractedName && !isVisibleName }"  class="nameSaveBox">
+                <div @fadeSlide class="nameSaveBox">
                     <div class="saveBox">
                         <h3>Channel-Name</h3>
                         <button class="editOverMobil editButton" (click)="saveNewName()"
@@ -52,7 +52,7 @@
                 }
             }
             @if (editDescription) {
-                <div [ngClass]="{ 'fade-in': hasInteracted && isVisible, 'fade-out': hasInteracted && !isVisible }" class="descriptionBox">
+                <div @fadeSlide class="descriptionBox">
                     <div class="descriptionText">
                         <div class="boxEdit">
                             <h3>Beschreibung</h3>
@@ -73,7 +73,7 @@
                 </div>
             }
             @else {
-                <div [ngClass]="{ 'fade-in': hasInteracted && isVisible, 'fade-out': hasInteracted && !isVisible }" class="descriptionSaveOutBox">
+                <div @fadeSlide class="descriptionSaveOutBox">
                     <div class="descriptionSaveBox">
                         <div class="descriptionText">
                             <div class="saveBox">
@@ -132,12 +132,10 @@
 @if (newChannelMembers) {
     <div (click)="closeAddMember()" class="memberAdd">
         <app-add-new-members
+        @slideUpDown
+        [@.disabled]="!isMobile"
         (click)="$event.stopPropagation()"
         (close)="closeAddMember()"
-        [ngClass]="{ 
-            'slide-up': !animateOut, 
-            'slide-down': animateOut 
-        }"
         [channelMembers]="channelMembers"
         [activeUserId]="activeUserId"
         [channelId]="channelData?.cId"

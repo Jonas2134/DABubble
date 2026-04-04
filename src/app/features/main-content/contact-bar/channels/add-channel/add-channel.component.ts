@@ -1,9 +1,31 @@
 import { CommonModule } from '@angular/common';
+import { AnimationEvent } from '@angular/animations';
 import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild } from '@angular/core';
 import { AddNewMembersComponent } from '../../../../general-components/add-new-members/add-new-members.component';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, tap } from 'rxjs';
 import { ChannelService } from '../../../../../shared/services/channel.service';
 import { FormsModule } from '@angular/forms';
+import { trigger, transition, style, animate } from '@angular/animations';
+
+const sectionEnter = trigger('sectionEnter', [
+  transition(':enter', [
+    style({ transform: 'translate(-100%, -50%)', opacity: 0 }),
+    animate('0.8s ease-out', style({ transform: 'translate(-50%, -50%)', opacity: 1 }))
+  ])
+]);
+
+const popupAnim = trigger('popupAnim', [
+  transition('desktop => void', [
+    animate('0.8s ease', style({ transform: 'translate(-150%, -50%)', opacity: 0 }))
+  ]),
+  transition('void => mobile', [
+    style({ transform: 'translateY(100%)', opacity: 0 }),
+    animate('0.8s ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
+  ]),
+  transition('mobile => void', [
+    animate('0.8s ease-out', style({ transform: 'translateY(100%)', opacity: 0 }))
+  ])
+]);
 
 @Component({
   selector: 'app-add-channel',
@@ -11,6 +33,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, AddNewMembersComponent, FormsModule],
   templateUrl: './add-channel.component.html',
   styleUrl: './add-channel.component.scss',
+  animations: [sectionEnter, popupAnim],
 })
 
 export class AddChannelComponent{
@@ -20,14 +43,16 @@ export class AddChannelComponent{
   channelId: any = '';
   channelName: string = '';
   channelDescription: string = '';
-  animateOut = false;
-  nameExists = false;  
-  isVisible: boolean = true; 
+  isMobile = window.innerWidth <= 600;
+  nameExists = false;
+  isVisible: boolean = true;
   private nameCheck$ = new Subject<string>();
   @ViewChild('addChannel') channelWrapper?: ElementRef;
   @ViewChild('addChannelAll') memberAddWrapper?: ElementRef;
-  
+
   constructor( private elRef: ElementRef, private channelService: ChannelService) {}
+
+  get animMode() { return this.isMobile ? 'mobile' : 'desktop'; }
 
   ngOnInit(): void {
     this.nameCheck$
@@ -53,15 +78,24 @@ export class AddChannelComponent{
 
   
   triggerSlideOut() {
-    this.animateOut = true;
-    setTimeout(() => {
+    if (this.showAddMember) {
+      this.close.emit();
+    } else {
       this.isVisible = false;
-      this.animateOut = false;
-      this.close.emit(); 
-    }, 800);
+    }
   }
 
-  
+  onAnimDone(event: AnimationEvent) {
+    if (event.toState === 'void') {
+      this.close.emit();
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.isMobile = window.innerWidth <= 600;
+  }
+
   closeWindow() {
     this.close.emit();
   }
