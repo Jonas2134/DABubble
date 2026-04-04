@@ -1,5 +1,7 @@
 @use "../../../../shared/scss/mixins" as mixins;
 @use "../../../../shared/scss/variables" as vari;
+@use "../../../../shared/scss/buttons" as buttons;
+@use "../../../../shared/scss/utilities" as utils;
 
 :host {
   position: relative;
@@ -22,11 +24,7 @@ emoji-mart {
   flex: 1;
   overflow-y: auto;
   padding: 20px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  @include utils.hideScrollbar();
   background-color: #ffffff;
   border: 1px solid vari.$hover-border;
   border-radius: 20px 20px 20px 0px;
@@ -66,13 +64,7 @@ emoji-mart {
 }
 
 .icon-button {
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  background-color: transparent;
-  border: none;
-  border-radius: 50px;
-  @include mixins.dFlex();
+  @include buttons.iconBtn();
   &:disabled {
     .send-icon {
       color: vari.$gray;
@@ -81,13 +73,10 @@ emoji-mart {
   }
 }
 
-.blue-hover:hover {
-  background-color: vari.$sky-grey;
+.blue-hover {
+  @include utils.blueHover();
 }
 
 .textfield-icon {
-  color: vari.$gray;
-  &:hover {
-    color: vari.$purple;
-  }
+  @include utils.textfieldIcon();
 }

@@ -1,14 +1,10 @@
 @use "../../../../../shared/scss/mixins" as mixins;
 @use "../../../../../shared/scss/variables" as vari;
+@use "../../../../../shared/scss/overlays" as overlays;
+@use "../../../../../shared/scss/buttons" as buttons;
 
 main {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100vh;
-  width: 100%;
-  z-index: 100;
+  @include overlays.overlay(0.4, 100);
 }
 
 .sectionMain {
@@ -78,24 +74,7 @@ header {
 }
 
 .closeButton {
-  @include mixins.dFlex();
-  height: 40px;
-  width: 40px;
-  background-color: white;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    background-color: vari.$sky-grey;
-  }
-}
-
-.closeButton:hover img {
-  background-color: vari.$sky-grey;
-}
-
-.closeButton:hover div {
-  color: vari.$purple;
+  @include buttons.closeBtn();
 }
 
 .addChannelText {

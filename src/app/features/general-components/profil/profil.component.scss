@@ -1,14 +1,10 @@
 @use '../../../shared/scss/variables' as vari;
 @use '../../../shared/scss/mixins' as mixins;
+@use '../../../shared/scss/overlays' as overlays;
+@use '../../../shared/scss/buttons' as buttons;
 
-main{
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 100;
+main {
+  @include overlays.overlay();
 }
 
 section{
@@ -91,29 +87,14 @@ header{
     width: 100%;
 }
 
-.closeProfil{
-    @include mixins.dFlex();
-    height: 40px;
-    width: 40px;
-    border: none;
-    border-radius: 50%;
-    background-color: white;
-    cursor: pointer;
-    &:hover{
-        background-color: vari.$sky-grey;
-    }
+.closeProfil {
+  @include buttons.closeBtn();
 }
 
 .closeIcon{
     height: 24px;
     width: 24px;
 }
-.closeProfil:hover .closeIcon,
-.editIconShow:hover .editIcon
-{
-    color: vari.$purple;
-}
-
 .editIconShow{
     display: none;
 }
@@ -283,16 +264,8 @@ header{
 }
 
 @media(max-width: vari.$bp-mobile){
-    .editIconShow{
-        @include mixins.dFlex();
-        height: 40px;
-        width: 40px;
-        background-color: white;
-        border: none;
-        border-radius: 50%;
-        &:hover{
-            background-color: vari.$sky-grey;
-        }
+    .editIconShow {
+      @include buttons.closeBtn();
     }
 
     .nameEdit{

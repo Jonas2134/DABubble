@@ -1,5 +1,7 @@
 @use "../../../../shared/scss/mixins" as mixins;
 @use "../../../../shared/scss/variables" as vari;
+@use "../../../../shared/scss/overlays" as overlays;
+@use "../../../../shared/scss/buttons" as buttons;
 
 section {
   position: absolute;
@@ -13,14 +15,8 @@ section {
   @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
 }
 
-.overlay{
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  z-index: 99;
-  background-color: rgba(0, 0, 0, 0.5);
+.overlay {
+  @include overlays.overlay(0.5, 99);
 }
 
 .hidden {
@@ -39,20 +35,8 @@ app-add-new-members{
   @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
 }
 
-.closeChannelMember{
-  @include mixins.dFlex();
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  background-color: white;
-  border: none;
-  &:hover{
-    background-color: vari.$sky-grey;
-  }
-}
-
-.closeChannelMember:hover .closeButton{
-  color: vari.$purple;
+.closeChannelMember {
+  @include buttons.closeBtn();
 }
 
 .memberlist-header {

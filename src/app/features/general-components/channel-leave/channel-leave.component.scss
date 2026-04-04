@@ -1,14 +1,10 @@
 @use "../../../shared/scss/variables" as vari;
 @use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/overlays" as overlays;
+@use "../../../shared/scss/buttons" as buttons;
 
 main {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100vh;
-  width: 100%;
-  z-index: 90;
+  @include overlays.overlay(0.4, 90);
 }
 
 section {
@@ -62,24 +58,11 @@ header {
 }
 
 .closeChannelLeave {
-  @include mixins.dFlex();
-  height: 40px;
-  width: 40px;
-  border: none;
-  border-radius: 50%;
-  background-color: white;
-  cursor: pointer;
+  @include buttons.closeBtn();
   div {
     @include mixins.dFlex();
     font-size: 24px;
   }
-  &:hover {
-    background-color: vari.$sky-grey;
-  }
-}
-
-.closeChannelLeave:hover div {
-  color: vari.$purple;
 }
 
 .nameBox {
@@ -119,19 +102,6 @@ header {
     &:hover {
       background-color: vari.$sky-grey;
     }
-  }
-}
-
-.channelHashtagName {
-  @include mixins.dFlex($justify: left, $gap: 10px);
-  img {
-    height: 24px;
-    width: 24px;
-  }
-  span {
-    font-size: 18px;
-    color: black;
-    font-weight: 400;
   }
 }
 
@@ -216,11 +186,8 @@ header {
   }
 }
 
-.editOverTablet{
+.editOverTablet {
   display: none;
-}
-
-.editOverTablet{
   height: 40px;
   width: 40px;
 }

@@ -1,7 +1,26 @@
 @use "../../../shared/scss/mixins" as mixins;
 @use "../../../shared/scss/variables" as vari;
+@use "../../../shared/scss/buttons" as buttons;
 
+.overlayAddNewMember {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  width: 100vw;
+  background: transparent;
+  z-index: 1000;
+}
 
+.overlayAddNewMemberAlternative {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100vh;
+  width: 100vw;
+  background: transparent;
+  z-index: 1000;
+}
 
 .addMemberChannel {
   @include mixins.dFlex($justify: left, $gap: 15px);
@@ -19,21 +38,7 @@
 }
 
 .closeIconButton {
-  @include mixins.dFlex();
-  height: 40px;
-  width: 40px;
-  background-color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-
-  &:hover {
-    background-color: vari.$sky-grey;
-  }
-}
-
-.closeIconButton:hover .closeIcon {
-  color: vari.$dark-blue;
+  @include buttons.closeBtn(vari.$dark-blue);
 }
 
 .devspaceElement {
@@ -74,7 +79,6 @@
 
   .popup {
     position: fixed;
-    /* zentriert, kannst Du anpassen */
     top:  50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -83,7 +87,6 @@
     max-width: 410px;
     background: white;
     border-radius: 16px;
-    /* optional Schatten */
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 

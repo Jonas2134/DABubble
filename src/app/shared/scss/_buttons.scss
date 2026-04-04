@@ -1,0 +1,26 @@
+@use 'variables' as vari;
+@use 'mixins' as mixins;
+
+@mixin closeBtn($hover-icon-color: vari.$purple) {
+  @include mixins.dFlex();
+  height: 40px;
+  width: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  &:hover {
+    background-color: vari.$sky-grey;
+    > * { color: $hover-icon-color; }
+  }
+}
+
+@mixin iconBtn() {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: none;
+  border-radius: 50px;
+  @include mixins.dFlex();
+}

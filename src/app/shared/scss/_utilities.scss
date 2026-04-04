@@ -1,0 +1,16 @@
+@use 'variables' as vari;
+
+@mixin hideScrollbar() {
+  &::-webkit-scrollbar { display: none; }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@mixin textfieldIcon() {
+  color: vari.$gray;
+  &:hover { color: vari.$purple; }
+}
+
+@mixin blueHover() {
+  &:hover { background-color: vari.$sky-grey; }
+}

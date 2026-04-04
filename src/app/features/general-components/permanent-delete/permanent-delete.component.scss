@@ -1,12 +1,10 @@
 @use '../../../shared/scss/mixins' as mixins;
 @use '../../../shared/scss/variables' as vari;
+@use '../../../shared/scss/overlays' as overlays;
 
 .overlay {
   @include mixins.dFlex();
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  @include overlays.overlayFixed();
 }
 
 .modal {

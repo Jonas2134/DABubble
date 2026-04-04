@@ -1,16 +1,13 @@
 @use "../../../shared/scss/mixins" as mixins;
 @use "../../../shared/scss/variables" as vari;
+@use "../../../shared/scss/utilities" as utils;
 
 .memberlist {
   width: 100%;
   flex: 1;
   overflow-y: auto;
   padding-top: 20px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  @include utils.hideScrollbar();
   @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 16px, $direction: column);
 }
 

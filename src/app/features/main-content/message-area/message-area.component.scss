@@ -1,5 +1,7 @@
 @use "../../../shared/scss/mixins" as mixins;
 @use "../../../shared/scss/variables" as vari;
+@use "../../../shared/scss/overlays" as overlays;
+@use "../../../shared/scss/utilities" as utils;
 
 .loading-screen {
   height: 100%;
@@ -30,11 +32,7 @@ section {
     min-height: 0;
     padding-block: 20px;
     overflow-y: auto;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    @include utils.hideScrollbar();
     @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 20px, $direction: column);
   }
 
@@ -279,13 +277,7 @@ app-message {
 }
 
 main {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  height: 100vh;
-  width: 100%;
-  z-index: 90;
+  @include overlays.overlay(0.4, 90);
 }
 .slide-up {
   animation: slideUpFromBottom 0.8s ease-out forwards;

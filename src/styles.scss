@@ -56,26 +56,6 @@ textarea {
   z-index: 2;
 }
 
-.overlayAddNewMember{
-  position: fixed;
-  inset: 0;
-  height: 100vh;
-  width: 100vw;
-  background: transparent;
-  z-index: 1000;
-}
-
-.overlayAddNewMemberAlternative{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 100vh;
-  width: 100vw;
-  background: transparent;
-  z-index: 1000;
-}
-
 .user-img-status {
   position: relative;
   width: 50px;
@@ -142,45 +122,6 @@ textarea {
 
 button {
   font-family: "Nunito", sans-serif;
-}
-
-.primary-btn {
-  background-color: vari.$dark-blue;
-  color: vari.$white;
-  border: 1px solid vari.$dark-blue;
-  &:hover {
-    background-color: vari.$light-blue;
-    border: 1px solid vari.$light-blue;
-  }
-  &:active {
-    background-color: vari.$dark-blue;
-    border: 1px solid vari.$dark-blue;
-  }
-  &:disabled {
-    background-color: vari.$gray;
-    border: 1px solid vari.$gray;
-    cursor: not-allowed;
-  }
-}
-
-.secondary-btn {
-  background-color: vari.$white;
-  color: vari.$dark-blue;
-  border: 1px solid vari.$light-blue;
-  &:hover {
-    background-color: vari.$purple;
-    color: vari.$white;
-    border: 1px solid vari.$purple;
-  }
-  &:active {
-    background-color: vari.$dark-blue;
-    border: 1px solid vari.$dark-blue;
-  }
-  &:disabled {
-    color: vari.$gray;
-    border: 1px solid vari.$gray;
-    cursor: not-allowed;
-  }
 }
 
 @keyframes slideUpFromBottom {

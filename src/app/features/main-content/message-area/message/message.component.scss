@@ -1,5 +1,46 @@
 @use "../../../../shared/scss/variables" as vari;
 @use "../../../../shared/scss/mixins" as mixins;
+@use "../../../../shared/scss/buttons" as buttons;
+@use "../../../../shared/scss/utilities" as utils;
+
+.primary-btn {
+  background-color: vari.$dark-blue;
+  color: vari.$white;
+  border: 1px solid vari.$dark-blue;
+  &:hover {
+    background-color: vari.$light-blue;
+    border: 1px solid vari.$light-blue;
+  }
+  &:active {
+    background-color: vari.$dark-blue;
+    border: 1px solid vari.$dark-blue;
+  }
+  &:disabled {
+    background-color: vari.$gray;
+    border: 1px solid vari.$gray;
+    cursor: not-allowed;
+  }
+}
+
+.secondary-btn {
+  background-color: vari.$white;
+  color: vari.$dark-blue;
+  border: 1px solid vari.$light-blue;
+  &:hover {
+    background-color: vari.$purple;
+    color: vari.$white;
+    border: 1px solid vari.$purple;
+  }
+  &:active {
+    background-color: vari.$dark-blue;
+    border: 1px solid vari.$dark-blue;
+  }
+  &:disabled {
+    color: vari.$gray;
+    border: 1px solid vari.$gray;
+    cursor: not-allowed;
+  }
+}
 
 button {
   cursor: pointer;
@@ -68,25 +109,16 @@ section {
 }
 
 .icon-button {
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
+  @include buttons.iconBtn();
   font-weight: 400;
-  background-color: transparent;
-  border: none;
-  border-radius: 50px;
-  @include mixins.dFlex();
 }
 
-.blue-hover:hover {
-  background-color: vari.$sky-grey;
+.blue-hover {
+  @include utils.blueHover();
 }
 
 .textfield-icon {
-  color: vari.$gray;
-  &:hover {
-    color: vari.$purple;
-  }
+  @include utils.textfieldIcon();
 }
 
 .message {
