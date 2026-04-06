@@ -1,19 +1,8 @@
-export interface UserInterface {
+export interface User {
   uId: string;
   uName: string;
   uEmail: string;
-  uUserImage: string;
   uStatus: boolean;
+  uUserImage: string;
   uLastReactions: string[];
 }
-
-export interface User {
-    uId?: string; 
-    uName: string; 
-    uEmail: string;
-    uStatus: boolean; 
-    uUserImage: string;
-    uLastReactions: string[];
-}
-
-

@@ -118,7 +118,7 @@ export class SearchInformationComponent implements OnInit {
       .map((ch) => ({
         ...ch,
         memberNames: users
-          .filter((u) => u.uId && (ch.cUserIds || []).includes(u.uId!))
+          .filter((u) => (ch.cUserIds || []).includes(u.uId))
           .map((u) => u.uName),
       }));
   }
@@ -153,7 +153,7 @@ export class SearchInformationComponent implements OnInit {
       )
       .map((m) => {
         const otherId =
-          m.mUserId === this.activeUserId ? m.mSenderId! : m.mUserId!;
+          m.mUserId === this.activeUserId ? m.mSenderId : m.mUserId!;
         const otherUser = users.find((u) => u.uId === otherId);
         return {
           mText: m.mText,
@@ -173,7 +173,7 @@ export class SearchInformationComponent implements OnInit {
         parent?.mChannelId ??
         (parent
           ? parent.mUserId === this.activeUserId
-            ? parent.mSenderId!
+            ? parent.mSenderId
             : parent.mUserId!
           : '');
       hits.push({ mText: m.mText, threadId: m.mThreadId!, chatId, chatType });

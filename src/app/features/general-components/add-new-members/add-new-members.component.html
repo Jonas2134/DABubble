@@ -68,7 +68,7 @@
         @if (showMember ) {
           <div class="showMembers" (click)="$event.stopPropagation()">
             @for(member of filteredMembers; track trackById) {
-            <button (mousedown)="toggleMember(member)" [class.selected]="selectedMemberIds.includes(member.uId!)" class="memberItem">
+            <button (mousedown)="toggleMember(member)" [class.selected]="selectedMemberIds.includes(member.uId)" class="memberItem">
               <div class="user-img-status">
                 <img src="{{ member.uUserImage }}" alt="" />
                 <span [ngClass]="member.uStatus ? 'online' : 'offline'"></span>

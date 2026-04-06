@@ -64,12 +64,12 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
     const allUsers = await this.userService.allUsers();
     const excluded = new Set<string>();
     for (const u of this.channelMembers) {
-      if (u.uId) excluded.add(u.uId);
+      excluded.add(u.uId);
     }
     if (this.activeUserId) {
       excluded.add(this.activeUserId);
     }
-    this.availableMembers = allUsers.filter(u => u.uId && !excluded.has(u.uId));
+    this.availableMembers = allUsers.filter(u => !excluded.has(u.uId));
     this.filteredMembers  = [...this.availableMembers];
   }
 
@@ -136,7 +136,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
 
 
   toggleMember(member: User) {
-    const id = member.uId!;
+    const id = member.uId;
     const idx = this.selectedMemberIds.indexOf(id);
     if (idx > -1) {
       this.selectedMemberIds.splice(idx, 1);
@@ -197,9 +197,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
     let ids: string[];
     if (this.selectedOption === 'option1') {
       const allUsers = await this.userService.allUsers();
-      ids = allUsers
-        .map((u) => u.uId)
-        .filter((id): id is string => typeof id === 'string');
+      ids = allUsers.map((u) => u.uId);
     } else {
       ids = [...this.selectedMemberIds];
     }

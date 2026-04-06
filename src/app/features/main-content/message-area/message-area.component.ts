@@ -314,7 +314,7 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   }
 
   selectUserNew(u: User) {
-    this.finishNewTarget('private', u.uId!);
+    this.finishNewTarget('private', u.uId);
   }
   selectChannelNew(c: Channel) {
     this.finishNewTarget('channel', c.cId!);

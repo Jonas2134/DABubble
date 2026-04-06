@@ -36,7 +36,7 @@ export class MessageService {
       mId: id || '',
       mText: obj.mText || '',
       mReactions: obj.mReactions || [],
-      mTime: obj.mTime || new Date(),
+      mTime: obj.mTime || Timestamp.now(),
       mSenderId: obj.mSenderId || '',
       mUserId: obj.mUserId || '',
       mThreadId: obj.mThreadId || '',
@@ -127,8 +127,6 @@ export class MessageService {
   private getTimeValue(msg: Message): number {
     if (msg.mTime instanceof Timestamp) {
       return msg.mTime.toDate().getTime();
-    } else if (msg.mTime instanceof Date) {
-      return msg.mTime.getTime();
     }
     return 0;
   }
@@ -286,7 +284,7 @@ export class MessageService {
   getAllMessages(): Promise<Message[]> {
     const messagesCollection = collection(this.firestore, 'messages');
     return getDocs(messagesCollection).then((snap) =>
-      snap.docs.map((doc) => doc.data() as Message)
+      snap.docs.map((doc) => this.setNoteObject(doc.data(), doc.id))
     );
   }
 
@@ -294,7 +292,7 @@ export class MessageService {
     const docRef = doc(this.firestore, 'messages', id);
     const docSnap = await getDoc(docRef);
     return docSnap.exists()
-      ? { mId: docSnap.id, ...(docSnap.data() as Message) }
+      ? { ...(docSnap.data() as Message), mId: docSnap.id }
       : undefined;
   }
 }

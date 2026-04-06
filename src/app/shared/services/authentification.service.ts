@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { UserInterface } from '../interfaces/user.interface';
+import { User } from '../interfaces/user.interface';
 import {
   deleteDoc,
   doc,
@@ -67,7 +67,7 @@ export class AuthentificationService {
     );
     const uid = userCredential.user.uid;
   
-    const userData: UserInterface = {
+    const userData: User = {
       uId:            uid,
       uName:          username,
       uEmail:         email,
@@ -106,7 +106,7 @@ export class AuthentificationService {
     return signInWithPopup(this.auth, provider)
     .then(async (result) => {
       this.currentUid = result.user.uid;
-      const userData: UserInterface = {
+      const userData: User = {
         uId: this.currentUid,
         uName: result.user.displayName || '',
         uEmail: result.user.email || '',
@@ -128,7 +128,7 @@ export class AuthentificationService {
     return signInAnonymously(this.auth)
     .then(async (result) => {
       this.currentUid = result.user.uid;
-      const guestData: UserInterface = {
+      const guestData: User = {
         uId: this.currentUid,
         uName: 'Gast',
         uEmail: '',

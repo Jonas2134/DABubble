@@ -8,8 +8,4 @@ export interface GroupedReaction {
   reaction: string;
   count:    number;
   names:    string[];
-  namesLine:  string;
-  actionLine: string;
 }
-
-

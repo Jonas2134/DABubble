@@ -6,7 +6,7 @@
           <h1>Gefundene Nutzer</h1>
           <ng-container>
             @for (user of users; track $index) {
-              <button (click)="selectChat(user.uId!, 'private')" class="userPhoto">
+              <button (click)="selectChat(user.uId, 'private')" class="userPhoto">
                 <img [src]="user.uUserImage" alt="{{ user.uName }}" />
                 <h3>{{ user.uName }}</h3>
               </button>

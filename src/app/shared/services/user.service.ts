@@ -29,7 +29,7 @@ export class UserService {
         userDocRef,
         (docSnap) => {
           if (docSnap.exists()) {
-            subscriber.next(docSnap.data() as User);
+            subscriber.next({ ...docSnap.data(), uId: docSnap.id } as User);
           } else {
             subscriber.next(null);
           }
@@ -63,7 +63,7 @@ export class UserService {
     const userDocRef = doc(this.firestore, 'users', userId);
     return getDoc(userDocRef).then((docSnap) => {
       if (docSnap.exists()) {
-        return docSnap.data() as User;
+        return { ...docSnap.data(), uId: docSnap.id } as User;
       } else {
         throw new Error('User not found');
       }
@@ -81,7 +81,7 @@ export class UserService {
       const docRef = doc(this.firestore, 'users', id);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        const userData = docSnap.data() as User;
+        const userData = { ...docSnap.data(), uId: docSnap.id } as User;
         results.push(userData);
       } else {
         console.warn(`User not found for ID: ${id}`);
@@ -115,7 +115,7 @@ export class UserService {
         return;
       }
 
-      const userData = docSnap.data() as User;
+      const userData = { ...docSnap.data(), uId: docSnap.id } as User;
       const lastReactions = userData.uLastReactions || [];
       const index = lastReactions.indexOf(reaction);
 
@@ -167,7 +167,7 @@ export class UserService {
 
   allUsers(): Promise<User[]> {
     const usersCollection = collection(this.firestore, 'users');
-    return getDocs(usersCollection).then(snap => snap.docs.map(doc => doc.data() as User));
+    return getDocs(usersCollection).then(snap => snap.docs.map(doc => ({ ...doc.data(), uId: doc.id } as User)));
   }
  
 

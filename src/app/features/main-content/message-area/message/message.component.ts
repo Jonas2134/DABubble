@@ -18,6 +18,11 @@ import {
   GroupedReaction,
   Reaction,
 } from '../../../../shared/interfaces/reaction.interface';
+
+interface ReactionViewModel extends GroupedReaction {
+  namesLine: string;
+  actionLine: string;
+}
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../../../shared/services/message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
@@ -53,7 +58,7 @@ export class MessageComponent implements OnInit {
 
   activeUserData: User | null = null;
   senderData: User | null = null;
-  groupedReactions: GroupedReaction[] = [];
+  groupedReactions: ReactionViewModel[] = [];
   shownReactionNumber = 7;
   editText = '';
   replyCount = 0;
@@ -87,7 +92,7 @@ export class MessageComponent implements OnInit {
   private loadSenderData() {
     this.senderSub?.unsubscribe();
     this.senderSub = this.userService
-      .getUserRealtime(this.message.mSenderId!)
+      .getUserRealtime(this.message.mSenderId)
       .subscribe({
         next: (u) => (this.senderData = u),
         error: (err) => console.error('Sender-Live', err),
@@ -134,7 +139,7 @@ export class MessageComponent implements OnInit {
   private groupReactionsWithNames(
     reactions: Reaction[],
     activeUserId: string
-  ): GroupedReaction[] {
+  ): ReactionViewModel[] {
     const grouped = this.collectReactions(reactions, activeUserId);
     return this.mapBucketsToViewModel(grouped);
   }
@@ -159,7 +164,7 @@ export class MessageComponent implements OnInit {
 
   private mapBucketsToViewModel(
     buckets: Map<string, { count: number; names: string[] }>
-  ): GroupedReaction[] {
+  ): ReactionViewModel[] {
     return Array.from(buckets, ([reaction, data]) => ({
       reaction,
       count: data.count,
