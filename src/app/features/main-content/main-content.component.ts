@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { ContactBarComponent } from './contact-bar/contact-bar.component';
 import { MessageAreaComponent } from './message-area/message-area.component';
 import { SearchBarComponent } from './header/search-bar/search-bar.component';
-import { DeviceVisibleComponent } from '../../shared/services/responsive';
+import { DeviceVisibleComponent } from '../../shared/components/device-visible.component';
 import { AuthentificationService } from '../../shared/services/authentification.service';
 
 @Component({
@@ -22,9 +22,10 @@ import { AuthentificationService } from '../../shared/services/authentification.
   templateUrl: './main-content.component.html',
   styleUrls: ['./main-content.component.scss'],
 })
-export class MainContentComponent {
+export class MainContentComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private authService = inject(AuthentificationService);
+  private resizeListener = () => this.updateScreenSize();
 
   smallSize = false;
   messageIn = false;
@@ -46,7 +47,11 @@ export class MainContentComponent {
     if (this.authService.currentUid === null) this.authService.currentUid = this.activeUserId;
 
     this.updateScreenSize();
-    window.addEventListener('resize', () => this.updateScreenSize());
+    window.addEventListener('resize', this.resizeListener);
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeListener);
   }
 
   toggleSection() {

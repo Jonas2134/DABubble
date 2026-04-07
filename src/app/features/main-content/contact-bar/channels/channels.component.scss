@@ -1,7 +1,8 @@
 @use "../../../../shared/scss/mixins" as mixins;
 @use "../../../../shared/scss/variables" as vari;
 
-main {
+:host {
+  display: block;
   width: 300px;
   margin: 0 auto;
 }
@@ -115,8 +116,6 @@ section {
   padding: 0 20px;
   border-radius: 20px;
   cursor: pointer;
-  background-color: white;
-  border: none;
   span {
     font-size: 18px;
     color: black;
@@ -131,12 +130,16 @@ section {
   @include mixins.dFlex();
 }
 .tagName{
+  all: unset;
   @include mixins.dFlex($justify: left, $align: center, $gap: 15px);
+  cursor: pointer;
 }
 
 .newChannels {
   @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 25px, $direction: column);
   margin-top: 25px;
+  list-style: none;
+  padding: 0;
 }
 
 .addIconChannel {
@@ -152,7 +155,7 @@ section {
 }
 
 @media (max-width: vari.$bp-tablet) {
-  main {
+  :host {
     margin: 0 0;
     width: 100%;
   }

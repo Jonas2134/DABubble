@@ -2,24 +2,24 @@
 <emoji-mart #emojiPicker (emojiClick)="addEmoji($event)"></emoji-mart>
 
 } @if (displaySuggestions) {
-<div class="suggestions">
+<ul class="suggestions" role="listbox">
   @for(user of foundUsers; track user) {
-  <div (click)="insertUserSuggestion(user)">
+  <li role="option" (click)="insertUserSuggestion(user)">
     <div class="user-img-status">
-      <img src="{{ user?.uUserImage }}" alt="" />
+      <img src="{{ user?.uUserImage }}" [alt]="user?.uName + ' Profilbild'" />
       <span [ngClass]="user?.uStatus ? 'online' : 'offline'"></span>
     </div>
     <span>{{ user?.uName }}</span>
-  </div>
+  </li>
   } @for(channel of foundChannels; track channel) {
-  <div (click)="insertChannelSuggestion(channel)">#{{ channel?.cName }}</div>
+  <li role="option" (click)="insertChannelSuggestion(channel)">#{{ channel?.cName }}</li>
   }
-</div>
+</ul>
 }
 
 <textarea
-  type="text"
   [placeholder]="getPlaceholder()"
+  [attr.aria-label]="getPlaceholder()"
   [(ngModel)]="newMessageText"
   #messageInput
   (input)="onTextChange($event)"
@@ -29,16 +29,16 @@
 
 <div class="textfield-buttons">
   <div>
-    <button class="icon-button blue-hover" (click)="toggleEmojiPicker($event)">
-      <div class="material-symbols textfield-icon">sentiment_satisfied</div>
+    <button class="icon-button blue-hover" aria-label="Emoji einfügen" (click)="toggleEmojiPicker($event)">
+      <span class="material-symbols textfield-icon">sentiment_satisfied</span>
     </button>
 
-    <button class="icon-button blue-hover" (click)="openUserSuggestions()">
-      <div class="material-symbols textfield-icon">alternate_email</div>
+    <button class="icon-button blue-hover" aria-label="Person erwähnen" (click)="openUserSuggestions()">
+      <span class="material-symbols textfield-icon">alternate_email</span>
     </button>
   </div>
 
-  <button class="icon-button" [disabled]="!newMessageText.trim()">
-    <div class="material-symbols send-icon" (click)="sendMessage()">send</div>
+  <button class="icon-button" aria-label="Nachricht senden" [disabled]="!newMessageText.trim()" (click)="sendMessage()">
+    <span class="material-symbols send-icon">send</span>
   </button>
 </div>

@@ -3,7 +3,7 @@
   [class.edit-open]="isEditOpen"
   [class.thread]="chatType === 'thread'"
 >
-  <img src="{{ senderData?.uUserImage }}" alt="" />
+  <img src="{{ senderData?.uUserImage }}" [alt]="(senderData?.uName || '') + ' Profilbild'" />
 
   @if (isEditOpen && message.mSenderId === activeUserId) {
   <div class="edit-message">
@@ -90,39 +90,44 @@
     <span (click)="addReaction(reaction)">{{ reaction }}</span>
     } }
 
-    <span
+    <button
       #emojiBtn
       class="material-symbols action-btn"
+      aria-label="Reaktion hinzufügen"
       (click)="toggleEmojiPicker($event)"
     >
       add_reaction
-    </span>
+    </button>
 
-    <div
+    <button
       class="material-symbols action-btn"
       [class.d-none]="chatType === 'thread'"
+      aria-label="In Thread antworten"
       (click)="onThreadClick()"
     >
       comment
-    </div>
+    </button>
 
-    <div
+    <button
       #optionsBtn
       class="material-symbols action-btn"
       [class.d-none]="message.mSenderId != activeUserId"
+      aria-label="Weitere Optionen"
+      [attr.aria-expanded]="isOptionsOpen"
       (click)="toggleOptions($event)"
     >
       more_vert
-    </div>
+    </button>
 
     @if (isOptionsOpen) {
     <div
       #optionsMenu
       class="options-menu"
+      role="menu"
       [class.active-user-options]="message.mSenderId === activeUserId"
     >
-      <div (click)="openEdit()">Nachricht bearbeiten</div>
-      <div (click)="togglePermanentDelete()">Nachricht löschen</div>
+      <button role="menuitem" (click)="openEdit()">Nachricht bearbeiten</button>
+      <button role="menuitem" (click)="togglePermanentDelete()">Nachricht löschen</button>
     </div>
     }
   </div>

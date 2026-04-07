@@ -16,14 +16,16 @@
   height: 200px;
   padding: 8px 4px;
   overflow-y: auto;
+  list-style: none;
+  margin: 0;
   @include mixins.dFlex($justify: initial, $align: initial, $gap: 16px, $direction: column);
-  div {
+  .member-btn {
+    all: unset;
     cursor: pointer;
     padding: 4px 24px;
+    width: 100%;
+    box-sizing: border-box;
     @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
-    div {
-      padding: 0;
-    }
     &:hover {
       background-color: vari.$sky-grey;
       border-radius: 30px;
@@ -32,9 +34,11 @@
 }
 
 .add-member {
+  all: unset;
   cursor: pointer;
   width: 100%;
   padding: 12px 24px;
+  box-sizing: border-box;
   @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
   &:hover {
     background-color: vari.$sky-grey;

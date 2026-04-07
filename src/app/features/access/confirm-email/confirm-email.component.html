@@ -1,4 +1,4 @@
-<div class="arrow" (click)="changeComponent('login')">
+<button type="button" class="arrow" aria-label="Zurück zum Login" (click)="changeComponent('login')">
   <svg
     width="16"
     height="16"
@@ -11,7 +11,7 @@
       fill="black"
     />
   </svg>
-</div>
+</button>
 
 <form [formGroup]="confirmForm" (ngSubmit)="onSubmit()">
   <h1>Passwort zurücksetzen</h1>

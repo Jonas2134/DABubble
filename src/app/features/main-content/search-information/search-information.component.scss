@@ -1,7 +1,7 @@
 @use "../../../shared/scss/mixins" as mixins;
 @use "../../../shared/scss/variables" as vari;
 
-main {
+.search-results {
     position: absolute;
     top: 90%;
     left: 5%;
@@ -19,7 +19,7 @@ h1{
     margin-bottom: 8px;
 }
 
-main::-webkit-scrollbar-track{
+.search-results::-webkit-scrollbar-track{
     margin-top: 40px;
     margin-bottom: 40px;
 }

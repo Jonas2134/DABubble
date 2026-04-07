@@ -1,12 +1,12 @@
-<main (click)="closeWindow()">
+<div class="channel-leave-overlay" role="dialog" aria-modal="true" aria-label="Channel bearbeiten" (click)="closeWindow()">
     <section (click)="$event.stopPropagation()">
         <header>
             <div>
-                <img src="assets/icons/hashtag.svg">
+                <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
                 <h1>{{ channelData?.cName}}</h1>
             </div>
-            <button (click)="closeWindow()" class="closeChannelLeave">
-                <div class="material-symbols closeIcon">close</div>
+            <button (click)="closeWindow()" class="closeChannelLeave" aria-label="Schließen">
+                <span class="material-symbols closeIcon">close</span>
             </button>
         </header>
         <div class="scrollContainer">
@@ -20,7 +20,7 @@
                         </button>
                     </div>
                     <div class="channelHashtagName">
-                        <img src="assets/icons/hashtag.svg">
+                        <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
                         <span>{{ channelData?.cName}}</span>
                     </div>
                 </div>
@@ -39,8 +39,8 @@
                         </button>
                     </div>
                     <div class="editChannelName" >
-                        <img src="assets/icons/hashtag.svg">
-                        <input [(ngModel)]="editedChannelName"  (ngModelChange)="onNameInput($event)" [placeholder]="editedChannelName"/>
+                        <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
+                        <input aria-label="Channel-Name" [(ngModel)]="editedChannelName"  (ngModelChange)="onNameInput($event)" [placeholder]="editedChannelName"/>
                     </div>
                 </div>
                 @if ( hasInteractedName && editedChannelName.trim().length > 0 &&
@@ -84,7 +84,7 @@
                                 </button>
                             </div>
                             <div class="inputDescription">
-                                <textarea [(ngModel)]="editedDescription" placeholder="Dein Text hier" type="text"></textarea>
+                                <textarea aria-label="Channel-Beschreibung" [(ngModel)]="editedDescription" placeholder="Dein Text hier"></textarea>
                             </div>
                         </div>
                         <div class="xLineSave"></div>
@@ -98,7 +98,7 @@
                 </div>
             }
             <div class="memberListMobile">
-                <app-device-visible mode="mobilBig">
+                <app-device-visible mode="mobileBig">
                     <h1 class="mobileHeadlineMember">Mitglieder</h1>
                     <app-member-list
                     [channelMembers]="channelMembers"
@@ -113,15 +113,15 @@
             </div>
         </div>
     </section>
-</main>
+</div>
 @if (isChannelMemberProfilOpen) {
     <app-profil
-    [activeUserId]="activeUserId"
-    [userImage]="activChannelMemberProfil?.uUserImage"
-    [userName]="activChannelMemberProfil?.uName"
-    [userEmail]="activChannelMemberProfil?.uEmail"
-    [userStatus]="activChannelMemberProfil?.uStatus"    
-    [userId]="activChannelMemberProfil?.uId"
+    [activeUserId]="activeUserId ?? ''"
+    [userImage]="activChannelMemberProfil?.uUserImage ?? ''"
+    [userName]="activChannelMemberProfil?.uName ?? ''"
+    [userEmail]="activChannelMemberProfil?.uEmail ?? ''"
+    [userStatus]="activChannelMemberProfil?.uStatus ?? false"
+    [userId]="activChannelMemberProfil?.uId ?? ''"
     #profilRef
     size="big"
     [showButton]="activeUserId !== activChannelMemberProfil?.uId"

@@ -148,7 +148,10 @@ section {
 
 .new-suggestions {
   @include mixins.dFlex($justify: initial, $align: initial, $gap: 10px, $direction: column);
-  > div {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  > li {
     cursor: pointer;
     padding: 8px 24px;
     @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);

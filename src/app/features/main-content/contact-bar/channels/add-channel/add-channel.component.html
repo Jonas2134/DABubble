@@ -4,8 +4,8 @@
     <header>
       <div class="headlineClose">
         <span>Channel erstellen</span>
-        <button class="closeButton" (click)="closeWindow()">
-          <div class="material-symbols">close</div>
+        <button class="closeButton" aria-label="Schließen" (click)="closeWindow()">
+          <span class="material-symbols">close</span>
         </button>
       </div>
       <div class="addChannelText">
@@ -19,7 +19,7 @@
       <span class="channelField">Channel-Name</span>
       <div class="inputSpan">
         <img src="assets/icons/hashtag_grey.svg" />
-        <input #channelNameInput  [(ngModel)]="channelName" (input)="checkNameUnique(channelName)" placeholder="z.B. Kooperationsprojekte" type="text"/>
+        <input #channelNameInput [(ngModel)]="channelName" (input)="checkNameUnique(channelName)" placeholder="z.B. Kooperationsprojekte" type="text" aria-label="Channel-Name"/>
       </div>
       @if (channelName && channelName.length < 3) {
         <span class="errorText">
@@ -41,6 +41,7 @@
         <textarea
           #channelDescriptionInput
           placeholder="Dein Text hier"
+          aria-label="Channel-Beschreibung"
         ></textarea>
       </div>
     </div>

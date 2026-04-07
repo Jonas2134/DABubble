@@ -3,7 +3,7 @@
 @use "../../../shared/scss/overlays" as overlays;
 @use "../../../shared/scss/buttons" as buttons;
 
-main {
+.channel-leave-overlay {
   @include overlays.overlay(0.4, 90);
 }
 

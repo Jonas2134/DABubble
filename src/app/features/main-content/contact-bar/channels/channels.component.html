@@ -1,42 +1,42 @@
-<main>
+<div role="region" aria-label="Channels">
     <header>
-        <button class="channelHeadShow" (click)="showAllChannels()">
-            <button class="showChannels">
+        <button class="channelHeadShow" [attr.aria-expanded]="!showChannels" (click)="showAllChannels()">
+            <span class="showChannels">
                 @if (!showChannels) {
-                    <div class="material-symbols showChannelsIcon">arrow_drop_down</div>
+                    <span class="material-symbols showChannelsIcon">arrow_drop_down</span>
                 }
                 @else {
-                    <div class="material-symbols showChannelsIcon">arrow_right</div>
+                    <span class="material-symbols showChannelsIcon">arrow_right</span>
                 }
-            </button>
-            <div class="workSpaceText">
-                <div class="material-symbols workSpaceIcon">workspaces</div>
+            </span>
+            <span class="workSpaceText">
+                <span class="material-symbols workSpaceIcon">workspaces</span>
                 <h2>Channels</h2>
-            </div>
+            </span>
         </button>
-        <button class="addButton" (click)="toggleAddChannel()">
-            <div class="material-symbols addIcon" >add</div>
+        <button class="addButton" aria-label="Channel hinzufügen" (click)="toggleAddChannel()">
+            <span class="material-symbols addIcon">add</span>
         </button>
     </header>
     @if (!showChannels) {
         <section>
-            <div class="newChannels">
+            <ul class="newChannels" role="list">
                 @for (channel of channels$ | async; track channel.id) {
-                    <button (click)="selectChannel(channel.id); someAction()" class="everyChannel">
-                        <div class="tagName">
-                            <div class="tagImage">
-                                <div class="material-symbols hashtagIcon">tag</div>
-                              </div>
+                    <li class="everyChannel">
+                        <button (click)="selectChannel(channel.id); someAction()" class="tagName">
+                            <span class="tagImage">
+                                <span class="material-symbols hashtagIcon">tag</span>
+                              </span>
                               <span>{{ channel.name }}</span>
-                        </div>
-                      <button class="deleteChannel" (click)="onDeleteClick(channel.id, $event)">
-                        <div class="material-symbols closeIcon" >delete</div>
+                        </button>
+                      <button class="deleteChannel" aria-label="Channel löschen" (click)="onDeleteClick(channel.id, $event)">
+                        <span class="material-symbols closeIcon">delete</span>
                       </button>
-                    </button>
+                    </li>
                 }
-            </div>
+            </ul>
             <button class="addChannel" (click)="toggleAddChannel()">
-                <div class="material-symbols addIconChannel">add_circle</div>
+                <span class="material-symbols addIconChannel">add_circle</span>
                 <span>Channel hinzufügen</span>
             </button>
         </section>
@@ -44,8 +44,8 @@
     @if (showAddChannel) {
         <app-add-channel [activeUserId]="activeUserId" (close)="toggleAddChannel()"></app-add-channel>
     }
-    
-</main>
+
+</div>
 
 @if (isPermanentDeleteOpen && openChannelId) {
     <app-permanent-delete

@@ -1,6 +1,6 @@
-<div class="overlay">
+<div class="overlay" role="dialog" aria-modal="true" aria-labelledby="deleteHeading">
   <div class="modal">
-    <h2>{{ heading }}</h2>
+    <h2 id="deleteHeading">{{ heading }}</h2>
 
     <div class="button-row">
       <button class="btn cancel" (click)="onNo()">Nein</button>

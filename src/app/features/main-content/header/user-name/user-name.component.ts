@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { ProfilComponent } from '../../../general-components/profil/profil.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DeviceVisibleComponent } from '../../../../shared/services/responsive';
+import { DeviceVisibleComponent } from '../../../../shared/components/device-visible.component';
 import { AuthentificationService } from '../../../../shared/services/authentification.service';
 import { UserService } from '../../../../shared/services/user.service';
 import { ChannelService } from '../../../../shared/services/channel.service';
@@ -30,6 +30,9 @@ export class UserNameComponent {
   private authService = inject(AuthentificationService);
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
+  private route = inject(ActivatedRoute);
+  private userService = inject(UserService);
+  private router = inject(Router);
   @Input() activeUserId!: string | null;
   isLogOutVisible: boolean = false;
   showProfil: boolean = false;
@@ -49,11 +52,6 @@ export class UserNameComponent {
     chatId: string;
   }>();
 
-  constructor(
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     const userId = this.route.snapshot.paramMap.get('activeUserId');

@@ -24,7 +24,9 @@ import { UserService } from '../../../shared/services/user.service';
 export class ProfilComponent {
   private originalUserImage!: string;
   
-  firestore = inject(Firestore);
+  private firestore = inject(Firestore);
+  private router = inject(Router);
+  private userService = inject(UserService);
   isActive: boolean = true;
   showEditProfil: boolean = false;
   showAvatarChoice = false;
@@ -32,22 +34,21 @@ export class ProfilComponent {
   items = [1, 2, 3, 4, 5, 6];
 
   @Input() showButton: boolean = false;
-  @Input() userName: any;
-  @Input() userEmail: any;
-  @Input() userImage: any;
-  @Input() userStatus: any;
-  @Input() userId: any;
-  @Input() activeUserId!: any;
+  @Input() userName: string = '';
+  @Input() userEmail: string = '';
+  @Input() userImage: string = '';
+  @Input() userStatus: boolean = false;
+  @Input() userId: string = '';
+  @Input() activeUserId: string = '';
   @Input() size: 'small' | 'big' = 'small';
   @Output() close = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{chatType: 'private'; chatId: string}>();
   @ViewChild('profilWrapper') profilWrapper?: ElementRef;
 
-  constructor(private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.isActive = this.userStatus === true || this.userStatus === 'true';
-    this.originalUserImage = this.userImage;    
+    this.isActive = this.userStatus;
+    this.originalUserImage = this.userImage;
   }
 
   closeProfil() {

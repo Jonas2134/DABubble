@@ -11,7 +11,7 @@ import { Component, Input, HostListener, OnInit } from '@angular/core';
 })
 export class DeviceVisibleComponent implements OnInit {
   @Input() mode:
-    | 'mobilBig'
+    | 'mobileBig'
     | 'tabletBig'
     | 'desktopBig' = 'desktopBig';
   shouldShow = false;
@@ -25,7 +25,7 @@ export class DeviceVisibleComponent implements OnInit {
     const width = window.innerWidth;
 
     switch (this.mode) {
-      case 'mobilBig':
+      case 'mobileBig':
         this.shouldShow = width < 600;
         break;
       case 'tabletBig':

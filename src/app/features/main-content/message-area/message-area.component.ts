@@ -88,10 +88,8 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.isLoading = false;
-      setTimeout(() => {
-        this.scrollToBottom();
-        this.composerRef?.focus();
-      }, 2000);
+      this.scrollToBottom();
+      this.composerRef?.focus();
     }, 500);
   }
 

@@ -1,48 +1,48 @@
-<main>
+<div class="user-menu-wrapper">
   <div class="avatar">
     <span class="avatarNameText">{{ userName }}</span>
     <div class="userStatus">
       <app-device-visible mode="tabletBig">
-          <img #tabletToggleBtn (click)="toggleImage()" [src]="userImage" />
+          <img #tabletToggleBtn (click)="toggleImage()" [src]="userImage" [alt]="userName + ' Profilbild'" />
       </app-device-visible>
       <app-device-visible mode="desktopBig">
-        <img class="normalImage" (click)="toggleImage()" [src]="userImage" />
-        <span class="normalImagePoint" [ngClass]="userStatus === 'true' || userStatus === true ? 'online' : 'offline'"></span>
+        <img class="normalImage" (click)="toggleImage()" [src]="userImage" [alt]="userName + ' Profilbild'" />
+        <span class="normalImagePoint" [ngClass]="userStatus === 'true' || userStatus === true ? 'online' : 'offline'" [attr.aria-label]="userStatus === 'true' || userStatus === true ? 'Online' : 'Abwesend'"></span>
       </app-device-visible>
     </div>
   </div>
-  <button class="openLogOut" (click)="toggleLogOut()"  #arrowToggleBtn>
-    <div class="arrowDownHeight material-symbols arrowDown">keyboard_arrow_down</div>
+  <button class="openLogOut" (click)="toggleLogOut()" [attr.aria-expanded]="isLogOutVisible" aria-label="Benutzermenü" #arrowToggleBtn>
+    <span class="arrowDownHeight material-symbols arrowDown">keyboard_arrow_down</span>
   </button>
-</main>
+</div>
 @if (isLogOutVisible) {
-  <section>
+  <div role="menu" aria-label="Benutzermenü">
     <div class="popUpStyle" @slideUpDown [@.disabled]="windowSize > 1000">
       <app-device-visible mode="tabletBig">
           <div class="popUpXLine"></div>
       </app-device-visible>
       <div class="logOut" #logOutBox>
-        <button (click)="openProfil()">
-          <div class=" material-symbols">account_circle</div>
+        <button role="menuitem" (click)="openProfil()">
+          <span class="material-symbols">account_circle</span>
           <span>Profil</span>
         </button>
-        <button (click)="logOut()">
-          <div class=" material-symbols">logout</div>
+        <button role="menuitem" (click)="logOut()">
+          <span class="material-symbols">logout</span>
           <span>Log out</span>
         </button>
       </div>
     </div>
-  </section>
+  </div>
 }
 <div #profilWrapper>
   @if (showProfil) {
     <app-profil
-    [activeUserId]="activeUserId"
+    [activeUserId]="activeUserId ?? ''"
     [userImage]="userImage"
     [userName]="userName"
     [userEmail]="userEmail"
-    [userStatus]="userStatus"
-    [userId]="userId"
+    [userStatus]="userStatus === true || userStatus === 'true'"
+    [userId]="userId ?? ''"
     #profilRef
     (close)="showProfil = false"
     (openChat)="openChat.emit($event)" 

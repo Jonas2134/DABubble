@@ -12,7 +12,7 @@
       <app-search-bar></app-search-bar>
     </app-device-visible>
     <div class="content-container">      
-      <button class="toogleBar" (click)="toggleSection()">
+      <button class="toogleBar" (click)="toggleSection()" [attr.aria-expanded]="sectionVisible" aria-controls="contact-bar">
         <div>
           @if (sectionVisible) {
           <span>Workspace-Menü schließen</span>
@@ -34,6 +34,7 @@
 
       @if (sectionVisible) {
         <app-contact-bar
+        id="contact-bar"
         [sectionVisible]="sectionVisible"
         [activeUserId]="activeUserId"
         (toggle)="toggleSection()"

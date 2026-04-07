@@ -1,22 +1,23 @@
-
 <div class="memberlist">
-    <div class="members">
+    <ul class="members" role="list">
       @for (member of channelMembers; track member) {
-        <div (click)="showProfil.emit(member)">
-          <div class="user-img-status">
-            <img src="{{ member?.uUserImage }}" alt="" />
-            <span [ngClass]="member?.uStatus ? 'online' : 'offline'"></span>
-          </div>
-          <span>{{ member?.uName }}
-            @if (member.uId === activeUserId) {
-              <span>(Du)</span>
-            }
-          </span>
-        </div>
+        <li>
+          <button class="member-btn" (click)="showProfil.emit(member)">
+            <div class="user-img-status">
+              <img src="{{ member?.uUserImage }}" [alt]="member?.uName + ' Profilbild'" />
+              <span [ngClass]="member?.uStatus ? 'online' : 'offline'"></span>
+            </div>
+            <span>{{ member?.uName }}
+              @if (member.uId === activeUserId) {
+                <span>(Du)</span>
+              }
+            </span>
+          </button>
+        </li>
       }
-    </div>
-    <div class="add-member" (click)="addMember.emit()">
-      <div class="material-symbols add-person-icon">person_add</div>
+    </ul>
+    <button class="add-member" (click)="addMember.emit()">
+      <span class="material-symbols add-person-icon">person_add</span>
       <span>Mitglieder hinzufügen</span>
-    </div>
+    </button>
   </div>

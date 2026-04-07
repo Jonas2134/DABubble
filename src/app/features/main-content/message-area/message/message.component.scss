@@ -253,7 +253,8 @@ section {
       transform: translateX(0);
     }
   }
-  > span {
+  > span, > button {
+    all: unset;
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -299,7 +300,8 @@ emoji-mart {
   z-index: 90;
   @include mixins.dFlex($justify: stretch, $align: stretch, $direction: column);
 
-  > div {
+  > button {
+    all: unset;
     cursor: pointer;
     padding: 10px 20px;
     width: 220px;

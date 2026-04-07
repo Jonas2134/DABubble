@@ -10,27 +10,28 @@
     <input
       type="text"
       placeholder="An: #channel, @user oder E-Mail"
+      aria-label="Empfänger suchen"
       [(ngModel)]="newChatInput"
       (input)="onNewInputChange()"
     />
 
     @if (showNewSuggestions) {
-    <div class="new-suggestions">
+    <ul class="new-suggestions" role="listbox">
       @for (ch of foundChannelsNew; track ch.cId) {
-      <div (click)="selectChannelNew(ch)">
-        <div class="material-symbols">tag</div>
+      <li role="option" (click)="selectChannelNew(ch)">
+        <span class="material-symbols">tag</span>
         <span>{{ ch.cName }}</span>
-      </div>
+      </li>
       } @for (u of foundUsersNew; track u.uId) {
-      <div (click)="selectUserNew(u)">
+      <li role="option" (click)="selectUserNew(u)">
         <div class="user-img-status">
-          <img src="{{ u.uUserImage }}" alt="" />
+          <img src="{{ u.uUserImage }}" [alt]="u.uName + ' Profilbild'" />
           <span [ngClass]="u.uStatus ? 'online' : 'offline'"></span>
         </div>
         <span>{{ u.uName }}</span>
-      </div>
+      </li>
       }
-    </div>
+    </ul>
     }
   </div>
   } @else {
@@ -42,7 +43,7 @@
           [src]="chatPartner?.uUserImage || 'assets/img/profile.png'"
           loading="lazy"
           (error)="onAvatarError($event)"
-          alt=""
+          [alt]="(chatPartner?.uName || 'Benutzer') + ' Profilbild'"
         />
         <span [ngClass]="chatPartner?.uStatus ? 'online' : 'offline'"></span>
       </div>
@@ -58,7 +59,7 @@
       <div class="channel-members">
         <div class="channel-every-member" (click)="toggleChannelMembers()">
           @for (member of channelMembers.slice(0,3); track member) {
-          <img src="{{ member.uUserImage }}" alt="" />
+          <img src="{{ member.uUserImage }}" [alt]="member.uName" />
           } @if (channelMembers.length > 3) {
           <div>...</div>
           }
@@ -66,12 +67,14 @@
         </div>
         <button
           class="addButtonBefore openAddMemberPopUpButton"
+          aria-label="Mitglied hinzufügen"
           (click)="openAddMemberPopUp()"
         >
           <span class="material-symbols add-person-icon">person_add</span>
         </button>
         <button
           class="addButtonAfter openAddMemberPopUpButton"
+          aria-label="Mitglieder anzeigen"
           (click)="toggleChannelMembers()"
         >
           <span class="material-symbols add-person-icon">person_add</span>
@@ -84,7 +87,7 @@
         <h1>Thread</h1>
         <span>{{ threadContextName }}</span>
       </div>
-      <div class="material-symbols" (click)="handleCloseThread()">close</div>
+      <button class="material-symbols thread-close-btn" aria-label="Thread schließen" (click)="handleCloseThread()">close</button>
     </div>
     }
   </div>
@@ -127,7 +130,7 @@
     'private'){
     <div class="empty-private-chat">
       <div>
-        <img src="{{ chatPartner?.uUserImage }}" alt="" />
+        <img src="{{ chatPartner?.uUserImage }}" [alt]="(chatPartner?.uName || '') + ' Profilbild'" />
         <h1>{{ chatPartner?.uName }}</h1>
       </div>
       <p>
@@ -187,12 +190,12 @@
   ></app-channel-leave>
   } @if (isProfilOpen) {
   <app-profil
-    [activeUserId]="activeUserId"
-    [userImage]="userProfil?.uUserImage"
-    [userName]="userProfil?.uName"
-    [userEmail]="userProfil?.uEmail"
-    [userStatus]="userProfil?.uStatus"
-    [userId]="userProfil?.uId"
+    [activeUserId]="activeUserId ?? ''"
+    [userImage]="userProfil?.uUserImage ?? ''"
+    [userName]="userProfil?.uName ?? ''"
+    [userEmail]="userProfil?.uEmail ?? ''"
+    [userStatus]="userProfil?.uStatus ?? false"
+    [userId]="userProfil?.uId ?? ''"
     #profilRef
     size="big"
     [showButton]="activeUserId !== userProfil?.uId"

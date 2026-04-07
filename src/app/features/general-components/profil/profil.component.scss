@@ -3,7 +3,7 @@
 @use '../../../shared/scss/overlays' as overlays;
 @use '../../../shared/scss/buttons' as buttons;
 
-main {
+.profil-overlay {
   @include overlays.overlay();
 }
 

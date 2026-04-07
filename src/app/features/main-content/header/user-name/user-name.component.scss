@@ -2,7 +2,7 @@
 @use "../../../../shared/scss/variables" as vari;
 @use "../../../../shared/scss/overlays" as overlays;
 
-main {
+.user-menu-wrapper {
   @include mixins.dFlex($justify: right, $align: center);
   height: 100%;
   position: relative;

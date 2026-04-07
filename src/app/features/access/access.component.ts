@@ -17,6 +17,8 @@ import { VisibleButtonService } from '../../shared/services/visible-button.servi
 })
 export class AccessComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
+  private route = inject(ActivatedRoute);
+  public componentSwitcher = inject(ComponentSwitcherService);
 
   showAnimation: boolean = false;
   LoginComponent = LoginComponent;
@@ -24,8 +26,6 @@ export class AccessComponent implements OnInit {
   PrivacyComponent = PrivacyComponent;
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
-
-  constructor(private route: ActivatedRoute, public componentSwitcher: ComponentSwitcherService) {}
 
   ngOnInit(): void {
     this.handleResetMode();

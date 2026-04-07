@@ -1,14 +1,14 @@
 <header class="nunitoFont">
   @if (messageIn) {
   <div class="messageInWorkspace">
-    <button (click)="toggleMessageInView()">
-      <div class="material-symbols arrowLeft">keyboard_arrow_left</div>
-      <img src="assets/img/workspaceLogo.png" />
+    <button (click)="toggleMessageInView()" aria-label="Zurück zum Workspace">
+      <span class="material-symbols arrowLeft">keyboard_arrow_left</span>
+      <img src="assets/img/workspaceLogo.png" alt="Devspace Logo" />
     </button>
     <h1>Devespace</h1>
   </div>
   } @else {
-  <img src="assets/img/logo.png" />
+  <img src="assets/img/logo.png" alt="DABubble Logo" />
   }
   <app-device-visible mode="desktopBig">
     <app-search-bar

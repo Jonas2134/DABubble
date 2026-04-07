@@ -1,23 +1,23 @@
-<main (click)="onMainClick($event)">
+<div class="profil-overlay" role="dialog" aria-modal="true" [attr.aria-label]="showEditProfil ? 'Profil bearbeiten' : 'Profil'" (click)="onMainClick($event)">
     <section #profilWrapper [ngClass]="size">
         <header>
             @if (!showEditProfil) {
                 <h1>Profil</h1>
             }
             @else {
-                <h1 >Dein Profil bearbeiten</h1>
+                <h1>Dein Profil bearbeiten</h1>
             }
-            <button (click)="closeProfil()" class="closeProfil">
-                <div class="material-symbols closeIcon">close</div>
+            <button (click)="closeProfil()" class="closeProfil" aria-label="Profil schließen">
+                <span class="material-symbols closeIcon">close</span>
             </button>
         </header>
         @if (!showEditProfil) {
-            <img [src]="userImage">
+            <img [src]="userImage" [alt]="userName + ' Profilbild'">
         }
         @else {
             <div class="avatarsMain">
-                <button class="buttonImg" (click)="bigUserImg()">
-                    <img [src]="userImage">
+                <button class="buttonImg" aria-label="Avatar ändern" (click)="bigUserImg()">
+                    <img [src]="userImage" [alt]="userName + ' Avatar'">
                 </button>
                 @if (showAvatarChoice) {
                     <div class="avatarChoice">
@@ -43,13 +43,13 @@
                 </div>
                 @if (isActive) {
                     <div class="status">
-                        <img src="assets/img/green_point.png">
-                        <span class="statusActive">Aktive</span>
+                        <img src="assets/img/green_point.png" alt="" aria-hidden="true">
+                        <span class="statusActive">Aktiv</span>
                     </div>
                 }
                 @else {
                     <div class="status">
-                        <img src="assets/img/grey_point.png">
+                        <img src="assets/img/grey_point.png" alt="" aria-hidden="true">
                         <span class="statusAbsent">Abwesend</span>
                     </div>
                 }
@@ -59,17 +59,18 @@
             @if (showEditProfil) {
                 <div class="editInput">
                     <div class="editAccountText">
-                        <img src="assets/icons/account_circle.svg">
+                        <img src="assets/icons/account_circle.svg" alt="" aria-hidden="true">
                         <h2>Vollständiger Name</h2>
                     </div>
-                    <input [(ngModel)]="editedUserName" [placeholder]="userName" type="text">
+                    <label class="sr-only" for="editUserName">Benutzername</label>
+                    <input id="editUserName" [(ngModel)]="editedUserName" [placeholder]="userName" type="text">
                 </div>
             }
         }
         @if (!showEditProfil) {
             <div class="mailAdress">
                 <div>
-                    <img src="assets/icons/mail.svg">
+                    <img src="assets/icons/mail.svg" alt="" aria-hidden="true">
                     <h2>E-Mail-Adresse</h2>
                 </div>
                 <span>{{ userEmail }}</span>
@@ -100,4 +101,4 @@
             </div>
         }
     </section>
-</main>
+</div>
