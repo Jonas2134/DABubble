@@ -1,0 +1,69 @@
+@use "../../shared/scss/mixins" as mixins;
+@use "../../shared/scss/variables" as vari;
+
+header {
+  @include mixins.dFlex($justify: space-between, $align: center, $gap: 45px);
+  padding-inline: 25px;
+  height: 100%;
+}
+
+img {
+  width: 240px;
+}
+
+app-search-bar {
+  width: 100%;
+  display: contents;
+}
+
+app-device-visible {
+  width: 100%;
+  margin-left: 96px;
+}
+
+@media (max-width: vari.$bp-tablet) {
+    header{
+        padding-inline: 12px
+    }
+
+  .messageInWorkspace {
+    @include mixins.dFlex($justify: space-between, $align: center, $gap: 10px);
+    height: 50px;
+    margin-left: -8px
+  }
+
+  button {
+    @include mixins.dFlex($justify: space-between, $align: center, $gap: 2px);
+    background-color: vari.$sky-grey;
+    cursor: pointer;
+    border: none;
+    img {
+      height: 50px;
+      width: 50px;
+    }
+  }
+
+  .arrowLeft {
+    font-size: 32px;
+  }
+
+  button:hover .arrowLeft {
+    color: vari.$purple;
+  }
+}
+@media (max-width: vari.$bp-mobile) {
+  header {
+    @include mixins.dFlex($justify: space-between, $align: center);
+    padding-inline: 0px;
+  }
+
+  app-device-visible{
+    width: 0px;
+    margin-left: 0px;
+  }
+}
+@media (max-width: vari.$bp-mobile-sm) {
+  img {
+    width: 200px;
+  }
+}

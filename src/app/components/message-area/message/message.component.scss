@@ -1,0 +1,337 @@
+@use "../../../shared/scss/variables" as vari;
+@use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/buttons" as buttons;
+@use "../../../shared/scss/utilities" as utils;
+
+.primary-btn {
+  background-color: vari.$dark-blue;
+  color: vari.$white;
+  border: 1px solid vari.$dark-blue;
+  &:hover {
+    background-color: vari.$light-blue;
+    border: 1px solid vari.$light-blue;
+  }
+  &:active {
+    background-color: vari.$dark-blue;
+    border: 1px solid vari.$dark-blue;
+  }
+  &:disabled {
+    background-color: vari.$gray;
+    border: 1px solid vari.$gray;
+    cursor: not-allowed;
+  }
+}
+
+.secondary-btn {
+  background-color: vari.$white;
+  color: vari.$dark-blue;
+  border: 1px solid vari.$light-blue;
+  &:hover {
+    background-color: vari.$purple;
+    color: vari.$white;
+    border: 1px solid vari.$purple;
+  }
+  &:active {
+    background-color: vari.$dark-blue;
+    border: 1px solid vari.$dark-blue;
+  }
+  &:disabled {
+    color: vari.$gray;
+    border: 1px solid vari.$gray;
+    cursor: not-allowed;
+  }
+}
+
+button {
+  cursor: pointer;
+  font-family: "Nunito", sans-serif;
+  font-weight: 700;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+}
+
+section {
+  position: relative;
+  width: 100%;
+  padding: 10px clamp(120px, calc(120px + 16 * (100vw - 1000px) / 920), 136px)
+    10px clamp(32px, calc(32px + 16 * (100vw - 1000px) / 920), 48px);
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px);
+  img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+  }
+  &:hover {
+    background-color: vari.$sky-grey;
+    .message-text {
+      color: #000000;
+      background-color: #ffffff;
+    }
+  }
+}
+
+.row-reverse {
+  padding: 10px clamp(32px, calc(32px + 16 * (100vw - 1000px) / 920), 48px) 10px
+    clamp(120px, calc(120px + 16 * (100vw - 1000px) / 920), 136px);
+  flex-direction: row-reverse;
+  &:hover {
+    .message-text {
+      color: #ffffff;
+      background-color: vari.$light-blue;
+    }
+  }
+}
+
+.thread {
+  padding: 10px 40px 10px 40px;
+}
+
+.edit-open {
+  background-color: vari.$sky-grey;
+}
+
+.edit-message {
+  width: 100%;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid vari.$hover-border;
+  border-radius: 20px;
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 16px, $direction: column);
+
+  > div {
+    width: 100%;
+    @include mixins.dFlex($justify: space-between, $align: center);
+    > div {
+      @include mixins.dFlex($justify: initial, $align: initial, $gap: 32px);
+    }
+  }
+}
+
+.icon-button {
+  @include buttons.iconBtn();
+  font-weight: 400;
+}
+
+.blue-hover {
+  @include utils.blueHover();
+}
+
+.textfield-icon {
+  @include utils.textfieldIcon();
+}
+
+.message {
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 8px, $direction: column);
+
+  .message-header {
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 20px);
+    h3 {
+      cursor: pointer;
+      &:hover {
+        color: vari.$dark-blue;
+      }
+    }
+  }
+
+  .message-text {
+    width: fit-content;
+    padding: 15px;
+    border-radius: 0px 30px 30px 30px;
+    background-color: vari.$sky-grey;
+    word-break: break-word;
+    white-space: pre-wrap;
+    font-size: 18px;
+  }
+
+  .message-attachments {
+    @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 8px, $direction: column);
+  }
+}
+
+.user-message {
+  @include mixins.dFlex($justify: initial, $align: flex-end, $gap: 8px, $direction: column);
+  > div {
+    &:first-child {
+      @include mixins.dFlex($justify: flex-start, $align: center, $gap: 20px, $direction: row-reverse);
+    }
+  }
+
+  .message-text {
+    color: #ffffff;
+    background-color: vari.$light-blue;
+    border-radius: 30px 0px 30px 30px;
+  }
+
+  .message-attachments {
+    @include mixins.dFlex($justify: initial, $align: flex-end, $gap: 8px, $direction: column);
+  }
+}
+
+.reaction-field {
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
+  flex-wrap: wrap;
+  > div {
+    cursor: pointer;
+    height: 34px;
+    padding: 5px 10px;
+    background-color: #ffffff;
+    border: 1px solid vari.$hover-border;
+    border-radius: 20px;
+    &:hover {
+      border: 1px solid vari.$dark-blue;
+      .reaction-details {
+        display: flex;
+      }
+    }
+  }
+}
+
+.single-reaction {
+  position: relative;
+}
+
+.reaction-details {
+  position: absolute;
+  bottom: 33px;
+  left: 32px;
+  width: 160px;
+  padding: 16px 8px;
+  color: #ffffff;
+  background-color: vari.$dark-blue;
+  border-radius: 30px 30px 30px 0px;
+  @include mixins.dFlex($gap: 5px, $direction: column);
+  display: none;
+  > span {
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    @include mixins.dFlex();
+  }
+  > div {
+    text-align: center;
+  }
+  > p {
+    font-size: 16px;
+  }
+}
+
+.thread-field {
+  cursor: pointer;
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 12px);
+}
+
+.message-actions {
+  position: absolute;
+  right: 46px;
+  top: -18px;
+  padding: 4px 16px 4px 20px;
+  background-color: #ffffff;
+  border: 1px solid vari.$hover-border;
+  border-radius: 25px 25px 0 25px;
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 5px);
+
+  opacity: 0;
+  transform: translateX(-50px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  section:hover &,
+  &.always {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  &.user-message-actions {
+    right: initial;
+    left: 46px;
+    transform: translateX(50px);
+
+    section:hover &,
+    &.always {
+      transform: translateX(0);
+    }
+  }
+  > span, > button {
+    all: unset;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    @include mixins.dFlex();
+  }
+  .action-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+emoji-mart {
+  position: absolute;
+  bottom: 0px;
+  right: 266px;
+  z-index: 95;
+}
+
+.active-user-emoji {
+  right: inherit;
+  left: 308px;
+}
+
+.user-message-actions {
+  right: initial;
+  left: 46px;
+}
+
+.thread-emoji {
+  right: initial;
+  left: 68px;
+}
+
+.options-menu {
+  position: absolute;
+  top: 25px;
+  right: -240px;
+  padding: 10px 20px;
+  background: #ffffff;
+  border-radius: 0 30px 30px 30px;
+  box-shadow: 0px 6px 14px 0px rgba(0, 0, 0, 0.2);
+  z-index: 90;
+  @include mixins.dFlex($justify: stretch, $align: stretch, $direction: column);
+
+  > button {
+    all: unset;
+    cursor: pointer;
+    padding: 10px 20px;
+    width: 220px;
+    font-weight: 600;
+    border-radius: 100px;
+    &:hover {
+      color: vari.$purple;
+      font-weight: 700;
+      background: vari.$sky-grey;
+    }
+  }
+}
+
+.d-none {
+  display: none;
+}
+
+@media (max-width: vari.$bp-tablet) {
+  section {
+    padding: 10px clamp(50px, calc(50px + 70 * (100vw - 450px) / 550), 120px)
+      10px clamp(16px, calc(16px + 16 * (100vw - 450px) / 550), 32px);
+      img {
+        width: clamp(50px, calc(50px + 20 * (100vw - 450px) / 550), 70px);
+        height: clamp(50px, calc(50px + 20 * (100vw - 450px) / 550), 70px);
+        border-radius: 50%;
+      }
+  }
+
+  .row-reverse {
+    padding: 10px clamp(16px, calc(16px + 16 * (100vw - 450px) / 550), 32px)
+      10px clamp(50px, calc(50px + 70 * (100vw - 450px) / 550), 120px);
+  }
+}

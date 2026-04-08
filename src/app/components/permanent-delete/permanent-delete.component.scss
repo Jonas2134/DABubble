@@ -1,0 +1,57 @@
+@use '../../shared/scss/mixins' as mixins;
+@use '../../shared/scss/variables' as vari;
+@use '../../shared/scss/overlays' as overlays;
+
+.overlay {
+  @include mixins.dFlex();
+  @include overlays.overlayFixed();
+}
+
+.modal {
+  background: vari.$white;
+  border-radius: 30px;
+  padding: 45px 40px;
+  width: min(90%, 480px);
+  text-align: center;
+
+  h2 {
+    margin-bottom: 32px;
+    font-size: 22px;
+  }
+
+  .button-row {
+    @include mixins.dFlex($gap: 24px);
+
+    .btn {
+      cursor: pointer;
+      min-width: 100px;
+      padding: 10px 0;
+      font-family: "Nunito", sans-serif;
+      font-weight: 600;
+      border: none;
+      border-radius: 30px;
+      &:hover {
+        font-weight: 700;
+        transition: all 0.1s ease-in-out;
+      }
+    }
+
+    .cancel {
+      background: vari.$white;
+      color: vari.$gray;
+      border: 1px solid vari.$gray;
+      &:hover {
+        background: vari.$sky-grey;
+        color: vari.$dark-blue;
+        border: 1px solid vari.$light-blue;
+      }
+    }
+    .confirm {
+      background: vari.$rose;
+      color: vari.$white;
+      &:hover {
+        background: #d71a6b;
+      }
+    }
+  }
+}

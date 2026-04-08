@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { AccessComponent } from './features/access/access.component';
-import { MainContentComponent } from './features/main-content/main-content.component';
+import { AccessComponent } from './pages/access/access.component';
+import { HomeComponent } from './pages/home/home.component';
 import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'access', pathMatch: 'full' },
   { path: 'access', component: AccessComponent },
 
-  { path: 'home/:activeUserId', component: MainContentComponent, canActivate: [authGuard] },
+  { path: 'home/:activeUserId', component: HomeComponent, canActivate: [authGuard] },
 
   { path: '**', redirectTo: 'access' }
 ];

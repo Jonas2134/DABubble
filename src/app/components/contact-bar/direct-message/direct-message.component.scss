@@ -1,0 +1,68 @@
+@use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
+
+:host {
+    display: block;
+    width: 300px;
+    margin: 0 auto;
+}
+.directMessageButton{
+    @include mixins.dFlex($justify: left, $align: center, $gap: 13px);
+    width: 260px;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
+.directMessageButton:hover .directMessage,
+.directMessageButton:hover .accountCircle,
+.directMessageButton:hover .showMessagesIcon,
+.directMessageButton:hover h2
+{
+    color: vari.$purple;
+}
+.accountCircle{
+    font-size: 24px
+}
+.directMessage{
+    @include mixins.dFlex($justify: space-between, $align: center, $gap: 10px);
+}
+.keyDownUser{
+    @include mixins.dFlex();
+    width: 32px;
+    height: 32px;
+    background-color: white;
+    border: none;
+}
+.showMessagesIcon{
+    font-size: 30px
+}
+.directMessageList{
+    @include mixins.dFlex($justify: center, $align: left, $gap: 13px, $direction: column);
+    margin-top: 25px;
+    width: 270px;
+    padding-left: 32px;
+    list-style: none;
+}
+.directUser{
+    @include mixins.dFlex($justify: left, $align: center, $gap: 15px);
+    height: 60px;
+    width: 270px;
+    padding-left: 16px;
+    border-radius: 30px;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+    &:hover{
+        background-color: vari.$sky-grey;
+    }
+}
+.userImage{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+@media(max-width: vari.$bp-tablet){
+    :host{
+        margin: 0 0;
+    }
+}

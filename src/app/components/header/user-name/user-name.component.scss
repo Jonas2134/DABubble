@@ -1,0 +1,203 @@
+@use "../../../shared/scss/mixins" as mixins;
+@use "../../../shared/scss/variables" as vari;
+@use "../../../shared/scss/overlays" as overlays;
+
+.user-menu-wrapper {
+  @include mixins.dFlex($justify: right, $align: center);
+  height: 100%;
+  position: relative;
+}
+
+.avatar {
+  @include mixins.dFlex($justify: end, $align: center, $gap: 20px);
+  span {
+    font-size: 32px;
+    color: black;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  img {
+    border-radius: 50%;
+    height: 70px;
+    width: 70px;
+  }
+}
+
+.userStatus{
+  position: relative;
+  height: 70px;
+  width: 70px;
+  span {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+}
+
+.arrowDownHeight{
+  font-size: 30px;
+}
+
+.openLogOut {
+  @include mixins.dFlex($justify: right, $align: center);
+  border: none;
+  padding-inline: 0;
+  padding-block: 0;
+  cursor: pointer;
+  position: relative;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: vari.$sky-grey;
+}
+
+.arrowDown{
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 55%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease;
+}
+
+.openLogOut:hover .arrowDown{
+  color: vari.$purple;
+}
+
+section {
+  @include overlays.overlay(0.5, 50);
+}
+
+.logOut {
+  @include mixins.dFlex($gap: 15px, $direction: column);
+  height: 180px;
+  width: 260px;
+  top: 104px;
+  right: 24px;
+  position: absolute;
+  background-color: white;
+  border-radius: 30px 0 30px 30px;
+  padding: 30px;
+  z-index: 15;
+  button {
+    all: unset;
+    font-size: 24px;
+    color: black;
+    font-weight: 600;
+    @include mixins.dFlex($gap: 15px);
+    background-color: white;
+    width: 220px;
+    height: 50px;
+    border-radius: 100px;
+    cursor: pointer;
+    position: relative;
+    &:hover {
+      background-color: vari.$sky-grey;
+      color: vari.$purple;
+    }
+    span{
+      width: 80px;
+    }
+  }
+}
+
+.accountLogOut{
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  top: 50%;
+  left: 32px;
+  transform: translateY(-50%);
+  transition: opacity 0.3s ease;
+}
+
+@media(max-width: vari.$bp-desktop){
+  .avatarNameText{
+    display: none;
+  }
+
+  .avatar{
+    width: 70px;
+  }
+
+  main{
+    width: 120px;
+  }
+}
+
+@media(max-width: vari.$bp-tablet){
+  .openLogOut{
+    display: none;
+  }
+
+  .userStatus img{
+    cursor: pointer;
+  }
+
+  .normalImage{
+    display: none
+  }
+
+  .normalImagePoint{
+    display: none
+  }
+
+  .logOut {
+    @include mixins.dFlex($align: flex-start);
+    width: 380px;
+    height: 180px;
+    bottom: 0px;
+    top: auto;
+    right: auto;
+    margin-left: 32px;
+    padding: 0;
+  }
+
+  .popUpXLine{
+    background-color: #d9d9d9;
+    width: 60px;
+    height: 8px;
+    border-radius: 25px;
+    margin: 0 auto;
+    margin-top: 25px;
+  }
+
+  .popUpStyle{
+    height: 210px;
+    background-color: white;
+    position: absolute;
+    border-radius: 30px 30px 0px 0px;
+    width: 100%;
+    bottom: 0px;
+  }
+}
+
+@media(max-width: vari.$bp-mobile){
+  .logOut {
+    button {
+      width: 180px;
+    }
+  }
+
+  main{
+    width: 70px;
+  }
+}
+
+@media(max-width: vari.$bp-mobile-sm){
+  main{
+    width: 60px;
+  }
+
+  .avatar img,
+  .userStatus
+  {
+    height: 60px;
+    width: 60px;
+  }
+}

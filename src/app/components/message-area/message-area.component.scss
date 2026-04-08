@@ -1,0 +1,369 @@
+@use "../../shared/scss/mixins" as mixins;
+@use "../../shared/scss/variables" as vari;
+@use "../../shared/scss/overlays" as overlays;
+@use "../../shared/scss/utilities" as utils;
+
+.loading-screen {
+  height: 100%;
+  width: 100%;
+  @include mixins.dFlex($direction: column);
+}
+
+section {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 30px;
+  @include mixins.dFlex($justify: initial, $align: initial, $direction: column);
+
+  .chatbox-header {
+    width: 100%;
+    height: 96px;
+    padding-block: 24px;
+    padding-inline: clamp(32px, calc(32px + 16 * (100vw - 1000px) / 920), 48px);
+    border-radius: 30px 30px 0px 0px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.08);
+    @include mixins.dFlex($justify: initial, $align: center);
+  }
+
+  .chatbox-messages {
+    flex: 1 1 0;
+    min-height: 0;
+    padding-block: 20px;
+    overflow-y: auto;
+    @include utils.hideScrollbar();
+    @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 20px, $direction: column);
+  }
+
+  .chatbox-textfield {
+    position: relative;
+    flex-shrink: 0;
+    width: calc(
+      100% - 2 * clamp(32px, calc(32px + 16 * (100vw - 1000px) / 920), 48px)
+    );
+    margin-block: 40px;
+    margin-inline: clamp(32px, calc(32px + 16 * (100vw - 1000px) / 920), 48px);
+    padding: 20px;
+    border: 1px solid vari.$hover-border;
+    border-radius: 20px;
+    @include mixins.dFlex($justify: initial, $align: initial, $gap: 15px, $direction: column);
+
+    &:focus-within {
+      border-color: vari.$dark-blue;
+    }
+  }
+}
+
+.private-header {
+  cursor: pointer;
+  height: 100%;
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
+}
+
+.channel-header {
+  width: 100%;
+  height: 100%;
+  @include mixins.dFlex($justify: space-between, $align: center);
+
+  .channel-name {
+    cursor: pointer;
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
+  }
+
+  .channel-members {
+    cursor: pointer;
+    height: 100%;
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
+    div {
+      height: 100%;
+      padding-inline: 12px;
+      @include mixins.dFlex();
+      &:hover {
+        background-color: vari.$sky-grey;
+        border-radius: 30px;
+      }
+      img {
+        width: 40px;
+        height: 40px;
+        margin-right: -10px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+      }
+      div {
+        padding: 0;
+        margin-left: 12px;
+        margin-bottom: 12px;
+        &:hover {
+          background-color: transparent;
+        }
+      }
+      h2 {
+        margin-left: 24px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.thread-header {
+  width: 100%;
+  height: 100%;
+  @include mixins.dFlex($justify: space-between, $align: center);
+
+  div {
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
+    span {
+      color: vari.$light-blue;
+      font-size: 14px;
+      text-decoration: none;
+      @include mixins.dFlex($justify: initial, $align: center, $gap: 5px);
+      &:first-child {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.new-header {
+  width: 100%;
+  height: 100%;
+  padding: 24px 40px;
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 20px, $direction: column);
+  > input {
+    width: 100%;
+    padding: 15px 20px;
+    font-family: "Nunito", sans-serif;
+    border: 1px solid vari.$hover-border;
+    border-radius: 30px;
+    &:hover {
+      border: 1px solid vari.$light-blue;
+    }
+    &:focus-visible {
+      outline: none;
+      border: 1px solid vari.$purple;
+    }
+  }
+}
+
+.new-suggestions {
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 10px, $direction: column);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  > li {
+    cursor: pointer;
+    padding: 8px 24px;
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 10px);
+    &:hover {
+      color: vari.$purple;
+      font-weight: 700;
+      background-color: vari.$sky-grey;
+      border-radius: 30px;
+    }
+    > span {
+      font-size: 20px;
+    }
+  }
+}
+
+.date-separator {
+  width: 100%;
+  padding-inline: 36px;
+  display: flex;
+  align-items: center;
+  span {
+    width: 100%;
+    height: 1px;
+    background-color: vari.$hover-border;
+  }
+  p {
+    padding: 5px 15px;
+    white-space: nowrap;
+    border: 1px solid vari.$hover-border;
+    border-radius: 30px;
+  }
+}
+
+.thread-separator {
+  width: 100%;
+  display: flex;
+  padding: 0 36px 18px 36px;
+  gap: 20px;
+  p {
+    color: vari.$hover-border;
+    font-size: 18px;
+    margin: 0;
+    width: fit-content;
+  }
+  span {
+    background-color: vari.$hover-border;
+    height: 1px;
+    flex: 1;
+    align-self: center;
+  }
+}
+
+.empty-private-chat {
+  width: 100%;
+  height: 100%;
+  padding-left: 46px;
+  @include mixins.dFlex($justify: flex-end, $align: initial, $gap: 24px, $direction: column);
+  div {
+    @include mixins.dFlex($justify: initial, $align: flex-end, $gap: 16px);
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+  }
+  p {
+    color: vari.$gray;
+    font-size: 20px;
+    span {
+      cursor: pointer;
+      color: vari.$purple;
+    }
+  }
+}
+
+.empty-channel-chat {
+  width: 100%;
+  height: 100%;
+  padding-left: 46px;
+  @include mixins.dFlex($justify: flex-end, $align: initial, $gap: 8px, $direction: column);
+  div {
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
+  }
+  p {
+    color: vari.$gray;
+    font-size: 20px;
+    span {
+      color: vari.$purple;
+    }
+  }
+}
+
+app-message {
+  width: 100%;
+}
+
+.thread-margin {
+  width: calc(100% - 40px);
+  margin: 40px 20px;
+}
+
+.rotating-icon {
+  animation: slowRotate 1.5s linear infinite;
+}
+
+@keyframes slowRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.renew-icon {
+  width: 80px;
+  height: 80px;
+  color: vari.$dark-blue;
+  font-size: 80px;
+}
+
+.tag-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
+}
+
+main {
+  @include overlays.overlay(0.4, 90);
+}
+.memberAddMessage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
+app-add-new-members {
+  @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 20px, $direction: column);
+  position: absolute;
+  right: 20px;
+  top: 192px;
+  width: 500px;
+  height: 290px;
+  border-radius: 30px 0px 30px 30px;
+  background-color: white;
+  z-index: 100;
+  padding: 40px;
+}
+
+.openAddMemberPopUpButton {
+  @include mixins.dFlex();
+  border: none;
+  width: 40px;
+  height: 40px;
+  background-color: vari.$sky-grey;
+  border-radius: 50px;
+  &.addButtonAfter {
+    display: none;
+    @media (max-width: vari.$bp-mobile) {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  &:hover span {
+    color: vari.$purple;
+  }
+}
+
+@media (max-width: vari.$bp-tablet) {
+  section {
+    border-radius: 0px;
+    .chatbox-header {
+      height: clamp(60px, calc(60px + 36 * (100vw - 450px) / 550), 96px);
+      padding-block: clamp(10px, calc(10px + 14 * (100vw - 450px) / 550), 24px);
+      padding-inline: clamp(
+        16px,
+        calc(16px + 16 * (100vw - 450px) / 550),
+        32px
+      );
+    }
+    .chatbox-textfield {
+      position: relative;
+      flex-shrink: 0;
+      width: calc(
+        100% - 2 * clamp(16px, calc(16px + 16 * (100vw - 450px) / 550), 32px)
+      );
+      margin-block: clamp(16px, calc(16px + 24 * (100vw - 450px) / 550), 40px);
+      margin-inline: clamp(16px, calc(16px + 16 * (100vw - 450px) / 550), 32px);
+      padding: clamp(12px, calc(12px + 8 * (100vw - 450px) / 550), 20px);
+    }
+  }
+  .date-separator {
+    padding-inline: clamp(16px, calc(16px + 20 * (100vw - 450px) / 550), 36px);
+  }
+}
+
+@media (max-width: vari.$bp-mobile) {
+  .openAddMemberPopUpButton.addButtonBefore {
+    display: none;
+  }
+
+  .channel-header {
+    .channel-members {
+      div {
+        display: none;
+      }
+    }
+  }
+}

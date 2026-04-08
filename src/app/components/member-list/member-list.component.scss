@@ -1,0 +1,58 @@
+@use "../../shared/scss/mixins" as mixins;
+@use "../../shared/scss/variables" as vari;
+@use "../../shared/scss/utilities" as utils;
+
+.memberlist {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 20px;
+  @include utils.hideScrollbar();
+  @include mixins.dFlex($justify: initial, $align: flex-start, $gap: 16px, $direction: column);
+}
+
+.members {
+  width: 100%;
+  height: 200px;
+  padding: 8px 4px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  @include mixins.dFlex($justify: initial, $align: initial, $gap: 16px, $direction: column);
+  .member-btn {
+    all: unset;
+    cursor: pointer;
+    padding: 4px 24px;
+    width: 100%;
+    box-sizing: border-box;
+    @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
+    &:hover {
+      background-color: vari.$sky-grey;
+      border-radius: 30px;
+    }
+  }
+}
+
+.add-member {
+  all: unset;
+  cursor: pointer;
+  width: 100%;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  @include mixins.dFlex($justify: initial, $align: center, $gap: 16px);
+  &:hover {
+    background-color: vari.$sky-grey;
+    border-radius: 30px;
+    color: vari.$dark-blue;
+    .add-person-icon {
+      color: vari.$dark-blue;
+    }
+  }
+  .add-person-icon {
+    width: 40px;
+    height: 40px;
+    background-color: vari.$sky-grey;
+    border: none;
+    border-radius: 50px;
+  }
+}

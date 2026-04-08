@@ -1,0 +1,307 @@
+@use '../../shared/scss/variables' as vari;
+@use '../../shared/scss/mixins' as mixins;
+@use '../../shared/scss/overlays' as overlays;
+@use '../../shared/scss/buttons' as buttons;
+
+.profil-overlay {
+  @include overlays.overlay();
+}
+
+section{
+    @include mixins.dFlex($justify: flex-start, $align: center, $gap: 40px, $direction: column);
+    position: absolute;
+    background-color: white;
+    width: 500px;
+    &.small {
+        @include mixins.dFlex($justify: flex-start, $align: center, $gap: 40px);
+        height: 640px;
+        padding: 30px 40px;
+        top: 104px;
+        right: 24px;
+        border-radius: 30px 0px 30px 30px;
+      }
+      &.big {
+        @include mixins.dFlex($justify: flex-start, $align: center, $gap: 45px);
+        top: 50%;
+        right: auto;
+        left: 50%;
+        padding: 45px 40px;
+        transform: translate(-50%, -50%);
+        height: 700px;
+        border-radius: 30px;
+      }
+}
+
+img{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+}
+
+.buttonImg{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    cursor: pointer;
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+.avatarButtons{
+    @include mixins.dFlex($gap: 10px);
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    img{
+        height: 48px;
+        width: 48px;
+    }
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+.avatarsMain{
+    @include mixins.dFlex($gap: 10px, $direction: column);
+    position: relative;
+}
+
+.avatarChoice{
+    @include mixins.dFlex($gap: 10px);
+    position: absolute;
+    top: 210px;
+    background-color: white;
+    padding: 8px 24px;
+    border-radius: 50px;
+    box-shadow:
+    -3px -3px 6px rgba(255, 255, 255, 0.6),
+    6px 6px 16px rgba(0, 0, 0, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+header{
+    @include mixins.dFlex($justify: space-between);
+    height: 40px;
+    width: 100%;
+}
+
+.closeProfil {
+  @include buttons.closeBtn();
+}
+
+.closeIcon{
+    height: 24px;
+    width: 24px;
+}
+.editIconShow{
+    display: none;
+}
+
+.nameActive{
+    height: 90px;
+    width: 100%;
+}
+
+.nameEdit{
+    @include mixins.dFlex($justify: space-between);
+    height: 45px;
+    width: 100%;
+    span{
+        font-size: 32px;
+        color: black;
+        font-weight: 700;
+    }
+    a{
+        font-size: 18px;
+        color: vari.$purple;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 25px;
+        cursor: pointer;
+        padding: 6px 12px;
+        &:hover{
+            background-color: vari.$sky-grey
+        }
+    }
+}
+
+.status{
+    @include mixins.dFlex($justify: left, $gap: 15px);
+    width: 80px;
+    height: 30px;
+    img{
+        height: 16px;
+        width: 16px;
+    }
+}
+
+.statusActive{
+    color:vari.$online-green;
+}
+
+.statusAbsent{
+    color: vari.$gray;
+}
+
+.mailAdress{
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 10px, $direction: column);
+    width: 100%;
+    height: 60px;
+    div{
+        @include mixins.dFlex($justify: left, $gap: 20px);
+        height: 30px;
+        width: 200px;
+        img{
+            width: 30px;
+            height: 30px;
+        }
+    }
+    span{
+        font-size: 18px;
+        color: #1381FF;
+        font-weight: 400;
+        height: 20px;
+        margin-left: 50px;
+    }
+}
+
+.messageArea{
+    @include mixins.dFlex();
+    height: 50px;
+    width: 100%;
+}
+
+.messageButton{
+    @include mixins.dFlex($gap: 10px);
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 50px;
+    height: 100%;
+    width: 160px;
+    padding: 12px 25px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    &:hover{
+        opacity: 0.8;
+    }
+    img{
+        height: 24px;
+        width: 24px;
+    }
+}
+
+.messageButtonBackgroundBlue{
+    background-color: vari.$dark-blue;
+}
+
+.messageButtonBackgroundPink{
+    background-color: vari.$rose;
+}
+
+.editSaveButtons{
+    @include mixins.dFlex($gap: 10px);
+}
+
+.editAccountText{
+    @include mixins.dFlex($justify: left, $gap: 20px);
+    height: 30px;
+    width: 100%;
+    img{
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.editInput{
+    @include mixins.dFlex($justify: flex-start, $align: stretch, $gap: 15px, $direction: column);
+    height: 90px;
+    width: 100%;
+    input{
+        font-size: 18px;
+        color: vari.$gray;
+        font-weight: 500;
+        width: 100%;
+        height: 50px;
+        border-radius: 30px;
+        border: 1px solid vari.$hover-border;
+        padding: 15px 20px;
+    }
+}
+
+.editButton{
+    @include mixins.dFlex();
+    height: 50px;
+    width: 140px;
+    border-radius: 50px;
+    padding: 12px 25px;
+    cursor: pointer;
+}
+
+.stopButton{
+    font-size: 18px;
+    color: vari.$dark-blue;
+    font-weight: 700;
+    background-color: white;
+    border: 1px solid vari.$light-blue;
+    &:hover{
+        background-color: vari.$dark-blue;
+        color: white;
+    }
+}
+
+.saveButton{
+    background-color: vari.$dark-blue;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    border: none;
+    &:hover{
+        opacity: 0.8;
+    }
+}
+
+@media(max-width: vari.$bp-mobile){
+    .editIconShow {
+      @include buttons.closeBtn();
+    }
+
+    .nameEdit{
+        a{
+            display: none;
+        }
+    }
+
+    section{
+        width: 95%;
+        right: auto;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        &.small {
+            top: 50%;
+            right: auto;
+            border-radius: 30px;
+        }
+    }
+}
+
+@media(max-width: vari.$bp-mobile-sm){
+    section{
+        &.small,
+        &.big
+         {
+            padding: 30px 24px;
+        }
+    }
+    img{
+        height: 160px;
+        width: 160px;
+    }
+}
+@media(max-width: 350px){
+    .editSaveButtons{
+        @include mixins.dFlex($gap: 15px, $direction: column-reverse);
+    }
+}
