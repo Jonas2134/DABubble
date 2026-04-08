@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { IconComponent } from '../../icon/icon.component';
 import {
   trigger,
   state,
@@ -13,7 +14,7 @@ import { take } from 'rxjs';
 
 @Component({
   selector: 'app-logo',
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: './logo.component.html',
   styleUrl: './logo.component.scss',
   animations: [

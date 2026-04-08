@@ -3,6 +3,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { ComponentSwitcherService } from '../../shared/services/component-switcher.service';
 import { ActivatedRoute } from '@angular/router';
 import { LogoComponent } from '../../components/access/logo/logo.component';
+import { IconComponent } from '../../components/icon/icon.component';
 import { LoginComponent } from '../../components/access/login/login.component';
 import { ImprintComponent } from '../../components/access/imprint/imprint.component';
 import { PrivacyComponent } from '../../components/access/privacy/privacy.component';
@@ -11,7 +12,7 @@ import { VisibleButtonService } from '../../shared/services/visible-button.servi
 
 @Component({
   selector: 'app-access',
-  imports: [NgComponentOutlet, LogoComponent, ButtonComponent],
+  imports: [NgComponentOutlet, LogoComponent, ButtonComponent, IconComponent],
   templateUrl: './access.component.html',
   styleUrl: './access.component.scss'
 })

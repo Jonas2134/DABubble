@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
+import { IconComponent } from '../../icon/icon.component';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
 import {
   FormControl,
@@ -17,7 +18,7 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ButtonComponent, ReactiveFormsModule, CustomInputComponent, SuccessIndicatorComponent],
+  imports: [CommonModule, ButtonComponent, ReactiveFormsModule, CustomInputComponent, SuccessIndicatorComponent, IconComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })

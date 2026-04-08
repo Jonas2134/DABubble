@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { IconComponent } from '../../icon/icon.component';
 import {
   AbstractControl,
   FormControl,
@@ -23,6 +24,7 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
     ReactiveFormsModule,
     CustomInputComponent,
     SuccessIndicatorComponent,
+    IconComponent,
   ],
   templateUrl: './confirm-password.component.html',
   styleUrl: './confirm-password.component.scss',

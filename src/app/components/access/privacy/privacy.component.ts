@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
+import { IconComponent } from '../../icon/icon.component';
 
 @Component({
   selector: 'app-privacy',
-  imports: [],
+  imports: [IconComponent],
   templateUrl: './privacy.component.html',
   styleUrl: './privacy.component.scss',
 })

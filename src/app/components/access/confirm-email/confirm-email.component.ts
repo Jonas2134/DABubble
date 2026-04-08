@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
+import { IconComponent } from '../../icon/icon.component';
 import {
   FormControl,
   FormGroup,
@@ -15,7 +16,7 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 
 @Component({
   selector: 'app-confirm-email',
-  imports: [ButtonComponent, ReactiveFormsModule, CustomInputComponent, SuccessIndicatorComponent],
+  imports: [ButtonComponent, ReactiveFormsModule, CustomInputComponent, SuccessIndicatorComponent, IconComponent],
   templateUrl: './confirm-email.component.html',
   styleUrl: './confirm-email.component.scss',
 })

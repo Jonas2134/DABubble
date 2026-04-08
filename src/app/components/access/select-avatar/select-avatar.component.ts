@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
+import { IconComponent } from '../../icon/icon.component';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
 import { SuccessIndicatorComponent } from '../../success-indicator/success-indicator.component';
@@ -7,7 +8,7 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 
 @Component({
   selector: 'app-select-avatar',
-  imports: [ButtonComponent, SuccessIndicatorComponent],
+  imports: [ButtonComponent, SuccessIndicatorComponent, IconComponent],
   templateUrl: './select-avatar.component.html',
   styleUrl: './select-avatar.component.scss',
 })

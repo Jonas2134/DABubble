@@ -1,5 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
+import { IconComponent } from '../../icon/icon.component';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
 import {
   AbstractControl,
@@ -32,7 +33,7 @@ function strongPasswordValidator(): ValidatorFn {
 
 @Component({
   selector: 'app-create-account',
-  imports: [ButtonComponent, ReactiveFormsModule, CustomInputComponent],
+  imports: [ButtonComponent, ReactiveFormsModule, CustomInputComponent, IconComponent],
   templateUrl: './create-account.component.html',
   styleUrls: ['./create-account.component.scss', './create-account-checkbox.component.scss'],
 })
