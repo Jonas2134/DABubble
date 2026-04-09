@@ -12,9 +12,7 @@
   <section #channelWrapper (click)="$event.stopPropagation()" [class.hidden]="newChannelMembers">
     <div class="memberlist-header">
       <h1>Mitglieder</h1>
-      <button class="closeChannelMember" aria-label="Schließen" (click)="closeChannelMembers(); $event.stopPropagation()">
-        <span class="material-symbols closeButton">close</span>
-      </button>
+      <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="closeChannelMembers()"></app-button>
     </div>  
     <app-member-list
       [channelMembers]="channelMembers"

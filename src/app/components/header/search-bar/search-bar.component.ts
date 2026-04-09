@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import { SearchInformationComponent } from '../../search-information/search-information.component';
 import { DeviceVisibleComponent } from '../../device-visible/device-visible.component';
-import { FormsModule } from '@angular/forms';
-
 @Component({
   selector: 'app-search-bar',
   standalone: true,
@@ -18,7 +16,6 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     SearchInformationComponent,
     DeviceVisibleComponent,
-    FormsModule,
   ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.scss',

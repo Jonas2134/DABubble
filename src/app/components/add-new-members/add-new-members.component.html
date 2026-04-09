@@ -6,9 +6,7 @@
 <header class="addMemberHeader">
   <div>
     <h1>Leute hinzufügen</h1>
-    <button class="closeIconButton" aria-label="Schließen" (click)="emitClose(); $event.stopPropagation()">
-      <span class="material-symbols closeIcon">close</span>
-    </button>
+    <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="emitClose()"></app-button>
   </div>
   @if (showInput) {
     <span class="addMemberChannel"><div class="material-symbols">tag</div>{{ channelName }}</span>
@@ -17,22 +15,22 @@
 @if (!showInput) {
   <div class="addEveryOrOneMember">
     <div class="custom-radio">
-      <input type="radio" [(ngModel)]="selectedOption" name="memberOption" value="option1" id="option1"/>
-      <span class="radio-mark" (click)="selectedOption = 'option1'"></span>
+      <input type="radio" [formControl]="selectedOption" name="memberOption" value="option1" id="option1"/>
+      <span class="radio-mark" (click)="selectedOption.setValue('option1')"></span>
       <span class="radio-label">
         Alle Mitglieder von
-        <a class="devspaceElement" (click)="selectedOption = 'option1'" href="javascript:void(0)">Devspace</a>
+        <a class="devspaceElement" (click)="selectedOption.setValue('option1')" href="javascript:void(0)">Devspace</a>
         hinzufügen
       </span>
       </div>
     <div class="custom-radio">
-      <input type="radio" [(ngModel)]="selectedOption" name="memberOption" value="option2" id="option2"/>
-      <span class="radio-mark" (click)="selectedOption = 'option2'"></span>
+      <input type="radio" [formControl]="selectedOption" name="memberOption" value="option2" id="option2"/>
+      <span class="radio-mark" (click)="selectedOption.setValue('option2')"></span>
       <span class="radio-label">Bestimmte Leute hinzufügen</span>
     </div>
   </div>
 }
-@if ((!showInput && selectedOption === 'option2') || (showInput)) {
+@if ((!showInput && selectedOption.value === 'option2') || (showInput)) {
   <ng-container >
     @if (showOverlay) {
       <div [ngClass]="{ 'overlayAddNewMember': showXLine && showInput, 'overlayAddNewMemberAlternative': showXLine && !showInput }" (click)="onFocusOut()"></div>
@@ -85,8 +83,8 @@
 <div class="addNewMember">
   @if (!showInput) {
     <button
-      [class.active]="selectedOption !== 'option2' || selectedMembers.length > 0"
-      [disabled]="selectedOption === 'option2' && selectedMembers.length === 0"
+      [class.active]="selectedOption.value !== 'option2' || selectedMembers.length > 0"
+      [disabled]="selectedOption.value === 'option2' && selectedMembers.length === 0"
       class="addNewMemberButton"
       (click)="createNewChannel(channelName, channelDescription)">
       Erstellen

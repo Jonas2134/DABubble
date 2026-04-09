@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AddChannelComponent } from './add-channel/add-channel.component';
-import { Component, Input, EventEmitter, Output} from '@angular/core';
+import { Component, Input, EventEmitter, Output, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ChannelService } from '../../../shared/services/channel.service';
 import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delete.component';
@@ -14,17 +14,15 @@ import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delet
 })
 
 export class ChannelsComponent{
+  private channelService = inject(ChannelService);
   showAddChannel = false;
   showChannels = false;
   isPermanentDeleteOpen = false;
   openChannelId: string | null = null;
-  channels$: Observable<any[]> = of([]); 
+  channels$: Observable<any[]> = of([]);
   @Input() activeUserId!: any;
   @Output() openChat = new EventEmitter<{ chatType: 'private' | 'channel'; chatId: string }>();
   @Output() toggleMessage = new EventEmitter<boolean>();
-
-
-  constructor(private channelService: ChannelService) {}
 
   ngOnInit() {
     this.loadChannels();

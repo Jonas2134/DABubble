@@ -63,7 +63,7 @@
                         <h2>Vollständiger Name</h2>
                     </div>
                     <label class="sr-only" for="editUserName">Benutzername</label>
-                    <input id="editUserName" [(ngModel)]="editedUserName" [placeholder]="userName" type="text">
+                    <input id="editUserName" [formControl]="editedUserName" [placeholder]="userName" type="text">
                 </div>
             }
         }

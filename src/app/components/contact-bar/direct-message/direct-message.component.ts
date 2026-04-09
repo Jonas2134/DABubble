@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
 import { Firestore, collectionData, collection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -15,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class DirectMessageComponent implements OnInit {
+  private firestore = inject(Firestore);
+  private route = inject(ActivatedRoute);
   showMessages = false;
   activeUser?: User;
   activeUsers$!: Observable<any[]>;
@@ -25,13 +27,11 @@ export class DirectMessageComponent implements OnInit {
 
   someAction() {
     const screenWidth = window.innerWidth;
-    
+
     if (screenWidth < 1000) {
       this.toggleMessage.emit(true);
     }
   }
-  
-  constructor(private firestore: Firestore, private route: ActivatedRoute) {}
 
 
   ngOnInit(): void {

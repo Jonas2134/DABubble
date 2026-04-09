@@ -11,6 +11,7 @@ import { User } from '../../../shared/interfaces/user.interface';
 import { ProfilComponent } from '../../profil/profil.component';
 import { AddNewMembersComponent } from '../../add-new-members/add-new-members.component';
 import { MemberListComponent } from '../../member-list/member-list.component';
+import { ButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'app-channel-members',
@@ -19,6 +20,7 @@ import { MemberListComponent } from '../../member-list/member-list.component';
     ProfilComponent,
     AddNewMembersComponent,
     MemberListComponent,
+    ButtonComponent,
   ],
   templateUrl: './channel-members.component.html',
   styleUrl: './channel-members.component.scss',

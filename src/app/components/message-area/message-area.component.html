@@ -11,8 +11,8 @@
       type="text"
       placeholder="An: #channel, @user oder E-Mail"
       aria-label="Empfänger suchen"
-      [(ngModel)]="newChatInput"
-      (input)="onNewInputChange()"
+      [value]="newChatInput"
+      (input)="onNewInputChange($event)"
     />
 
     @if (showNewSuggestions) {

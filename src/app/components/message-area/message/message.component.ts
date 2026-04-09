@@ -27,11 +27,11 @@ import { Subscription } from 'rxjs';
 import { MessageService } from '../../../shared/services/message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delete.component';
-import { FormsModule } from '@angular/forms';
+import { ButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'app-message',
-  imports: [PickerComponent, PermanentDeleteComponent, FormsModule],
+  imports: [PickerComponent, PermanentDeleteComponent, ButtonComponent],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
 })
@@ -300,6 +300,10 @@ export class MessageComponent implements OnInit {
     }
     this.addReaction(char);
     this.isEmojiPickerOpen = false;
+  }
+
+  onEditTextInput(event: Event) {
+    this.editText = (event.target as HTMLTextAreaElement).value;
   }
 
   openEdit() {

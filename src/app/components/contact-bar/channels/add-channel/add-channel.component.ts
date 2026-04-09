@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { AnimationEvent } from '@angular/animations';
-import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild, inject } from '@angular/core';
 import { AddNewMembersComponent } from '../../../add-new-members/add-new-members.component';
+import { ButtonComponent } from '../../../button/button.component';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, tap } from 'rxjs';
 import { ChannelService } from '../../../../shared/services/channel.service';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 const sectionEnter = trigger('sectionEnter', [
@@ -30,18 +31,20 @@ const popupAnim = trigger('popupAnim', [
 @Component({
   selector: 'app-add-channel',
   standalone: true,
-  imports: [CommonModule, AddNewMembersComponent, FormsModule],
+  imports: [CommonModule, AddNewMembersComponent, ReactiveFormsModule, ButtonComponent],
   templateUrl: './add-channel.component.html',
   styleUrl: './add-channel.component.scss',
   animations: [sectionEnter, popupAnim],
 })
 
 export class AddChannelComponent{
+  private elRef = inject(ElementRef);
+  private channelService = inject(ChannelService);
   @Output() close = new EventEmitter<void>();
   @Input() activeUserId!: string | null;
   showAddMember: boolean = true;
   channelId: any = '';
-  channelName: string = '';
+  channelName = new FormControl('');
   channelDescription: string = '';
   isMobile = window.innerWidth <= 600;
   nameExists = false;
@@ -49,8 +52,6 @@ export class AddChannelComponent{
   private nameCheck$ = new Subject<string>();
   @ViewChild('addChannel') channelWrapper?: ElementRef;
   @ViewChild('addChannelAll') memberAddWrapper?: ElementRef;
-
-  constructor( private elRef: ElementRef, private channelService: ChannelService) {}
 
   get animMode() { return this.isMobile ? 'mobile' : 'desktop'; }
 
@@ -101,19 +102,20 @@ export class AddChannelComponent{
   }
 
 
-  checkNameUnique(name: string) {
-    if (!name.trim()) {
+  checkNameUnique() {
+    const name = this.channelName.value?.trim() ?? '';
+    if (!name) {
       this.nameExists = false;
       return;
     }
-    this.nameCheck$.next(name.trim());
+    this.nameCheck$.next(name);
   }
 
 
-  addNewChannel(name: string, description: string){
+  addNewChannel(description: string){
+    const name = this.channelName.value?.trim() ?? '';
     if (!name || !this.activeUserId) return;
-    this.channelName = name;
     this.channelDescription = description;
-    this.showAddMember = false;    
+    this.showAddMember = false;
   }
 } 

@@ -38,14 +38,11 @@ function strongPasswordValidator(): ValidatorFn {
   styleUrls: ['./create-account.component.scss', './create-account-checkbox.component.scss'],
 })
 export class CreateAccountComponent implements OnInit, OnDestroy {
+  componentSwitcher = inject(ComponentSwitcherService);
+  private authService = inject(AuthentificationService);
   registerForm!: FormGroup;
   confError: string = '';
   private sub?: Subscription;
-
-  constructor(
-    public componentSwitcher: ComponentSwitcherService,
-    private authService: AuthentificationService
-  ) {}
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({

@@ -42,8 +42,12 @@ interface ThreadHit {
   styleUrl: './search-information.component.scss',
 })
 export class SearchInformationComponent implements OnInit {
-  private _searchText = '';
   private route = inject(ActivatedRoute);
+  private userService = inject(UserService);
+  private messageService = inject(MessageService);
+  private channelService = inject(ChannelService);
+
+  private _searchText = '';
 
   @Input() set searchText(value: string) {
     this._searchText = value.trim().toLowerCase();
@@ -74,12 +78,6 @@ export class SearchInformationComponent implements OnInit {
   showMatchedMessages = true;
   showDirectMessages = true;
   showThreadMessages = true;
-
-  constructor(
-    private userService: UserService,
-    private messageService: MessageService,
-    private channelService: ChannelService
-  ) {}
 
   ngOnInit(): void {
     this.activeUserId = this.route.snapshot.paramMap.get('activeUserId');

@@ -3,7 +3,7 @@ import { Component, EventEmitter, HostListener, Input, OnInit, Output, inject} f
 import { Channel } from '../../shared/interfaces/channel.interface';
 import { Firestore} from '@angular/fire/firestore';
 import {map, takeUntil } from 'rxjs/operators';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/interfaces/user.interface';
 import { ChannelService } from '../../shared/services/channel.service';
@@ -17,7 +17,7 @@ import { fadeSlide, slideUpDown } from '../../shared/animations/animations';
 @Component({
   selector: 'app-channel-leave',
   standalone: true,
-  imports: [CommonModule, FormsModule, DeviceVisibleComponent, MemberListComponent, ProfilComponent, AddNewMembersComponent],
+  imports: [CommonModule, ReactiveFormsModule, DeviceVisibleComponent, MemberListComponent, ProfilComponent, AddNewMembersComponent],
   templateUrl: './channel-leave.component.html',
   styleUrl: './channel-leave.component.scss',
   animations: [fadeSlide, slideUpDown],
@@ -25,6 +25,8 @@ import { fadeSlide, slideUpDown } from '../../shared/animations/animations';
 
 export class ChannelLeaveComponent implements OnInit{
   firestore = inject(Firestore);
+  private userService = inject(UserService);
+  private channelService = inject(ChannelService);
   @Input() channelData: Channel | null = null;
   @Input() channelMembers:  User[] = [];
   @Input() activeUserId: string | null = null;  
@@ -43,17 +45,16 @@ export class ChannelLeaveComponent implements OnInit{
   private destroy$ = new Subject<void>();
   channelNameSave: boolean = false;
   descriptionSave: boolean = false;
-  editedChannelName: string = '';
+  editedChannelName = new FormControl('');
   editMode: boolean = true;
   hasInteractedName: boolean = false;
   editDescription: boolean = true;
-  editedDescription: string = '';
+  editedDescription = new FormControl('');
   hasInteracted: boolean = false;
   isMobile = window.innerWidth <= 600;
   nameExists = false;
   createdByUserName: string = 'Unbekannt';
 
-  constructor(private userService: UserService, private channelService: ChannelService) {}
 
 
   ngOnInit(): void {
@@ -76,9 +77,8 @@ export class ChannelLeaveComponent implements OnInit{
   }
 
 
-  async onNameInput(value: string) {
-    this.editedChannelName = value;
-    const trimmed = value.trim();
+  async onNameInput() {
+    const trimmed = this.editedChannelName.value?.trim() ?? '';
     if (trimmed.length < 3 || trimmed === this.channelData?.cName) {
       this.nameExists = false;
       return;
@@ -105,7 +105,7 @@ export class ChannelLeaveComponent implements OnInit{
     this.hasInteractedName = true;
     this.editMode = !this.editMode;
     if (this.editMode && this.channelData?.cName) {
-      this.editedChannelName = this.channelData.cName;
+      this.editedChannelName.setValue(this.channelData.cName);
     }
   }
 
@@ -114,7 +114,7 @@ export class ChannelLeaveComponent implements OnInit{
     this.hasInteracted = true;
     this.editDescription = !this.editDescription;
     if (this.editDescription && this.channelData?.cDescription) {
-      this.editedDescription = this.channelData.cDescription;
+      this.editedDescription.setValue(this.channelData.cDescription);
     }
   }
 
@@ -134,7 +134,7 @@ export class ChannelLeaveComponent implements OnInit{
 
 
   saveNewName() {
-    const newName = this.editedChannelName.trim();
+    const newName = this.editedChannelName.value?.trim() ?? '';
     if (!newName || newName.length < 3 || this.nameExists || !this.channelData?.cId) {
       return;
     }
@@ -150,7 +150,7 @@ export class ChannelLeaveComponent implements OnInit{
 
   
   saveDescription() {
-    const newDesc = this.editedDescription.trim();
+    const newDesc = this.editedDescription.value?.trim() ?? '';
     if (!newDesc || !this.channelData?.cId) return;
     this.channelService.updateChannelDescription(this.channelData.cId, newDesc)
       .then(() => {

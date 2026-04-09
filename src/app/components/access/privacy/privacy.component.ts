@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
 import { IconComponent } from '../../icon/icon.component';
 
@@ -9,7 +9,7 @@ import { IconComponent } from '../../icon/icon.component';
   styleUrl: './privacy.component.scss',
 })
 export class PrivacyComponent {
-  constructor(public componentSwitcher: ComponentSwitcherService) {}
+  componentSwitcher = inject(ComponentSwitcherService);
 
   goBack(): void {
     this.componentSwitcher.setComponent('login');

@@ -22,6 +22,8 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 })
 export class ConfirmEmailComponent implements OnInit, OnDestroy {
   private visibleBtn = inject(VisibleButtonService);
+  componentSwitcher = inject(ComponentSwitcherService);
+  private authService = inject(AuthentificationService);
 
   confirmForm!: FormGroup;
   findEmail: string = '';
@@ -30,10 +32,7 @@ export class ConfirmEmailComponent implements OnInit, OnDestroy {
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
-  constructor(
-    public componentSwitcher: ComponentSwitcherService,
-    private authService: AuthentificationService
-  ) {
+  constructor() {
     this.visibleBtn.show();
   }
 

@@ -18,6 +18,52 @@ button {
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+
+  &.btn-white {
+    background-color: vari.$white;
+    color: vari.$gray;
+    border: none;
+
+    &:hover:not(:disabled) {
+      background-color: vari.$sky-grey;
+      color: vari.$purple;
+    }
+  }
+
+  &.btn-transparent {
+    background-color: transparent;
+    color: vari.$gray;
+    border: none;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      background-color: vari.$sky-grey;
+      color: vari.$purple;
+    }
+  }
+
+  &.btn-blue {
+    background-color: vari.$dark-blue;
+    color: vari.$white;
+    border: none;
+
+    &:hover:not(:disabled) {
+      background-color: vari.$light-blue;
+    }
+  }
 }
 
 .btn-blue {

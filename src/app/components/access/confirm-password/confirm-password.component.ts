@@ -31,6 +31,10 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 })
 export class ConfirmPasswordComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
+  componentSwitcher = inject(ComponentSwitcherService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private authService = inject(AuthentificationService);
 
   newPassword!: FormGroup;
   oobCode: string | null = null;
@@ -44,12 +48,7 @@ export class ConfirmPasswordComponent implements OnInit {
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
-  constructor(
-    public componentSwitcher: ComponentSwitcherService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthentificationService
-  ) {
+  constructor() {
     this.visibleBtn.show();
   }
 

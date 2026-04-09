@@ -11,7 +11,6 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../shared/services/message.service';
 import { UserService } from '../../shared/services/user.service';
@@ -31,7 +30,6 @@ import { MessageComposerComponent } from './message-composer/message-composer.co
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     MessageComponent,
     ChannelLeaveComponent,
     ProfilComponent,
@@ -274,7 +272,8 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
     this.addMemberPopUp = false;
   }
 
-  onNewInputChange() {
+  onNewInputChange(event: Event) {
+    this.newChatInput = (event.target as HTMLInputElement).value;
     const val = this.newChatInput.trim();
     this.showNewSuggestions = !!val;
 

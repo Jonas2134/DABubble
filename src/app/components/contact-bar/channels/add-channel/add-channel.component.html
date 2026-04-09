@@ -4,9 +4,7 @@
     <header>
       <div class="headlineClose">
         <span>Channel erstellen</span>
-        <button class="closeButton" aria-label="Schließen" (click)="closeWindow()">
-          <span class="material-symbols">close</span>
-        </button>
+        <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="closeWindow()"></app-button>
       </div>
       <div class="addChannelText">
         <span
@@ -19,14 +17,14 @@
       <span class="channelField">Channel-Name</span>
       <div class="inputSpan">
         <img src="assets/icons/hashtag_grey.svg" />
-        <input #channelNameInput [(ngModel)]="channelName" (input)="checkNameUnique(channelName)" placeholder="z.B. Kooperationsprojekte" type="text" aria-label="Channel-Name"/>
+        <input #channelNameInput [formControl]="channelName" (input)="checkNameUnique()" placeholder="z.B. Kooperationsprojekte" type="text" aria-label="Channel-Name"/>
       </div>
-      @if (channelName && channelName.length < 3) {
+      @if (channelName.value && channelName.value.length < 3) {
         <span class="errorText">
           Der Channel-Name muss mindestens 3 Buchstaben lang sein !
         </span>
       }
-      @if (nameExists && channelName.length >= 3) {
+      @if (nameExists && channelName.value!.length >= 3) {
         <span class="errorText">
           Bitte nutzen Sie einen anderen Channel-Name !
         </span>
@@ -47,9 +45,9 @@
     </div>
     <div class="addChannel">
       <button 
-        (click)="addNewChannel(channelNameInput.value, channelDescriptionInput.value)" [disabled]="
-        !channelName || channelName.length < 3 || nameExists"
-        [ngClass]="{ disabled: !channelName || channelName.length < 3 || nameExists }" class="addChannelButton">Erstellen
+        (click)="addNewChannel(channelDescriptionInput.value)" [disabled]="
+        !channelName.value?.trim() || channelName.value!.trim().length < 3 || nameExists"
+        [ngClass]="{ disabled: !channelName.value?.trim() || channelName.value!.trim().length < 3 || nameExists }" class="addChannelButton">Erstellen
       </button>
     </div>
   </section>
@@ -61,7 +59,7 @@
               [activeUserId]="activeUserId"
               (close)="triggerSlideOut()"
               [channelId]="channelId"
-              [channelName]="channelName"
+              [channelName]="channelName.value ?? ''"
               [channelDescription]="channelDescription"
               [showInput]="false"
           ></app-add-new-members>

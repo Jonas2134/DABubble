@@ -25,7 +25,9 @@
                         <span>{{ user.uName }} (Du)</span>
                     </button>
                 </li>
-                <li *ngFor="let user of inactiveUsers$ | async">
+            }
+            @for (user of inactiveUsers$ | async; track $index) {
+                <li>
                     <button (click)="selectPrivateChat(user.uId); someAction()" class="directUser">
                         <div class="user-img-status">
                             <img [src]="user.uUserImage" [alt]="user.uName + ' Profilbild'" />

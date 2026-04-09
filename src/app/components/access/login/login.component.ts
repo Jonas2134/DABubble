@@ -24,6 +24,9 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private visibleBtn = inject(VisibleButtonService);
+  componentSwitcher = inject(ComponentSwitcherService);
+  private authService = inject(AuthentificationService);
+  private router = inject(Router);
 
   loginForm!: FormGroup;
   authError: string = '';
@@ -32,11 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
-  constructor(
-    public componentSwitcher: ComponentSwitcherService,
-    private authService: AuthentificationService,
-    private router: Router
-  ) {
+  constructor() {
     this.visibleBtn.show();
   }
 

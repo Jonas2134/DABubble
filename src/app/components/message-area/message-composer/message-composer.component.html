@@ -23,7 +23,7 @@
 <textarea
   [placeholder]="getPlaceholder()"
   [attr.aria-label]="getPlaceholder()"
-  [(ngModel)]="newMessageText"
+  [value]="newMessageText"
   #messageInput
   (input)="onTextChange($event)"
   (keydown)="handleKeyDown($event)"
@@ -32,16 +32,9 @@
 
 <div class="textfield-buttons">
   <div>
-    <button class="icon-button blue-hover" aria-label="Emoji einfügen" (click)="toggleEmojiPicker($event)">
-      <span class="material-symbols textfield-icon">sentiment_satisfied</span>
-    </button>
-
-    <button class="icon-button blue-hover" aria-label="Person erwähnen" (click)="openUserSuggestions()">
-      <span class="material-symbols textfield-icon">alternate_email</span>
-    </button>
+    <app-button variant="icon" color="transparent" icon="sentiment_satisfied" ariaLabel="Emoji einfügen" (clicked)="toggleEmojiPicker($event)"></app-button>
+    <app-button variant="icon" color="transparent" icon="alternate_email" ariaLabel="Person erwähnen" (clicked)="openUserSuggestions()"></app-button>
   </div>
 
-  <button class="icon-button" aria-label="Nachricht senden" [disabled]="!newMessageText.trim()" (click)="sendMessage()">
-    <span class="material-symbols send-icon">send</span>
-  </button>
+  <app-button variant="icon" color="transparent" icon="send" ariaLabel="Nachricht senden" [disabled]="!newMessageText.trim()" (clicked)="sendMessage()"></app-button>
 </div>

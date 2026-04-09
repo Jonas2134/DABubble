@@ -9,14 +9,14 @@ import {
   inject,
 } from '@angular/core';
 import { Firestore, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-profil',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss',
 })
@@ -30,7 +30,7 @@ export class ProfilComponent {
   isActive: boolean = true;
   showEditProfil: boolean = false;
   showAvatarChoice = false;
-  editedUserName: string = '';
+  editedUserName = new FormControl('');
   items = [1, 2, 3, 4, 5, 6];
 
   @Input() showButton: boolean = false;
@@ -68,12 +68,13 @@ export class ProfilComponent {
 
 
   changeUserName() {
-    if (!this.activeUserId || !this.editedUserName.trim()) return;
+    const name = this.editedUserName.value?.trim();
+    if (!this.activeUserId || !name) return;
     const userRef = doc(this.firestore, 'users', this.activeUserId);
     updateDoc(userRef, {
-      uName: this.editedUserName.trim(),
+      uName: name,
     }).then(() => {
-      this.userName = this.editedUserName;
+      this.userName = name;
       this.showEditProfil = false;
     });
   }

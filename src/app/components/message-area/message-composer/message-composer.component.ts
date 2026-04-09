@@ -9,9 +9,8 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { ButtonComponent } from '../../button/button.component';
 
 import { UserService } from '../../../shared/services/user.service';
 import { ChannelService } from '../../../shared/services/channel.service';
@@ -21,7 +20,7 @@ import { Channel } from '../../../shared/interfaces/channel.interface';
 @Component({
   selector: 'app-message-composer',
   standalone: true,
-  imports: [CommonModule, FormsModule, PickerComponent],
+  imports: [CommonModule, PickerComponent, ButtonComponent],
   templateUrl: './message-composer.component.html',
   styleUrls: ['./message-composer.component.scss'],
 })
@@ -63,6 +62,7 @@ export class MessageComposerComponent {
 
   onTextChange(event: Event) {
     const txtArea = event.target as HTMLTextAreaElement;
+    this.newMessageText = txtArea.value;
     const caretPos = txtArea.selectionStart || 0;
     const message = txtArea.value;
 

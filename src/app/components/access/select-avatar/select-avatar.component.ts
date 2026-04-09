@@ -14,6 +14,8 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 })
 export class SelectAvatarComponent {
   private visibleBtn = inject(VisibleButtonService);
+  componentSwitcher = inject(ComponentSwitcherService);
+  private authService = inject(AuthentificationService);
 
   avatars = [
     'avatar-1.png',
@@ -24,17 +26,13 @@ export class SelectAvatarComponent {
     'avatar-6.png',
   ];
   selectedAvatar: string | null = null;
-  username: string | undefined | null = null;
+  username: string | undefined | null = this.authService.registrationData?.username;
   isConfirmationVisible: boolean = false;
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
-  
-  constructor(
-    public componentSwitcher: ComponentSwitcherService,
-    private authService: AuthentificationService
-  ) {
+
+  constructor() {
     this.visibleBtn.show();
-    this.username = this.authService.registrationData?.username;
   }
 
   goBack(): void {

@@ -30,24 +30,24 @@
                     <div class="saveBox">
                         <h3>Channel-Name</h3>
                         <button class="editOverMobil editButton" (click)="saveNewName()"
-                            [disabled]=" !editedChannelName.trim() || editedChannelName.trim().length < 3 || nameExists">
+                            [disabled]="!editedChannelName.value?.trim() || editedChannelName.value!.trim().length < 3 || nameExists">
                              Speichern
                         </button>
-                        <button  [disabled]=" !editedChannelName.trim() || editedChannelName.trim().length < 3 || nameExists" 
+                        <button  [disabled]="!editedChannelName.value?.trim() || editedChannelName.value!.trim().length < 3 || nameExists"
                             class="editOverTablet editButton" (click)="saveNewName()">
                             <div class="material-symbols closeIcon">check_circle</div>
                         </button>
                     </div>
                     <div class="editChannelName" >
                         <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
-                        <input aria-label="Channel-Name" [(ngModel)]="editedChannelName"  (ngModelChange)="onNameInput($event)" [placeholder]="editedChannelName"/>
+                        <input aria-label="Channel-Name" [formControl]="editedChannelName" (input)="onNameInput()" [placeholder]="editedChannelName.value ?? ''"/>
                     </div>
                 </div>
-                @if ( hasInteractedName && editedChannelName.trim().length > 0 &&
-                    editedChannelName.trim().length < 3 && editedChannelName.trim() !== channelData?.cName) {
+                @if ( hasInteractedName && editedChannelName.value?.trim()?.length! > 0 &&
+                    editedChannelName.value!.trim().length < 3 && editedChannelName.value?.trim() !== channelData?.cName) {
                     <span class="errorText">Der Channel-Name muss mindestens 3 Buchstaben lang sein !</span>
                   }
-                @if ( hasInteractedName && editedChannelName.trim().length >= 3 &&nameExists) {
+                @if ( hasInteractedName && editedChannelName.value!.trim().length >= 3 && nameExists) {
                     <span class="errorText">Bitte nutzen Sie einen anderen Channel-Name !</span>
                 }
             }
@@ -84,7 +84,7 @@
                                 </button>
                             </div>
                             <div class="inputDescription">
-                                <textarea aria-label="Channel-Beschreibung" [(ngModel)]="editedDescription" placeholder="Dein Text hier"></textarea>
+                                <textarea aria-label="Channel-Beschreibung" [formControl]="editedDescription" placeholder="Dein Text hier"></textarea>
                             </div>
                         </div>
                         <div class="xLineSave"></div>

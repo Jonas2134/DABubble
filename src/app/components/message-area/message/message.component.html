@@ -7,23 +7,12 @@
 
   @if (isEditOpen && message.mSenderId === activeUserId) {
   <div class="edit-message">
-    <textarea #editTextarea type="text" [(ngModel)]="editText"></textarea>
+    <textarea #editTextarea type="text" [value]="editText" (input)="onEditTextInput($event)"></textarea>
     <div>
-      <button
-        class="icon-button blue-hover"
-        (click)="toggleEmojiPicker($event)"
-      >
-        <div class="material-symbols textfield-icon">sentiment_satisfied</div>
-      </button>
+      <app-button variant="icon" color="transparent" icon="sentiment_satisfied" ariaLabel="Emoji einfügen" (clicked)="toggleEmojiPicker($event)"></app-button>
       <div>
-        <button class="secondary-btn" (click)="toggleEdit()">Abbrechen</button>
-        <button
-          class="primary-btn"
-          (click)="saveEdit()"
-          [disabled]="!editText.trim()"
-        >
-          Speichern
-        </button>
+        <app-button color="white" (clicked)="toggleEdit()">Abbrechen</app-button>
+        <app-button color="blue" (clicked)="saveEdit()" [disabled]="!editText.trim()">Speichern</app-button>
       </div>
     </div>
   </div>

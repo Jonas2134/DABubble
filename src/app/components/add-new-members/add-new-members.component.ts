@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ViewChildren, ElementRef, QueryList, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ViewChildren, ElementRef, QueryList, OnChanges, OnInit, ViewEncapsulation, inject } from '@angular/core';
 import { User } from '../../shared/interfaces/user.interface';
 import { ChannelService } from '../../shared/services/channel.service';
 import { UserService } from '../../shared/services/user.service';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-add-new-members',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
   templateUrl: './add-new-members.component.html',
   styleUrls: ['./add-new-members.component.scss'], 
   encapsulation: ViewEncapsulation.None,
@@ -18,6 +19,8 @@ import { FormsModule } from '@angular/forms';
 })
 
 export class AddNewMembersComponent implements OnInit, OnChanges{
+  private channelService = inject(ChannelService);
+  private userService = inject(UserService);
   private resizeObserver?: ResizeObserver;
   memberAddElement: boolean = false;
   memberInputId: string = '';
@@ -32,7 +35,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
   selectedMemberIds: string[] = [];
   selectedMembers: User[] = [];
   displayCount = 1;
-  selectedOption: string = '';
+  selectedOption = new FormControl('');
 
   @Input() channelMembers: User[] = [];
   @Input() activeUserId!: string | null;
@@ -44,8 +47,6 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
   @Output() close = new EventEmitter<void>();
   @ViewChild('memberInput', { static: false })memberInput?: ElementRef<HTMLElement>;
   @ViewChildren('containerDelete', { read: ElementRef })pills!: QueryList<ElementRef<HTMLDivElement>>;
-  
-  constructor(private channelService: ChannelService, private userService: UserService) {}
 
 
   ngOnInit() {
@@ -195,7 +196,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
   async createNewChannel(name: string, description: string) {
     if (!name || !this.activeUserId) return;    
     let ids: string[];
-    if (this.selectedOption === 'option1') {
+    if (this.selectedOption.value === 'option1') {
       const allUsers = await this.userService.allUsers();
       ids = allUsers.map((u) => u.uId);
     } else {

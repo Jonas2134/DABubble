@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import {
   trigger,
@@ -83,13 +83,12 @@ import { take } from 'rxjs';
   ],
 })
 export class LogoComponent implements OnInit {
+  private bp = inject(BreakpointObserver);
   logoPosition: 'center' | 'topLeft' | 'centerMobile' | 'topLeftMobile' = 'center';
   textState = 'hidden';
   backgroundState = 'visible';
 
   private isMobile = false;
-
-  constructor(private bp: BreakpointObserver) {}
 
   ngOnInit(): void {
     localStorage.setItem('showAnimation', 'true');
