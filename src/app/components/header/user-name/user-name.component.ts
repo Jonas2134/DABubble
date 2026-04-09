@@ -9,6 +9,7 @@ import {
   EventEmitter,
   Output,
 } from '@angular/core';
+import { ButtonComponent } from '../../button/button.component';
 import { ProfilComponent } from '../../profil/profil.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceVisibleComponent } from '../../device-visible/device-visible.component';
@@ -21,7 +22,7 @@ import { slideUpDown } from '../../../shared/animations/animations';
 @Component({
   selector: 'app-user-name',
   standalone: true,
-  imports: [CommonModule, ProfilComponent, DeviceVisibleComponent],
+  imports: [CommonModule, ButtonComponent, ProfilComponent, DeviceVisibleComponent],
   templateUrl: './user-name.component.html',
   styleUrl: './user-name.component.scss',
   animations: [slideUpDown],

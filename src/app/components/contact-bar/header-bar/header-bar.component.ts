@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
+import { ButtonComponent } from '../../button/button.component';
 import { DeviceVisibleComponent } from '../../device-visible/device-visible.component';
 
 @Component({
   selector: 'app-header-bar',
   standalone: true,
-  imports: [CommonModule, DeviceVisibleComponent],
+  imports: [CommonModule, ButtonComponent, DeviceVisibleComponent],
   templateUrl: './header-bar.component.html',
   styleUrl: './header-bar.component.scss'
 })

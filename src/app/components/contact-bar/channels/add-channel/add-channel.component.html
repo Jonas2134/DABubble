@@ -44,11 +44,11 @@
       </div>
     </div>
     <div class="addChannel">
-      <button 
-        (click)="addNewChannel(channelDescriptionInput.value)" [disabled]="
-        !channelName.value?.trim() || channelName.value!.trim().length < 3 || nameExists"
-        [ngClass]="{ disabled: !channelName.value?.trim() || channelName.value!.trim().length < 3 || nameExists }" class="addChannelButton">Erstellen
-      </button>
+      <app-button
+        color="blue"
+        [disabled]="!channelName.value?.trim() || channelName.value!.trim().length < 3 || nameExists"
+        (clicked)="addNewChannel(channelDescriptionInput.value)">Erstellen
+      </app-button>
     </div>
   </section>
   } @else {

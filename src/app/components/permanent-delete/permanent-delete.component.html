@@ -3,8 +3,8 @@
     <h2 id="deleteHeading">{{ heading }}</h2>
 
     <div class="button-row">
-      <button class="btn cancel" (click)="onNo()">Nein</button>
-      <button class="btn confirm" (click)="onYes()">Ja</button>
+      <app-button color="white" (clicked)="onNo()">Nein</app-button>
+      <app-button color="rose" (clicked)="onYes()">Ja</app-button>
     </div>
   </div>
 </div>

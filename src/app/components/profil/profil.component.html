@@ -7,9 +7,7 @@
             @else {
                 <h1>Dein Profil bearbeiten</h1>
             }
-            <button (click)="closeProfil()" class="closeProfil" aria-label="Profil schließen">
-                <span class="material-symbols closeIcon">close</span>
-            </button>
+            <app-button variant="icon" color="white" icon="close" ariaLabel="Profil schließen" (clicked)="closeProfil()"></app-button>
         </header>
         @if (!showEditProfil) {
             <img [src]="userImage" [alt]="userName + ' Profilbild'">
@@ -96,8 +94,8 @@
         }
         @if (showEditProfil) {
             <div class="editSaveButtons">
-                <button (click)="closeProfil()" class="editButton stopButton">Abbrechen</button>
-                <button (click)="changeUserName(); closeProfil(); saveAvatarChange()" class="editButton saveButton">Speichern</button>
+                <app-button color="white" (clicked)="closeProfil()">Abbrechen</app-button>
+                <app-button color="blue" (clicked)="changeUserName(); closeProfil(); saveAvatarChange()">Speichern</app-button>
             </div>
         }
     </section>

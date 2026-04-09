@@ -271,8 +271,8 @@ export class MessageComponent implements OnInit {
     if (this.message.mSenderId) this.profileClick.emit(this.message.mSenderId);
   }
 
-  toggleEmojiPicker(e: MouseEvent) {
-    e.stopPropagation();
+  toggleEmojiPicker(e?: MouseEvent) {
+    e?.stopPropagation();
     this.isEmojiPickerOpen = !this.isEmojiPickerOpen;
   }
   toggleOptions(e: MouseEvent) {

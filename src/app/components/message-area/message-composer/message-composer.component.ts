@@ -160,8 +160,8 @@ export class MessageComposerComponent {
     this.foundChannels = [];
   }
 
-  toggleEmojiPicker(event: MouseEvent) {
-    event.stopPropagation();
+  toggleEmojiPicker(event?: MouseEvent) {
+    event?.stopPropagation();
     this.isEmojiPickerOpen = !this.isEmojiPickerOpen;
 
     if (this.isEmojiPickerOpen) {

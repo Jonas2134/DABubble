@@ -1,5 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ButtonComponent } from '../button/button.component';
 import { MessageService } from '../../shared/services/message.service';
 import { ChannelService } from '../../shared/services/channel.service';
 
@@ -7,7 +8,7 @@ type DeleteTarget = 'message' | 'channel' | 'user';
 
 @Component({
   selector: 'app-permanent-delete',
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonComponent],
   templateUrl: './permanent-delete.component.html',
   styleUrl: './permanent-delete.component.scss',
 })

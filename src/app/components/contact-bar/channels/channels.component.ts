@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AddChannelComponent } from './add-channel/add-channel.component';
+import { ButtonComponent } from '../../button/button.component';
 import { Component, Input, EventEmitter, Output, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ChannelService } from '../../../shared/services/channel.service';
@@ -8,7 +9,7 @@ import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delet
 @Component({
   selector: 'app-channels',
   standalone: true,
-  imports: [CommonModule, AddChannelComponent, PermanentDeleteComponent],
+  imports: [CommonModule, AddChannelComponent, ButtonComponent, PermanentDeleteComponent],
   templateUrl: './channels.component.html',
   styleUrl: './channels.component.scss'
 })

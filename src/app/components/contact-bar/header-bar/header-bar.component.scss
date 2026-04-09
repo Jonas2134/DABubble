@@ -20,58 +20,26 @@ section{
     }
 }
 
-.squareImage{
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-    background-color: white;
-    border: none;
-    cursor: pointer;
-    position: relative;
-}
-
-.icon{
-    width: 24px;
-    height: 24px;
-    color: black;
-    transition: color 0.3s ease;
-}
-
-.squareImage:hover .icon{
-    color: vari.$purple;
-}
-
 @media(max-width: vari.$bp-tablet){
     header{
         display: none;
     }
 
-    .squareImageNewPosition{
-        @include mixins.dFlex();
+    .new-chat-fab {
         position: absolute;
-        height: 60px;
-        width: 60px;
-        border-radius: 50%;
         bottom: 64px;
         right: 40px;
-        background-color: vari.$dark-blue;
-        border: none;
-        &:hover{
-            opacity: 0.8;
+
+        ::ng-deep button {
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
         }
-    }
-
-    .icon{
-        color: white;
-    }
-
-    .squareImage:hover .icon{
-        color: none;
     }
 }
 
 @media(max-width: vari.$bp-mobile-sm){
-    .squareImageNewPosition{
+    .new-chat-fab {
         right: 8px;
     }
-  }
+}

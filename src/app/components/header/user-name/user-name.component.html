@@ -11,9 +11,7 @@
       </app-device-visible>
     </div>
   </div>
-  <button class="openLogOut" (click)="toggleLogOut()" [attr.aria-expanded]="isLogOutVisible" aria-label="Benutzermenü" #arrowToggleBtn>
-    <span class="arrowDownHeight material-symbols arrowDown">keyboard_arrow_down</span>
-  </button>
+  <app-button class="openLogOut" variant="icon" color="transparent" icon="keyboard_arrow_down" ariaLabel="Benutzermenü" (clicked)="toggleLogOut()" #arrowToggleBtn></app-button>
 </div>
 @if (isLogOutVisible) {
   <div role="menu" aria-label="Benutzermenü">

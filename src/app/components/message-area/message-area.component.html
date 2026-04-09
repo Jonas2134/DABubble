@@ -65,20 +65,8 @@
           }
           <h2>{{ channelMembers.length }}</h2>
         </div>
-        <button
-          class="addButtonBefore openAddMemberPopUpButton"
-          aria-label="Mitglied hinzufügen"
-          (click)="openAddMemberPopUp()"
-        >
-          <span class="material-symbols add-person-icon">person_add</span>
-        </button>
-        <button
-          class="addButtonAfter openAddMemberPopUpButton"
-          aria-label="Mitglieder anzeigen"
-          (click)="toggleChannelMembers()"
-        >
-          <span class="material-symbols add-person-icon">person_add</span>
-        </button>
+        <app-button class="addButtonBefore" variant="icon" color="white" icon="person_add" ariaLabel="Mitglied hinzufügen" (clicked)="openAddMemberPopUp()"></app-button>
+        <app-button class="addButtonAfter" variant="icon" color="white" icon="person_add" ariaLabel="Mitglieder anzeigen" (clicked)="toggleChannelMembers()"></app-button>
       </div>
     </div>
     } @else if (chatType === 'thread') {
@@ -87,7 +75,7 @@
         <h1>Thread</h1>
         <span>{{ threadContextName }}</span>
       </div>
-      <button class="material-symbols thread-close-btn" aria-label="Thread schließen" (click)="handleCloseThread()">close</button>
+      <app-button variant="icon" color="white" icon="close" ariaLabel="Thread schließen" (clicked)="handleCloseThread()"></app-button>
     </div>
     }
   </div>

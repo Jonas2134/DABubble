@@ -9,7 +9,7 @@
   <div class="edit-message">
     <textarea #editTextarea type="text" [value]="editText" (input)="onEditTextInput($event)"></textarea>
     <div>
-      <app-button variant="icon" color="transparent" icon="sentiment_satisfied" ariaLabel="Emoji einfügen" (clicked)="toggleEmojiPicker($event)"></app-button>
+      <app-button variant="icon" color="transparent" icon="sentiment_satisfied" ariaLabel="Emoji einfügen" (clicked)="toggleEmojiPicker()"></app-button>
       <div>
         <app-button color="white" (clicked)="toggleEdit()">Abbrechen</app-button>
         <app-button color="blue" (clicked)="saveEdit()" [disabled]="!editText.trim()">Speichern</app-button>

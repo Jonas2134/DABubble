@@ -8,6 +8,7 @@ import {
   ViewChild,
   inject,
 } from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
 import { Firestore, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,7 +17,7 @@ import { UserService } from '../../shared/services/user.service';
 @Component({
   selector: 'app-profil',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ButtonComponent, ReactiveFormsModule],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss',
 })

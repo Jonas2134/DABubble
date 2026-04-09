@@ -5,9 +5,7 @@
                 <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
                 <h1>{{ channelData?.cName}}</h1>
             </div>
-            <button (click)="closeWindow()" class="closeChannelLeave" aria-label="Schließen">
-                <span class="material-symbols closeIcon">close</span>
-            </button>
+            <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="closeWindow()"></app-button>
         </header>
         <div class="scrollContainer">
             @if (editMode) {
@@ -109,7 +107,7 @@
                 </app-device-visible>
             </div>
             <div class="channelLeaveButton">
-                <button (click)="closeWindow(); removeMember()">Channel verlassen</button>
+                <app-button color="rose" (clicked)="closeWindow(); removeMember()">Channel verlassen</app-button>
             </div>
         </div>
     </section>

@@ -141,3 +141,15 @@ button {
     color: vari.$gray;
   }
 }
+
+.btn-rose {
+  @include mixin.btnColor($bg-color: vari.$rose, $bor-color: vari.$rose, $text-color: vari.$white);
+
+  &:hover:not(:disabled) {
+    @include mixin.btnColor($bg-color: #d71a6b, $bor-color: #d71a6b, $text-color: vari.$white);
+  }
+
+  &:disabled {
+    @include mixin.btnColor($bg-color: vari.$gray, $bor-color: vari.$gray, $text-color: vari.$white);
+  }
+}

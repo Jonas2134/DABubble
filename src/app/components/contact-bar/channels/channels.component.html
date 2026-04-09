@@ -14,9 +14,7 @@
                 <h2>Channels</h2>
             </span>
         </button>
-        <button class="addButton" aria-label="Channel hinzufügen" (click)="toggleAddChannel()">
-            <span class="material-symbols addIcon">add</span>
-        </button>
+        <app-button variant="icon" color="white" icon="add" ariaLabel="Channel hinzufügen" (clicked)="toggleAddChannel()"></app-button>
     </header>
     @if (!showChannels) {
         <section>

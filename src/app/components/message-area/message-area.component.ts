@@ -18,6 +18,7 @@ import { ChannelService } from '../../shared/services/channel.service';
 import { Message } from '../../shared/interfaces/message.interface';
 import { User } from '../../shared/interfaces/user.interface';
 import { Channel } from '../../shared/interfaces/channel.interface';
+import { ButtonComponent } from '../button/button.component';
 import { MessageComponent } from './message/message.component';
 import { ChannelLeaveComponent } from '../channel-leave/channel-leave.component';
 import { ProfilComponent } from '../profil/profil.component';
@@ -30,6 +31,7 @@ import { MessageComposerComponent } from './message-composer/message-composer.co
   standalone: true,
   imports: [
     CommonModule,
+    ButtonComponent,
     MessageComponent,
     ChannelLeaveComponent,
     ProfilComponent,

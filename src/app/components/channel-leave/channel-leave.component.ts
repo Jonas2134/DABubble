@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, OnInit, Output, inject} from '@angular/core';
+import { ButtonComponent } from '../button/button.component';
 import { Channel } from '../../shared/interfaces/channel.interface';
 import { Firestore} from '@angular/fire/firestore';
 import {map, takeUntil } from 'rxjs/operators';
@@ -17,7 +18,7 @@ import { fadeSlide, slideUpDown } from '../../shared/animations/animations';
 @Component({
   selector: 'app-channel-leave',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DeviceVisibleComponent, MemberListComponent, ProfilComponent, AddNewMembersComponent],
+  imports: [CommonModule, ButtonComponent, ReactiveFormsModule, DeviceVisibleComponent, MemberListComponent, ProfilComponent, AddNewMembersComponent],
   templateUrl: './channel-leave.component.html',
   styleUrl: './channel-leave.component.scss',
   animations: [fadeSlide, slideUpDown],

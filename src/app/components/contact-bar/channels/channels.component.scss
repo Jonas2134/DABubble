@@ -47,7 +47,6 @@ header {
 .channelHeadShow:hover .workSpaceIcon,
 .channelHeadShow:hover .showChannelsIcon,
 .channelHeadShow:hover h2,
-.addButton:hover .addIcon,
 .addChannel:hover span,
 .everyChannel:hover span,
 .everyChannel:hover .hashtagIcon {
@@ -55,17 +54,6 @@ header {
   cursor: pointer;
 }
 
-.addButton {
-  @include mixins.dFlex();
-  height: 30px;
-  width: 30px;
-  border: none;
-  background-color: white;
-  border-radius: 50%;
-  &:hover {
-    background-color: vari.$sky-grey;
-  }
-}
 
 section {
   @include mixins.dFlex($justify: center, $align: left, $gap: 25px, $direction: column);

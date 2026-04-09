@@ -73,12 +73,6 @@ header {
   color: vari.$rose
 }
 
-.addChannelButton.disabled,
-.addChannelButton[disabled] {
-  background-color: vari.$gray;
-  cursor: not-allowed;
-  pointer-events: none;
-}
 
 .channelField {
   font-size: 18px;
@@ -147,20 +141,6 @@ textarea::placeholder {
   width: 800px;
 }
 
-.addChannelButton {
-  font-size: 18px;
-  color: white;
-  font-weight: 700;
-  height: 50px;
-  width: 130px;
-  background-color: vari.$dark-blue;
-  border-radius: 25px;
-  border: none;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.8;
-  }
-}
 
 @media (max-width: vari.$bp-tablet) {
   .sectionMain {

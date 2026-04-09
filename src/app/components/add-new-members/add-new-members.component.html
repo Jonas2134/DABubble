@@ -82,21 +82,19 @@
 }
 <div class="addNewMember">
   @if (!showInput) {
-    <button
-      [class.active]="selectedOption.value !== 'option2' || selectedMembers.length > 0"
+    <app-button
+      color="blue"
       [disabled]="selectedOption.value === 'option2' && selectedMembers.length === 0"
-      class="addNewMemberButton"
-      (click)="createNewChannel(channelName, channelDescription)">
+      (clicked)="createNewChannel(channelName, channelDescription)">
       Erstellen
-    </button>
-  } 
+    </app-button>
+  }
   @else {
-    <button
-      [class.active]="selectedMembers.length > 0"
+    <app-button
+      color="blue"
       [disabled]="selectedMembers.length === 0"
-      (click)="addNewChannelMembers()"
-      class="addNewMemberButton">
+      (clicked)="addNewChannelMembers()">
       Hinzufügen
-    </button>
+    </app-button>
   }
 </div>
