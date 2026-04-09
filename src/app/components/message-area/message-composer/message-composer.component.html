@@ -1,6 +1,9 @@
 @if (isEmojiPickerOpen) {
+@defer {
 <emoji-mart #emojiPicker (emojiClick)="addEmoji($event)"></emoji-mart>
-
+} @loading {
+<div class="emoji-loading">Laden…</div>
+}
 } @if (displaySuggestions) {
 <ul class="suggestions" role="listbox">
   @for(user of foundUsers; track user) {
