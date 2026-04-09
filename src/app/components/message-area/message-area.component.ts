@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { MessageService } from '../../shared/services/message.service';
 import { UserService } from '../../shared/services/user.service';
 import { ChannelService } from '../../shared/services/channel.service';
+import { DateFormatService } from '../../shared/services/date-format.service';
 import { Message } from '../../shared/interfaces/message.interface';
 import { User } from '../../shared/interfaces/user.interface';
 import { Channel } from '../../shared/interfaces/channel.interface';
@@ -46,6 +47,7 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   private userService = inject(UserService);
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
+  dateFormat = inject(DateFormatService);
 
   private messagesSub?: Subscription;
   private channelSub?: Subscription;
@@ -360,26 +362,9 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   shouldShowDateSeparator(i: number): boolean {
     if (i === 0) return true;
     return (
-      this.getDay(this.messages[i].mTime) !==
-      this.getDay(this.messages[i - 1].mTime)
+      this.dateFormat.getDay(this.messages[i].mTime) !==
+      this.dateFormat.getDay(this.messages[i - 1].mTime)
     );
-  }
-  private getDay(t: any): number {
-    const d = t?.toDate?.() ?? t ?? new Date(t);
-    return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
-  }
-  getDateString(t: any): string {
-    const d = t?.toDate?.() ?? t ?? new Date(t);
-    const diff = this.getDay(d) - this.getDay(new Date());
-
-    if (diff === 0) return 'Heute';
-    if (diff === -86400000) return 'Gestern';
-
-    return d.toLocaleDateString('de-DE', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-    });
   }
 
   getPlaceholder(): string {

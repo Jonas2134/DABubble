@@ -23,7 +23,7 @@
   >
     <div class="message-header">
       <h3 (click)="openProfil()">{{ senderData?.uName }}</h3>
-      <h5>{{ getTimeInHours(message.mTime) }} Uhr</h5>
+      <h5>{{ dateFormat.getTimeInHours(message.mTime) }} Uhr</h5>
     </div>
 
     <div class="message-text">{{ message.mText }}</div>
@@ -61,8 +61,8 @@
       <div class="thread-field" (click)="onThreadClick()">
         <h4>{{ replyCount }} Antwort{{ replyCount !== 1 ? "en" : "" }}</h4>
         <h5>
-          Letzte Antwort {{ getDayLabel(lastReplyTime!) }} um
-          {{ getTimeInHours(lastReplyTime!) }} Uhr
+          Letzte Antwort {{ dateFormat.getDayLabel(lastReplyTime!) }} um
+          {{ dateFormat.getTimeInHours(lastReplyTime!) }} Uhr
         </h5>
       </div>
       }

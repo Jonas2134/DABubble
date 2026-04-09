@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { Message } from '../../../shared/interfaces/message.interface';
 import { Timestamp } from 'firebase/firestore';
+import { DateFormatService } from '../../../shared/services/date-format.service';
 import { UserService } from '../../../shared/services/user.service';
 import { User } from '../../../shared/interfaces/user.interface';
 import {
@@ -38,6 +39,7 @@ import { ButtonComponent } from '../../button/button.component';
 export class MessageComponent implements OnInit {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
+  dateFormat = inject(DateFormatService);
   private userSub?: Subscription;
   private threadSub?: Subscription;
   private senderSub?: Subscription;
@@ -205,37 +207,6 @@ export class MessageComponent implements OnInit {
         : 7;
   }
 
-  getTimeInHours(ts: Timestamp | null): string | undefined {
-    return ts instanceof Timestamp
-      ? ts
-          .toDate()
-          .toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-      : undefined;
-  }
-
-  getDayLabel(mTime: any): string {
-    const date =
-      mTime instanceof Date ? mTime : mTime?.toDate?.() ?? new Date(mTime);
-    const todayMid = new Date().setHours(0, 0, 0, 0);
-    const msgMid = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate()
-    ).getTime();
-
-    if (msgMid === todayMid) return 'Heute';
-    if (msgMid === todayMid - 86400000) return 'Gestern';
-
-    return this.formatAsGermanDate(date);
-  }
-
-  private formatAsGermanDate(d: Date): string {
-    return (
-      `${String(d.getDate()).padStart(2, '0')}.` +
-      `${String(d.getMonth() + 1).padStart(2, '0')}.` +
-      d.getFullYear()
-    );
-  }
 
   addReaction(reaction: string) {
     if (!this.message.mId || !this.activeUserId) return;
