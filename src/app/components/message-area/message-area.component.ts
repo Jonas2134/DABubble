@@ -26,6 +26,7 @@ import { ProfilComponent } from '../profil/profil.component';
 import { ChannelMembersComponent } from './channel-members/channel-members.component';
 import { AddNewMembersComponent } from '../add-new-members/add-new-members.component';
 import { MessageComposerComponent } from './message-composer/message-composer.component';
+import { DateStringPipe } from '../../shared/pipes/date-string.pipe';
 
 @Component({
   selector: 'app-message-area',
@@ -39,6 +40,7 @@ import { MessageComposerComponent } from './message-composer/message-composer.co
     ChannelMembersComponent,
     AddNewMembersComponent,
     MessageComposerComponent,
+    DateStringPipe,
   ],
   templateUrl: './message-area.component.html',
   styleUrls: ['./message-area.component.scss'],
@@ -47,7 +49,7 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   private userService = inject(UserService);
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
-  dateFormat = inject(DateFormatService);
+  private dateFormat = inject(DateFormatService);
 
   private messagesSub?: Subscription;
   private channelSub?: Subscription;

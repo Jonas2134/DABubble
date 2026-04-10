@@ -1,0 +1,105 @@
+@use "../../../shared/scss/variables" as vari;
+@use "../../../shared/scss/mixins" as mixins;
+
+.channelHashtagName {
+  @include mixins.dFlex($justify: left, $gap: 10px);
+  width: auto;
+  img {
+    height: 24px;
+    width: 24px;
+  }
+  span {
+    font-size: 18px;
+    color: black;
+    font-weight: 400;
+  }
+}
+
+.nameBox {
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 20px, $direction: column);
+  height: 110px;
+  width: 100%;
+  border-radius: 20px;
+  border: 1px solid vari.$hover-border;
+  padding: 20px;
+}
+
+.nameSaveBox {
+  @include mixins.dFlex($justify: space-between, $align: stretch, $gap: 15px, $direction: column);
+  height: 110px;
+  width: 100%;
+  border: none;
+}
+
+.boxEdit {
+  @include mixins.dFlex($justify: space-between);
+  height: 25px;
+}
+
+.saveBox {
+  @include mixins.dFlex($justify: space-between);
+  height: 25px;
+  width: 100%;
+}
+
+.editChannelName {
+  @include mixins.dFlex($gap: 15px);
+  width: 100%;
+  height: 60px;
+  padding: 0px 20px;
+  border-radius: 40px;
+  border: 1px solid vari.$hover-border;
+  img {
+    height: 24px;
+    width: 24px;
+  }
+  input {
+    width: 100%;
+    border: none;
+    font-size: 18px;
+    outline: none;
+    height: 25px;
+  }
+}
+
+.errorText {
+  color: vari.$rose;
+}
+
+.editOverMobil {
+  @include mixins.dFlex($justify: flex-start, $align: stretch);
+}
+
+.editButton {
+  font-size: 18px;
+  color: vari.$purple;
+  font-weight: 600;
+  background-color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 50px;
+  cursor: pointer;
+  &:hover {
+    background-color: vari.$sky-grey;
+  }
+}
+
+.editOverTablet {
+  display: none;
+  height: 40px;
+  width: 40px;
+}
+
+@media (max-width: vari.$bp-mobile) {
+  .saveBox {
+    height: 40px;
+  }
+  .editOverTablet {
+    @include mixins.dFlex();
+    height: 40px;
+    width: 40px;
+  }
+  .editOverMobil {
+    display: none;
+  }
+}

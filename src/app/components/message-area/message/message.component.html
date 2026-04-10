@@ -23,104 +23,45 @@
   >
     <div class="message-header">
       <h3 (click)="openProfil()">{{ senderData?.uName }}</h3>
-      <h5>{{ dateFormat.getTimeInHours(message.mTime) }} Uhr</h5>
+      <h5>{{ message.mTime | timeInHours }} Uhr</h5>
     </div>
 
     <div class="message-text">{{ message.mText }}</div>
 
     <div class="message-attachments">
-      @if (groupedReactions && groupedReactions.length > 0) {
-      <div class="reaction-field">
-        @for (reaction of groupedReactions.slice(0,shownReactionNumber); track
-        reaction.reaction) {
+      <app-message-reactions
+        [message]="message"
+        [activeUserId]="activeUserId"
+        (reactionAdd)="addReaction($event)"
+        (emojiPickerToggle)="toggleEmojiPicker($event)"
+      ></app-message-reactions>
 
-        <div class="single-reaction">
-          <div class="reaction-details">
-            <span>{{ reaction.reaction }}</span>
-            <div>{{ reaction.namesLine }}</div>
-            <p>{{ reaction.actionLine }}</p>
-          </div>
-
-          <span (click)="addReaction(reaction.reaction)"
-            >{{ reaction.reaction }} {{ reaction.count }}</span
-          >
-        </div>
-        } @if (groupedReactions.length > shownReactionNumber) {
-        <div (click)="setShownReactionNumber()">
-          +{{ groupedReactions.length - shownReactionNumber }} weitere
-        </div>
-        } @if (groupedReactions.length === shownReactionNumber &&
-        shownReactionNumber > 7) {
-        <div (click)="setShownReactionNumber()">Weniger anzeigen</div>
-        }
-        <span class="material-symbols" (click)="toggleEmojiPicker($event)"
-          >add_reaction</span
-        >
-      </div>
-      }@if (message.mThreadId && chatType !== 'thread' && replyCount > 0) {
+      @if (message.mThreadId && chatType !== 'thread' && replyCount > 0) {
       <div class="thread-field" (click)="onThreadClick()">
         <h4>{{ replyCount }} Antwort{{ replyCount !== 1 ? "en" : "" }}</h4>
         <h5>
-          Letzte Antwort {{ dateFormat.getDayLabel(lastReplyTime!) }} um
-          {{ dateFormat.getTimeInHours(lastReplyTime!) }} Uhr
+          Letzte Antwort {{ lastReplyTime | dayLabel }} um
+          {{ lastReplyTime | timeInHours }} Uhr
         </h5>
       </div>
       }
     </div>
   </div>
 
-  <div
-    class="message-actions"
-    [class.always]="isOptionsOpen"
-    [class.user-message-actions]="message.mSenderId === activeUserId"
-  >
-    @if ( chatType != 'thread' ) { @for (reaction of
-    activeUserData?.uLastReactions; track reaction) {
-    <span (click)="addReaction(reaction)">{{ reaction }}</span>
-    } }
+  <app-message-actions
+    [message]="message"
+    [activeUserId]="activeUserId"
+    [chatType]="chatType"
+    [activeUserData]="activeUserData"
+    (reactionAdd)="addReaction($event)"
+    (emojiPickerToggle)="toggleEmojiPicker($event)"
+    (threadOpen)="onThreadClick()"
+    (editOpen)="openEdit()"
+    (deleteOpen)="togglePermanentDelete()"
+  ></app-message-actions>
+  }
 
-    <button
-      #emojiBtn
-      class="material-symbols action-btn"
-      aria-label="Reaktion hinzufügen"
-      (click)="toggleEmojiPicker($event)"
-    >
-      add_reaction
-    </button>
-
-    <button
-      class="material-symbols action-btn"
-      [class.d-none]="chatType === 'thread'"
-      aria-label="In Thread antworten"
-      (click)="onThreadClick()"
-    >
-      comment
-    </button>
-
-    <button
-      #optionsBtn
-      class="material-symbols action-btn"
-      [class.d-none]="message.mSenderId != activeUserId"
-      aria-label="Weitere Optionen"
-      [attr.aria-expanded]="isOptionsOpen"
-      (click)="toggleOptions($event)"
-    >
-      more_vert
-    </button>
-
-    @if (isOptionsOpen) {
-    <div
-      #optionsMenu
-      class="options-menu"
-      role="menu"
-      [class.active-user-options]="message.mSenderId === activeUserId"
-    >
-      <button role="menuitem" (click)="openEdit()">Nachricht bearbeiten</button>
-      <button role="menuitem" (click)="togglePermanentDelete()">Nachricht löschen</button>
-    </div>
-    }
-  </div>
-  } @if(isEmojiPickerOpen) {
+  @if (isEmojiPickerOpen) {
   @defer {
   <emoji-mart
     #emojiPicker

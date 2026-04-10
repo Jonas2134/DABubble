@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
-import { Firestore, collectionData, collection } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../../../shared/interfaces/user.interface';
-import { ActivatedRoute } from '@angular/router';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-direct-message',
@@ -15,8 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 
 export class DirectMessageComponent implements OnInit {
-  private firestore = inject(Firestore);
-  private route = inject(ActivatedRoute);
+  private userService = inject(UserService);
   showMessages = false;
   activeUser?: User;
   activeUsers$!: Observable<any[]>;
@@ -44,10 +42,7 @@ export class DirectMessageComponent implements OnInit {
 
 
   loadUsers(): void {
-    const usersCollection = collection(this.firestore, 'users');
-    const users$ = collectionData(usersCollection, { idField: 'uId' }).pipe(
-      map((users: any[]) => users.map(user => user as User))
-    );
+    const users$ = this.userService.getEveryUsers();
     this.activeUsers$ = users$.pipe(
       map(users => users.filter(user => user.uId === this.activeUserId))
     );

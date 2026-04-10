@@ -12,34 +12,35 @@ import {
 } from '@angular/core';
 import { Message } from '../../../shared/interfaces/message.interface';
 import { Timestamp } from 'firebase/firestore';
-import { DateFormatService } from '../../../shared/services/date-format.service';
 import { UserService } from '../../../shared/services/user.service';
 import { User } from '../../../shared/interfaces/user.interface';
-import {
-  GroupedReaction,
-  Reaction,
-} from '../../../shared/interfaces/reaction.interface';
-
-interface ReactionViewModel extends GroupedReaction {
-  namesLine: string;
-  actionLine: string;
-}
 import { Subscription } from 'rxjs';
 import { MessageService } from '../../../shared/services/message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delete.component';
 import { ButtonComponent } from '../../button/button.component';
+import { TimeInHoursPipe } from '../../../shared/pipes/time-in-hours.pipe';
+import { DayLabelPipe } from '../../../shared/pipes/day-label.pipe';
+import { MessageReactionsComponent } from './message-reactions/message-reactions.component';
+import { MessageActionsComponent } from './message-actions/message-actions.component';
 
 @Component({
   selector: 'app-message',
-  imports: [PickerComponent, PermanentDeleteComponent, ButtonComponent],
+  imports: [
+    PickerComponent,
+    PermanentDeleteComponent,
+    ButtonComponent,
+    TimeInHoursPipe,
+    DayLabelPipe,
+    MessageReactionsComponent,
+    MessageActionsComponent,
+  ],
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
 })
 export class MessageComponent implements OnInit {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
-  dateFormat = inject(DateFormatService);
   private userSub?: Subscription;
   private threadSub?: Subscription;
   private senderSub?: Subscription;
@@ -52,35 +53,27 @@ export class MessageComponent implements OnInit {
   @Output() threadOpen = new EventEmitter<string>();
 
   @ViewChild('emojiPicker', { read: ElementRef }) emojiPickerRef?: ElementRef;
-  @ViewChild('emojiBtn', { read: ElementRef }) emojiBtnRef?: ElementRef;
-  @ViewChild('optionsMenu', { read: ElementRef }) optionsMenuRef?: ElementRef;
-  @ViewChild('optionsBtn', { read: ElementRef }) optionsBtnRef?: ElementRef;
   @ViewChild('editTextarea', { read: ElementRef })
   editTextareaRef!: ElementRef<HTMLTextAreaElement>;
 
   activeUserData: User | null = null;
   senderData: User | null = null;
-  groupedReactions: ReactionViewModel[] = [];
-  shownReactionNumber = 7;
   editText = '';
   replyCount = 0;
   lastReplyTime: Timestamp | null = null;
 
   isEmojiPickerOpen = false;
-  isOptionsOpen = false;
   isPermanentDeleteOpen = false;
   isEditOpen = false;
 
   ngOnInit(): void {
     this.loadSenderData();
     this.loadActiveUserData();
-    this.regroupReactions();
     this.loadThreadInfo();
   }
 
   ngOnChanges(ch: SimpleChanges): void {
     if (ch['message']) {
-      this.regroupReactions();
       this.loadThreadInfo();
     }
   }
@@ -128,86 +121,6 @@ export class MessageComponent implements OnInit {
       });
   }
 
-  regroupReactions() {
-    this.groupedReactions =
-      this.message.mReactions && this.activeUserId
-        ? this.groupReactionsWithNames(
-            this.message.mReactions,
-            this.activeUserId
-          )
-        : [];
-  }
-
-  private groupReactionsWithNames(
-    reactions: Reaction[],
-    activeUserId: string
-  ): ReactionViewModel[] {
-    const grouped = this.collectReactions(reactions, activeUserId);
-    return this.mapBucketsToViewModel(grouped);
-  }
-
-  private collectReactions(
-    reactions: Reaction[],
-    activeUserId: string
-  ): Map<string, { count: number; names: string[] }> {
-    const grouped = new Map<string, { count: number; names: string[] }>();
-    reactions.forEach((r) => {
-      const key = r.reaction;
-      const name = r.userId === activeUserId ? 'Du' : r.userName;
-      const bucket = grouped.get(key) ?? { count: 0, names: [] };
-
-      bucket.count++;
-      if (!bucket.names.includes(name)) bucket.names.push(name);
-
-      grouped.set(key, bucket);
-    });
-    return grouped;
-  }
-
-  private mapBucketsToViewModel(
-    buckets: Map<string, { count: number; names: string[] }>
-  ): ReactionViewModel[] {
-    return Array.from(buckets, ([reaction, data]) => ({
-      reaction,
-      count: data.count,
-      names: data.names,
-      namesLine: this.buildNameLine(data.names),
-      actionLine: this.buildActionLine(data.names, data.count),
-    }));
-  }
-
-  private buildNameLine(names: string[], max = 3): string {
-    const list = [...names];
-    const idxDu = list.indexOf('Du');
-    if (idxDu > 0) {
-      list.splice(idxDu, 1);
-      list.unshift('Du');
-    }
-
-    if (list.length <= max) {
-      return list.join(', ').replace(/, ([^,]*)$/, ' und $1');
-    }
-    const first = list.slice(0, max).join(', ');
-    const rest = list.length - max;
-    return `${first} und ${rest === 1 ? 'ein weiterer' : rest + ' weitere'}`;
-  }
-
-  private buildActionLine(names: string[], count: number): string {
-    return count === 1
-      ? names[0] === 'Du'
-        ? 'hast reagiert'
-        : 'hat reagiert'
-      : 'haben reagiert';
-  }
-
-  setShownReactionNumber() {
-    this.shownReactionNumber =
-      this.shownReactionNumber < this.groupedReactions.length
-        ? this.groupedReactions.length
-        : 7;
-  }
-
-
   addReaction(reaction: string) {
     if (!this.message.mId || !this.activeUserId) return;
 
@@ -246,13 +159,11 @@ export class MessageComponent implements OnInit {
     e?.stopPropagation();
     this.isEmojiPickerOpen = !this.isEmojiPickerOpen;
   }
-  toggleOptions(e: MouseEvent) {
-    e.stopPropagation();
-    this.isOptionsOpen = !this.isOptionsOpen;
-  }
+
   toggleEdit() {
     this.isEditOpen = !this.isEditOpen;
   }
+
   togglePermanentDelete() {
     this.isPermanentDeleteOpen = !this.isPermanentDeleteOpen;
   }
@@ -295,7 +206,6 @@ export class MessageComponent implements OnInit {
       .then(() => {
         this.message.mText = trimmed;
         this.toggleEdit();
-        this.isOptionsOpen = false;
       })
       .catch(console.error);
   }
@@ -303,37 +213,12 @@ export class MessageComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   handleDocumentClick(ev: MouseEvent): void {
     if (this.isPermanentDeleteOpen) return;
-
     const target = ev.target as HTMLElement;
-
-    this.maybeCloseEmojiPicker(target);
-    this.maybeCloseOptionsMenu(target);
-  }
-
-  private maybeCloseEmojiPicker(target: HTMLElement): void {
     if (
       this.isEmojiPickerOpen &&
-      !this.elementContains(this.emojiPickerRef, target) &&
-      !this.elementContains(this.emojiBtnRef, target)
+      !this.emojiPickerRef?.nativeElement?.contains(target)
     ) {
       this.isEmojiPickerOpen = false;
     }
-  }
-
-  private maybeCloseOptionsMenu(target: HTMLElement): void {
-    if (
-      this.isOptionsOpen &&
-      !this.elementContains(this.optionsMenuRef, target) &&
-      !this.elementContains(this.optionsBtnRef, target)
-    ) {
-      this.isOptionsOpen = false;
-    }
-  }
-
-  private elementContains(
-    ref: ElementRef | undefined,
-    target: HTMLElement
-  ): boolean {
-    return ref?.nativeElement?.contains(target) ?? false;
   }
 }

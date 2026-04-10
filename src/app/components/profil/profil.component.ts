@@ -9,7 +9,6 @@ import {
   inject,
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
-import { Firestore, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
@@ -25,7 +24,6 @@ import { UserService } from '../../shared/services/user.service';
 export class ProfilComponent {
   private originalUserImage!: string;
   
-  private firestore = inject(Firestore);
   private router = inject(Router);
   private userService = inject(UserService);
   isActive: boolean = true;
@@ -71,10 +69,7 @@ export class ProfilComponent {
   changeUserName() {
     const name = this.editedUserName.value?.trim();
     if (!this.activeUserId || !name) return;
-    const userRef = doc(this.firestore, 'users', this.activeUserId);
-    updateDoc(userRef, {
-      uName: name,
-    }).then(() => {
+    this.userService.updateUserName(this.activeUserId, name).then(() => {
       this.userName = name;
       this.showEditProfil = false;
     });
@@ -98,8 +93,7 @@ export class ProfilComponent {
 
   async deleteMember() {
     if (!this.activeUserId) return;
-    const userRef = doc(this.firestore, 'users', this.activeUserId);
-    await deleteDoc(userRef);
+    await this.userService.deleteUser(this.activeUserId);
     this.router.navigate(['/access']);
   }
 

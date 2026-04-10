@@ -1,0 +1,40 @@
+@if (editMode) {
+  <div @fadeSlide class="nameBox">
+    <div class="boxEdit">
+      <h3>Channel-Name</h3>
+      <button class="editOverMobil editButton" (click)="toggleEdit()">Bearbeiten</button>
+      <button class="editOverTablet editButton" (click)="toggleEdit()">
+        <div class="material-symbols closeIcon">edit</div>
+      </button>
+    </div>
+    <div class="channelHashtagName">
+      <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
+      <span>{{ channelData?.cName }}</span>
+    </div>
+  </div>
+} @else {
+  <div @fadeSlide class="nameSaveBox">
+    <div class="saveBox">
+      <h3>Channel-Name</h3>
+      <button class="editOverMobil editButton" (click)="saveNewName()"
+        [disabled]="!editedChannelName.value?.trim() || editedChannelName.value!.trim().length < 3 || nameExists">
+        Speichern
+      </button>
+      <button [disabled]="!editedChannelName.value?.trim() || editedChannelName.value!.trim().length < 3 || nameExists"
+        class="editOverTablet editButton" (click)="saveNewName()">
+        <div class="material-symbols closeIcon">check_circle</div>
+      </button>
+    </div>
+    <div class="editChannelName">
+      <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
+      <input aria-label="Channel-Name" [formControl]="editedChannelName" (input)="onNameInput()" [placeholder]="editedChannelName.value ?? ''"/>
+    </div>
+  </div>
+  @if (hasInteractedName && editedChannelName.value?.trim()?.length! > 0 &&
+    editedChannelName.value!.trim().length < 3 && editedChannelName.value?.trim() !== channelData?.cName) {
+    <span class="errorText">Der Channel-Name muss mindestens 3 Buchstaben lang sein !</span>
+  }
+  @if (hasInteractedName && editedChannelName.value!.trim().length >= 3 && nameExists) {
+    <span class="errorText">Bitte nutzen Sie einen anderen Channel-Name !</span>
+  }
+}

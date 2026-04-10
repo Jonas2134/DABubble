@@ -1,0 +1,24 @@
+@let reactions = message.mReactions | groupReactions:activeUserId;
+@if (reactions.length > 0) {
+<div class="reaction-field">
+  @for (reaction of reactions.slice(0, shownReactionNumber); track reaction.reaction) {
+  <div class="single-reaction">
+    <div class="reaction-details">
+      <span>{{ reaction.reaction }}</span>
+      <div>{{ reaction.namesLine }}</div>
+      <p>{{ reaction.actionLine }}</p>
+    </div>
+    <span (click)="reactionAdd.emit(reaction.reaction)">{{ reaction.reaction }} {{ reaction.count }}</span>
+  </div>
+  }
+  @if (reactions.length > shownReactionNumber) {
+  <div (click)="setShownReactionNumber(reactions.length)">
+    +{{ reactions.length - shownReactionNumber }} weitere
+  </div>
+  }
+  @if (reactions.length === shownReactionNumber && shownReactionNumber > 7) {
+  <div (click)="setShownReactionNumber(reactions.length)">Weniger anzeigen</div>
+  }
+  <span class="material-symbols" (click)="emojiPickerToggle.emit($event)">add_reaction</span>
+</div>
+}

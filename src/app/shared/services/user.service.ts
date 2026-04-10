@@ -3,6 +3,7 @@ import { Firestore, collectionData  } from '@angular/fire/firestore';
 import {
   collection,
   doc,
+  deleteDoc,
   getDoc,
   getDocs,
   onSnapshot,
@@ -175,5 +176,16 @@ export class UserService {
     const userDocRef = doc(this.firestore, 'users', userId);
     return updateDoc(userDocRef, { uUserImage: imageFileName });
   }
-  
+
+
+  updateUserName(userId: string, name: string): Promise<void> {
+    const userDocRef = doc(this.firestore, 'users', userId);
+    return updateDoc(userDocRef, { uName: name });
+  }
+
+
+  deleteUser(userId: string): Promise<void> {
+    const userDocRef = doc(this.firestore, 'users', userId);
+    return deleteDoc(userDocRef);
+  }
 }

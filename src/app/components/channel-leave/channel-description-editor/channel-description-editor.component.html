@@ -1,0 +1,45 @@
+@if (editDescription) {
+  <div @fadeSlide class="descriptionBox">
+    <div class="descriptionText">
+      <div class="boxEdit">
+        <h3>Beschreibung</h3>
+        <button class="editOverMobil editButton" (click)="toggleDescription()">Bearbeiten</button>
+        <button class="editOverTablet editButton" (click)="toggleDescription()">
+          <div class="material-symbols closeIcon">edit</div>
+        </button>
+      </div>
+      <div class="descriptionBoxText">{{ channelData?.cDescription }}</div>
+    </div>
+    <div class="creatorXLine">
+      <div class="xLine"></div>
+      <div class="userCreator">
+        <h3>Erstellt von</h3>
+        <span>{{ createdByUserName }}</span>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div @fadeSlide class="descriptionSaveOutBox">
+    <div class="descriptionSaveBox">
+      <div class="descriptionText">
+        <div class="saveBox">
+          <h3>Beschreibung</h3>
+          <button class="editOverMobil editButton" (click)="toggleDescription(); saveDescription()">Speichern</button>
+          <button class="editOverTablet editButton" (click)="toggleDescription(); saveDescription()">
+            <div class="material-symbols closeIcon">check_circle</div>
+          </button>
+        </div>
+        <div class="inputDescription">
+          <textarea aria-label="Channel-Beschreibung" [formControl]="editedDescription" placeholder="Dein Text hier"></textarea>
+        </div>
+      </div>
+      <div class="xLineSave"></div>
+      <div class="creatorBox">
+        <div class="userCreator">
+          <h3>Erstellt von</h3>
+          <span>{{ createdByUserName }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+}
