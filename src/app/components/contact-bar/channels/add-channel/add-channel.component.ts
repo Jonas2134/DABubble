@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AnimationEvent } from '@angular/animations';
-import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild, inject, DestroyRef } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AddNewMembersComponent } from '../../../add-new-members/add-new-members.component';
 import { ButtonComponent } from '../../../button/button.component';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, tap } from 'rxjs';
@@ -36,37 +37,39 @@ const popupAnim = trigger('popupAnim', [
   styleUrl: './add-channel.component.scss',
   animations: [sectionEnter, popupAnim],
 })
-
-export class AddChannelComponent{
+export class AddChannelComponent {
   private elRef = inject(ElementRef);
   private channelService = inject(ChannelService);
+  private destroyRef = inject(DestroyRef);
+
   @Output() close = new EventEmitter<void>();
   @Input() activeUserId!: string | null;
-  showAddMember: boolean = true;
-  channelId: any = '';
+
+  showAddMember = true;
+  channelId = '';
   channelName = new FormControl('');
-  channelDescription: string = '';
+  channelDescription = '';
   isMobile = window.innerWidth <= 600;
   nameExists = false;
-  isVisible: boolean = true;
+  isVisible = true;
   private nameCheck$ = new Subject<string>();
   @ViewChild('addChannel') channelWrapper?: ElementRef;
   @ViewChild('addChannelAll') memberAddWrapper?: ElementRef;
 
   get animMode() { return this.isMobile ? 'mobile' : 'desktop'; }
 
-  ngOnInit(): void {
+  constructor() {
     this.nameCheck$
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
         switchMap(name => this.channelService.checkChannelNameExists(name)),
-        tap(exists => (this.nameExists = exists))
+        tap(exists => (this.nameExists = exists)),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe();
   }
 
-  
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elRef.nativeElement
@@ -77,7 +80,6 @@ export class AddChannelComponent{
     }
   }
 
-  
   triggerSlideOut() {
     if (this.showAddMember) {
       this.close.emit();
@@ -101,7 +103,6 @@ export class AddChannelComponent{
     this.close.emit();
   }
 
-
   checkNameUnique() {
     const name = this.channelName.value?.trim() ?? '';
     if (!name) {
@@ -111,11 +112,10 @@ export class AddChannelComponent{
     this.nameCheck$.next(name);
   }
 
-
-  addNewChannel(description: string){
+  addNewChannel(description: string) {
     const name = this.channelName.value?.trim() ?? '';
     if (!name || !this.activeUserId) return;
     this.channelDescription = description;
     this.showAddMember = false;
   }
-} 
+}

@@ -4,16 +4,33 @@ import { Message } from '../interfaces/message.interface';
 import { Reaction } from '../interfaces/reaction.interface';
 import { SupabaseService } from './supabase.service';
 
+interface MessageRow {
+  id: string;
+  text: string | null;
+  sender_id: string | null;
+  user_id: string | null;
+  thread_id: string | null;
+  channel_id: string | null;
+  created_at: string | null;
+  reactions?: ReactionRow[];
+}
+
+interface ReactionRow {
+  emoji: string;
+  user_id: string;
+  user_name: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class MessageService {
   private supabaseService = inject(SupabaseService);
   private subCounter = 0;
 
-  private mapMessage(row: any): Message {
+  private mapMessage(row: MessageRow): Message {
     return {
       id: row.id,
       text: row.text ?? '',
-      reactions: (row.reactions ?? []).map((r: any) => ({
+      reactions: (row.reactions ?? []).map(r => ({
         emoji: r.emoji,
         userId: r.user_id,
         userName: r.user_name,
@@ -54,10 +71,8 @@ export class MessageService {
 
     const { data, error } = await query;
     if (error) { console.error('fetchMessages', error); return []; }
-    return (data ?? []).map(r => this.mapMessage(r));
+    return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
-
-  // --- Read (Observable, realtime) ---
 
   getMessages(
     chatType: 'private' | 'channel' | 'thread' | 'new',
@@ -123,10 +138,8 @@ export class MessageService {
       .eq('thread_id', threadId)
       .order('created_at');
     if (error) { console.error('fetchThreadMessages', error); return []; }
-    return (data ?? []).map(r => this.mapMessage(r));
+    return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
-
-  // --- Read (Promise) ---
 
   async getAllMessages(): Promise<Message[]> {
     const { data, error } = await this.supabaseService.supabase
@@ -134,22 +147,10 @@ export class MessageService {
       .select('*, reactions(*)')
       .order('created_at');
     if (error) { console.error('getAllMessages', error); return []; }
-    return (data ?? []).map(r => this.mapMessage(r));
+    return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
 
-  async getMessageById(id: string): Promise<Message | undefined> {
-    const { data, error } = await this.supabaseService.supabase
-      .from('messages')
-      .select('*, reactions(*)')
-      .eq('id', id)
-      .maybeSingle();
-    if (error || !data) return undefined;
-    return this.mapMessage(data);
-  }
-
-  // --- Write ---
-
-  async createMessage(message: Partial<Message>): Promise<any> {
+  async createMessage(message: Partial<Message>): Promise<MessageRow> {
     const { data, error } = await this.supabaseService.supabase
       .from('messages')
       .insert({
@@ -162,7 +163,7 @@ export class MessageService {
       .select()
       .single();
     if (error) throw error;
-    return data;
+    return data as MessageRow;
   }
 
   async editMessageText(messageId: string, newText: string): Promise<void> {

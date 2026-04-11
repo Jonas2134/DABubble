@@ -3,7 +3,7 @@
   [class.edit-open]="isEditOpen"
   [class.thread]="chatType === 'thread'"
 >
-  <img src="{{ senderData?.userImage }}" [alt]="(senderData?.name || '') + ' Profilbild'" />
+  <img src="{{ senderData()?.userImage }}" [alt]="(senderData()?.name || '') + ' Profilbild'" />
 
   @if (isEditOpen && message.senderId === activeUserId) {
   <div class="edit-message">
@@ -22,7 +22,7 @@
     [class.user-message]="message.senderId === activeUserId"
   >
     <div class="message-header">
-      <h3 (click)="openProfil()">{{ senderData?.name }}</h3>
+      <h3 (click)="openProfil()">{{ senderData()?.name }}</h3>
       <h5>{{ message.createdAt | timeInHours }} Uhr</h5>
     </div>
 
@@ -52,7 +52,7 @@
     [message]="message"
     [activeUserId]="activeUserId"
     [chatType]="chatType"
-    [activeUserData]="activeUserData"
+    [activeUserData]="activeUserData()"
     (reactionAdd)="addReaction($event)"
     (emojiPickerToggle)="toggleEmojiPicker($event)"
     (threadOpen)="onThreadClick()"

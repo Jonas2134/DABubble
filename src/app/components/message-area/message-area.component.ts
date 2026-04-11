@@ -4,11 +4,13 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnDestroy,
   Output,
   SimpleChanges,
   ViewChild,
   inject,
+  signal,
+  computed,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
@@ -45,16 +47,14 @@ import { DateStringPipe } from '../../shared/pipes/date-string.pipe';
   templateUrl: './message-area.component.html',
   styleUrls: ['./message-area.component.scss'],
 })
-export class MessageAreaComponent implements OnChanges, OnDestroy {
+export class MessageAreaComponent implements OnChanges {
   private userService = inject(UserService);
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
   private dateFormat = inject(DateFormatService);
+  private destroyRef = inject(DestroyRef);
 
   private messagesSub?: Subscription;
-  private channelSub?: Subscription;
-  private chatPartnerSub?: Subscription;
-  private channelMemberSubs: Subscription[] = [];
 
   @Input() chatType: 'private' | 'channel' | 'thread' | 'new' = 'private';
   @Input() chatId: string | null = null;
@@ -68,17 +68,40 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   }>();
 
   @ViewChild('scrollContainer') private scrollCont!: ElementRef<HTMLDivElement>;
-  @ViewChild('composer')
-  private composerRef?: MessageComposerComponent;
+  @ViewChild('composer') private composerRef?: MessageComposerComponent;
+
+  private _chatId = signal<string | null>(null);
+  private _chatType = signal<string>('private');
+
+  readonly chatPartner = computed(() => {
+    if (this._chatType() !== 'private' || !this._chatId()) return null;
+    return this.userService.getUserById(this._chatId()!) ?? null;
+  });
+
+  readonly channelData = computed(() => {
+    if (this._chatType() !== 'channel' || !this._chatId()) return null;
+    return this.channelService.getChannelById(this._chatId()!) ?? null;
+  });
+
+  readonly channelMembers = computed(() => {
+    const ch = this.channelData();
+    if (!ch?.memberIds?.length) return [];
+    const members = ch.memberIds
+      .map(id => this.userService.getUserById(id))
+      .filter((u): u is User => !!u);
+    const uid = this.activeUserId;
+    return members.sort((a, b) => {
+      if (a.id === uid) return -1;
+      if (b.id === uid) return 1;
+      return 0;
+    });
+  });
 
   isLoading = true;
   isEditChannelOpen = false;
   isProfilOpen = false;
   isChannelMemberOpen = false;
   messages: Message[] = [];
-  chatPartner: User | null = null;
-  channelData: Channel | null = null;
-  channelMembers: User[] = [];
   userProfil: User | null = null;
   threadContextName = '';
   threadReplyCount = 0;
@@ -88,6 +111,10 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   newChatInput = '';
   newChannelMembers = false;
   addMemberPopUp = false;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.messagesSub?.unsubscribe());
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -99,19 +126,13 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
 
   ngOnChanges(ch: SimpleChanges): void {
     if (ch['chatType'] || ch['chatId'] || ch['activeUserId']) {
+      this._chatType.set(this.chatType);
+      this._chatId.set(this.chatId);
       this.isChannelMemberOpen = false;
       this.prepareForReload();
       this.loadMessages();
-      this.loadChatData();
       setTimeout(() => this.composerRef?.focus(), 500);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.messagesSub?.unsubscribe();
-    this.channelSub?.unsubscribe();
-    this.chatPartnerSub?.unsubscribe();
-    this.channelMemberSubs.forEach((s) => s.unsubscribe());
   }
 
   private prepareForReload() {
@@ -139,7 +160,7 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
 
   private handleIncomingMessages(msgs: Message[]) {
     const initial = this.messages.length === 0;
-    const more    = msgs.length > this.messages.length;
+    const more = msgs.length > this.messages.length;
     this.messages = msgs;
 
     if (this.chatType === 'thread') {
@@ -147,91 +168,18 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
       this.setThreadContextName(msgs[0]);
     }
 
-    if (more)    setTimeout(() => this.scrollToBottom(), 100);
+    if (more) setTimeout(() => this.scrollToBottom(), 100);
     if (initial) setTimeout(() => this.composerRef?.focus(), 0);
   }
 
   private setThreadContextName(parent: Message) {
     if (parent.channelId) {
-      this.channelService
-        .getChannel(parent.channelId)
-        .then((ch) => (this.threadContextName = `#${ch.name}`));
+      const ch = this.channelService.getChannelById(parent.channelId);
+      if (ch) this.threadContextName = `#${ch.name}`;
     } else if (parent.userId) {
-      this.userService
-        .getUser(parent.userId)
-        .then((u) => (this.threadContextName = `@${u.name}`));
+      const u = this.userService.getUserById(parent.userId);
+      if (u) this.threadContextName = `@${u.name}`;
     }
-  }
-
-  private loadChatData(): void {
-    this.channelSub?.unsubscribe();
-    this.chatPartnerSub?.unsubscribe();
-    this.channelMemberSubs.forEach((s) => s.unsubscribe());
-
-    this.chatPartner = null;
-    this.channelData = null;
-    this.channelMembers = [];
-
-    if (this.chatType === 'private' && this.chatId) {
-      this.loadChatPartnerData();
-      return;
-    }
-    if (this.chatType === 'channel' && this.chatId) {
-      this.subscribeChannelRealtime();
-      return;
-    }
-  }
-
-  private loadChatPartnerData() {
-    if (!this.chatId) return;
-    this.chatPartnerSub = this.userService
-      .getUserRealtime(this.chatId)
-      .subscribe({
-        next: (u) => (this.chatPartner = u),
-        error: (err) => console.error('User-Live', err),
-      });
-  }
-
-  private subscribeChannelRealtime() {
-    this.channelSub = this.channelService
-      .getChannelRealtime(this.chatId!)
-      .subscribe({
-        next: (ch) => {
-          this.channelData = ch;
-          this.loadChannelMembers();
-        },
-        error: (err) => console.error('Channel-Realtime', err),
-      });
-  }
-
-  private loadChannelMembers() {
-    this.channelMemberSubs.forEach((s) => s.unsubscribe());
-    this.channelMemberSubs = [];
-    this.channelMembers = [];
-
-    if (!this.channelData?.memberIds?.length) return;
-
-    for (const uid of this.channelData.memberIds) {
-      const sub = this.userService.getUserRealtime(uid).subscribe({
-        next: (u) => this.mergeMember(u),
-        error: (err) => console.error('User-Realtime', err),
-      });
-      this.channelMemberSubs.push(sub);
-    }
-  }
-
-  private mergeMember(u: User | null) {
-    if (!u) return;
-    const idx = this.channelMembers.findIndex((m) => m.id === u.id);
-    idx > -1 ? (this.channelMembers[idx] = u) : this.channelMembers.push(u);
-    this.sortMembers();
-  }
-  private sortMembers() {
-    this.channelMembers.sort((a, b) => {
-      if (a.id === this.activeUserId) return -1;
-      if (b.id === this.activeUserId) return 1;
-      return 0;
-    });
   }
 
   private scrollToBottom() {
@@ -257,10 +205,7 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   }
 
   openUserProfil(id: string) {
-    this.userService
-      .getUser(id)
-      .then((u) => (this.userProfil = u))
-      .catch(console.error);
+    this.userProfil = this.userService.getUserById(id) ?? null;
     this.isProfilOpen = true;
   }
 
@@ -293,26 +238,20 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
     const query = val.slice(1).toLowerCase();
 
     if (first === '@') {
-      this.userService.getAllUsers().then((all) => {
-        this.foundUsersNew = all.filter((u) =>
-          u.name.toLowerCase().includes(query)
-        );
-        this.foundChannelsNew = [];
-      });
+      this.foundUsersNew = this.userService.users().filter(u =>
+        u.name.toLowerCase().includes(query)
+      );
+      this.foundChannelsNew = [];
     } else if (first === '#') {
-      this.channelService.getAllChannels().then((all) => {
-        this.foundChannelsNew = all.filter((c) =>
-          c.name.toLowerCase().includes(query)
-        );
-        this.foundUsersNew = [];
-      });
+      this.foundChannelsNew = this.channelService.channels().filter(c =>
+        c.name.toLowerCase().includes(query)
+      );
+      this.foundUsersNew = [];
     } else {
-      this.userService.getAllUsers().then((all) => {
-        this.foundUsersNew = all.filter((u) =>
-          u.email.toLowerCase().includes(val.toLowerCase())
-        );
-        this.foundChannelsNew = [];
-      });
+      this.foundUsersNew = this.userService.users().filter(u =>
+        u.email.toLowerCase().includes(val.toLowerCase())
+      );
+      this.foundChannelsNew = [];
     }
   }
 
@@ -372,11 +311,9 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   getPlaceholder(): string {
     switch (this.chatType) {
       case 'private':
-        return `Nachricht an ${this.chatPartner?.name || 'unbekannter User'}`;
+        return `Nachricht an ${this.chatPartner()?.name || 'unbekannter User'}`;
       case 'channel':
-        return `Nachricht an #${
-          this.channelData?.name || 'unbekannter Kanal'
-        }`;
+        return `Nachricht an #${this.channelData()?.name || 'unbekannter Kanal'}`;
       case 'thread':
         return 'Antworten...';
       default:
@@ -391,5 +328,4 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
       img.src = 'assets/img/profile.png';
     }
   }
-
 }

@@ -8,6 +8,8 @@ import {
   inject,
   EventEmitter,
   Output,
+  computed,
+  signal,
 } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
 import { ProfilComponent } from '../../profil/profil.component';
@@ -34,15 +36,13 @@ export class UserNameComponent {
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
   private router = inject(Router);
+
   @Input() activeUserId!: string | null;
-  isLogOutVisible: boolean = false;
-  showProfil: boolean = false;
-  userStatus: boolean | string = false;
-  userName: string = '';
-  userEmail: string = '';
-  userImage: string = '';
-  userId: string | undefined = '';
+
+  isLogOutVisible = false;
+  showProfil = false;
   windowSize = window.innerWidth;
+
   @ViewChild('tabletToggleBtn') tabletToggleBtn?: ElementRef;
   @ViewChild('arrowToggleBtn') arrowToggleBtn?: ElementRef;
   @ViewChild('logOutBox') logOutBox?: ElementRef;
@@ -53,20 +53,17 @@ export class UserNameComponent {
     chatId: string;
   }>();
 
+  private readonly routeUserId = this.route.snapshot.paramMap.get('activeUserId');
 
-  ngOnInit(): void {
-    const userId = this.route.snapshot.paramMap.get('activeUserId');
-    if (!userId) return;
-    this.userService.getUserById(userId).subscribe((user) => {
-      if (user) {
-        this.userName = user.name;
-        this.userEmail = user.email;
-        this.userImage = user.userImage;
-        this.userStatus = user.status;
-        this.userId = user.id;
-      }
-    });
-  }
+  readonly user = computed(() =>
+    this.routeUserId ? this.userService.getUserById(this.routeUserId) : undefined
+  );
+
+  get userName() { return this.user()?.name ?? ''; }
+  get userEmail() { return this.user()?.email ?? ''; }
+  get userImage() { return this.user()?.userImage ?? ''; }
+  get userStatus() { return this.user()?.status ?? false; }
+  get userId() { return this.user()?.id ?? ''; }
 
   toggleLogOut() {
     this.isLogOutVisible = !this.isLogOutVisible;
@@ -78,18 +75,10 @@ export class UserNameComponent {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    const clickedInsideLogOut = this.logOutBox?.nativeElement?.contains(
-      event.target
-    );
-    const clickedToggleTablet = this.tabletToggleBtn?.nativeElement?.contains(
-      event.target
-    );
-    const clickedArrow = this.arrowToggleBtn?.nativeElement?.contains(
-      event.target
-    );
-    const clickedInsideProfil = this.profilWrapper?.nativeElement?.contains(
-      event.target
-    );
+    const clickedInsideLogOut = this.logOutBox?.nativeElement?.contains(event.target);
+    const clickedToggleTablet = this.tabletToggleBtn?.nativeElement?.contains(event.target);
+    const clickedArrow = this.arrowToggleBtn?.nativeElement?.contains(event.target);
+    const clickedInsideProfil = this.profilWrapper?.nativeElement?.contains(event.target);
     const clickedOutside =
       !clickedInsideLogOut &&
       !clickedToggleTablet &&
@@ -100,16 +89,15 @@ export class UserNameComponent {
     }
   }
 
-
-  openProfil() { 
+  openProfil() {
     this.showProfil = true;
   }
 
   async logOut() {
-    if (this.userName === 'Gast') {      
+    if (this.userName === 'Gast') {
       await this.channelService.deleteChannelsByCreator(this.activeUserId!);
       await this.messageService.deleteMessagesBySender(this.activeUserId!);
-    } 
+    }
     await this.authService.logout();
     await this.router.navigate(['/access']);
   }

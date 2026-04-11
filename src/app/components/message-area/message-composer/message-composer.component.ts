@@ -91,23 +91,19 @@ export class MessageComposerComponent {
   }
 
   private searchUsers(input: string) {
-    this.userService.getAllUsers().then((all) => {
-      this.foundUsers = all.filter((u) =>
-        u.name.toLowerCase().includes(input.toLowerCase())
-      );
-      this.foundChannels = [];
-      this.displaySuggestions = this.foundUsers.length > 0;
-    });
+    this.foundUsers = this.userService.users().filter((u) =>
+      u.name.toLowerCase().includes(input.toLowerCase())
+    );
+    this.foundChannels = [];
+    this.displaySuggestions = this.foundUsers.length > 0;
   }
 
   private searchChannels(input: string) {
-    this.channelService.getAllChannels().then((all) => {
-      this.foundChannels = all.filter((c) =>
-        c.name.toLowerCase().includes(input.toLowerCase())
-      );
-      this.foundUsers = [];
-      this.displaySuggestions = this.foundChannels.length > 0;
-    });
+    this.foundChannels = this.channelService.channels().filter((c) =>
+      c.name.toLowerCase().includes(input.toLowerCase())
+    );
+    this.foundUsers = [];
+    this.displaySuggestions = this.foundChannels.length > 0;
   }
 
   openUserSuggestions() {

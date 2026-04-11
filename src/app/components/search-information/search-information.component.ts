@@ -67,7 +67,7 @@ export class SearchInformationComponent implements OnInit {
 
   activeUserId: string | null = null;
   users: User[] = [];
-  channelsWithNames: any[] = [];
+  channelsWithNames: { name: string; id: string | null | undefined; memberNames: string[] }[] = [];
 
   matchedMessages: ChannelMessage[] = [];
   directMessages: DirectMessage[] = [];
@@ -86,24 +86,17 @@ export class SearchInformationComponent implements OnInit {
   private async handleSearch(searchText: string) {
     if (!searchText || searchText.length < 3) return;
 
-    const { users, messages, channels } = await this.fetchData();
+    const users = this.userService.users();
+    const channels = this.channelService.channels();
+    const messages = await this.messageService.getAllMessages();
 
     this.users = this.filterUsers(users, searchText);
     this.channelsWithNames = this.filterChannels(channels, users, searchText);
     this.matchedMessages = this.findChannelMsgs(messages, channels, searchText);
     this.directMessages = this.findDirectMsgs(messages, users, searchText);
-    this.threadMessages = await this.findThreadMsgs(messages, searchText);
+    this.threadMessages = this.findThreadMsgs(messages, searchText);
 
     this.updateVisibilityFlags();
-  }
-
-  private async fetchData() {
-    const [users, messages, channels] = await Promise.all([
-      this.userService.getAllUsers(),
-      this.messageService.getAllMessages(),
-      this.channelService.getAllChannels(),
-    ]);
-    return { users, messages, channels };
   }
 
   private filterUsers(users: User[], q: string): User[] {
@@ -114,7 +107,8 @@ export class SearchInformationComponent implements OnInit {
     return channels
       .filter((ch) => (ch.name || '').toLowerCase().includes(q))
       .map((ch) => ({
-        ...ch,
+        name: ch.name,
+        id: ch.id ?? null,
         memberNames: users
           .filter((u) => (ch.memberIds || []).includes(u.id))
           .map((u) => u.name),
@@ -161,19 +155,19 @@ export class SearchInformationComponent implements OnInit {
       });
   }
 
-  private async findThreadMsgs(msgs: Message[], q: string) {
+  private findThreadMsgs(msgs: Message[], q: string) {
     const hits: ThreadHit[] = [];
     for (const m of msgs) {
       if (!this.isThreadHit(m, q)) continue;
-      const parent = await this.resolveParent(msgs, m.threadId!);
-      const chatType = parent?.channelId ? 'channel' : 'private';
+      const parent = msgs.find((x) => x.id === m.threadId);
+      if (!parent) continue;
+      const chatType = parent.channelId ? 'channel' : 'private';
       const chatId =
-        parent?.channelId ??
-        (parent
-          ? parent.userId === this.activeUserId
-            ? parent.senderId
-            : parent.userId!
-          : '');
+        parent.channelId ??
+        (parent.userId === this.activeUserId
+          ? parent.senderId
+          : parent.userId!) ??
+        '';
       hits.push({ text: m.text, threadId: m.threadId!, chatId, chatType });
     }
     return hits;
@@ -184,13 +178,6 @@ export class SearchInformationComponent implements OnInit {
       typeof m.threadId === 'string' &&
       m.threadId.trim() &&
       m.text.toLowerCase().includes(q)
-    );
-  }
-
-  private async resolveParent(allMsgs: Message[], id: string) {
-    return (
-      allMsgs.find((x) => x.id === id) ??
-      (await this.messageService.getMessageById(id).catch(() => null))
     );
   }
 

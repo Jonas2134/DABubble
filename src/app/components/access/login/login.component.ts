@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ButtonComponent } from '../../button/button.component';
 import { IconComponent } from '../../icon/icon.component';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
@@ -13,7 +14,6 @@ import { AuthentificationService } from '../../../shared/services/authentificati
 import { Router } from '@angular/router';
 import { CustomInputComponent } from '../../custom-input/custom-input.component';
 import { SuccessIndicatorComponent } from '../../success-indicator/success-indicator.component';
-import { Subscription } from 'rxjs';
 import { VisibleButtonService } from '../../../shared/services/visible-button.service';
 
 @Component({
@@ -22,16 +22,16 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
+  private destroyRef = inject(DestroyRef);
   componentSwitcher = inject(ComponentSwitcherService);
   private authService = inject(AuthentificationService);
   private router = inject(Router);
 
   loginForm!: FormGroup;
-  authError: string = '';
-  isConfirmationVisible: boolean = false;
-  private sub?: Subscription;
+  authError = '';
+  isConfirmationVisible = false;
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
@@ -45,18 +45,16 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
     });
 
-    this.sub = this.loginForm.valueChanges.subscribe(() => {
-      if (this.authError) this.authError = '';
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.loginForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        if (this.authError) this.authError = '';
+      });
   }
 
   onSubmit(): void {
     if (!this.loginForm.valid) return;
-  
+
     this.visibleBtn.hide();
     const { email, password } = this.loginForm.value;
     this.attemptLogin(email, password);
@@ -69,27 +67,27 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
     .catch(error => this.handleLoginError(error));
   }
-  
+
   private showConfirmationAndNavigate(): void {
     this.toggleConfirmation(true);
     setTimeout(() => this.toggleConfirmation(false), 2000);
-  
+
     setTimeout(() => {
-      const uid = this.authService.currentUid;
+      const uid = this.authService.currentUid();
       this.router.navigate(['/home', uid]);
     }, 3000);
   }
-  
+
   private toggleConfirmation(visible: boolean): void {
     this.isConfirmationVisible = visible;
   }
-  
-  private handleLoginError(error: any): void {
+
+  private handleLoginError(error: { code?: string }): void {
     this.visibleBtn.show();
     console.error('Login error:', error);
-    this.authError = this.mapErrorToMessage(error.code);
+    this.authError = this.mapErrorToMessage(error.code ?? '');
   }
-  
+
   private mapErrorToMessage(code: string): string {
     switch (code) {
       case 'auth/invalid-credential':
@@ -102,11 +100,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   onLoginWithGoogle(): void {
     this.visibleBtn.hide();
     this.authService.loginWithGoogle()
-    .then(result => {
-      if (result) {
-        const uid = this.authService.currentUid;
-        this.router.navigate(['/home', uid]);
-      }
+    .then(() => {
+      const uid = this.authService.currentUid();
+      this.router.navigate(['/home', uid]);
     })
     .catch(error => {
       this.visibleBtn.show();
@@ -117,15 +113,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   onLoginAsGuest(): void {
     this.visibleBtn.hide();
     this.authService.loginAsGuest()
-    .then(result => {
-      if (result) {
-        const uid = this.authService.currentUid;
-        this.router.navigate(['/home', uid]);
-      }
+    .then(() => {
+      const uid = this.authService.currentUid();
+      this.router.navigate(['/home', uid]);
     })
     .catch(error => {
       this.visibleBtn.show();
-      console.error('Guest login error:', error)
+      console.error('Guest login error:', error);
     });
   }
 

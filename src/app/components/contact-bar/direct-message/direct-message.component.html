@@ -15,23 +15,23 @@
     </button>
     @if (!showMessages) {
         <ul class="directMessageList" role="list">
-            @for (user of activeUsers$ | async; track $index) {
+            @for (user of activeUsers(); track user.id) {
                 <li>
                     <button (click)="selectPrivateChat(user.id); someAction()" class="directUser">
                         <div class="user-img-status">
                             <img [src]="user.userImage" [alt]="user.name + ' Profilbild'" />
-                            <span [ngClass]="user.status === 'true' || user.status === true ? 'online' : 'offline'"></span>
+                            <span [ngClass]="user.status ? 'online' : 'offline'"></span>
                         </div>
                         <span>{{ user.name }} (Du)</span>
                     </button>
                 </li>
             }
-            @for (user of inactiveUsers$ | async; track $index) {
+            @for (user of inactiveUsers(); track user.id) {
                 <li>
                     <button (click)="selectPrivateChat(user.id); someAction()" class="directUser">
                         <div class="user-img-status">
                             <img [src]="user.userImage" [alt]="user.name + ' Profilbild'" />
-                            <span [ngClass]="user.status === 'true' || user.status === true ? 'online' : 'offline'"></span>
+                            <span [ngClass]="user.status ? 'online' : 'offline'"></span>
                         </div>
                       <span>{{ user.name }}</span>
                     </button>

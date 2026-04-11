@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.chatId = this.activeUserId;
     this.chatType = 'private';
 
-    if (this.authService.currentUid === null) this.authService.currentUid = this.activeUserId;
+
 
     this.updateScreenSize();
     window.addEventListener('resize', this.resizeListener);

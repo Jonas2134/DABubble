@@ -48,9 +48,7 @@ export class DateFormatService {
 
   private toDate(t: unknown): Date {
     if (t instanceof Date) return t;
-    if (t && typeof t === 'object' && 'toDate' in t && typeof (t as any).toDate === 'function') {
-      return (t as any).toDate();
-    }
-    return new Date(t as any);
+    if (typeof t === 'string' || typeof t === 'number') return new Date(t);
+    return new Date();
   }
 }

@@ -3,17 +3,19 @@ import {
   EventEmitter,
   inject,
   Input,
-  OnInit,
   Output,
   SimpleChanges,
   ElementRef,
   HostListener,
   ViewChild,
+  computed,
+  signal,
+  DestroyRef,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Message } from '../../../shared/interfaces/message.interface';
 import { UserService } from '../../../shared/services/user.service';
 import { User } from '../../../shared/interfaces/user.interface';
-import { Subscription } from 'rxjs';
 import { MessageService } from '../../../shared/services/message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delete.component';
@@ -37,12 +39,12 @@ import { MessageActionsComponent } from './message-actions/message-actions.compo
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
 })
-export class MessageComponent implements OnInit {
+export class MessageComponent {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
-  private userSub?: Subscription;
+  private destroyRef = inject(DestroyRef);
+
   private threadSub?: Subscription;
-  private senderSub?: Subscription;
 
   @Input() chatType: 'private' | 'channel' | 'thread' | 'new' | null = null;
   @Input() message!: Message;
@@ -55,8 +57,17 @@ export class MessageComponent implements OnInit {
   @ViewChild('editTextarea', { read: ElementRef })
   editTextareaRef!: ElementRef<HTMLTextAreaElement>;
 
-  activeUserData: User | null = null;
-  senderData: User | null = null;
+  private _senderId = signal('');
+  private _activeUserId = signal<string | null>(null);
+
+  readonly senderData = computed(() =>
+    this._senderId() ? this.userService.getUserById(this._senderId()) ?? null : null
+  );
+
+  readonly activeUserData = computed(() =>
+    this._activeUserId() ? this.userService.getUserById(this._activeUserId()!) ?? null : null
+  );
+
   editText = '';
   replyCount = 0;
   lastReplyTime: Date | string | null = null;
@@ -65,43 +76,24 @@ export class MessageComponent implements OnInit {
   isPermanentDeleteOpen = false;
   isEditOpen = false;
 
+  constructor() {
+    this.destroyRef.onDestroy(() => this.threadSub?.unsubscribe());
+  }
+
   ngOnInit(): void {
-    this.loadSenderData();
-    this.loadActiveUserData();
+    this._senderId.set(this.message.senderId);
+    this._activeUserId.set(this.activeUserId);
     this.loadThreadInfo();
   }
 
   ngOnChanges(ch: SimpleChanges): void {
     if (ch['message']) {
+      this._senderId.set(this.message.senderId);
       this.loadThreadInfo();
     }
-  }
-
-  ngOnDestroy() {
-    this.userSub?.unsubscribe();
-    this.threadSub?.unsubscribe();
-    this.senderSub?.unsubscribe();
-  }
-
-  private loadSenderData() {
-    this.senderSub?.unsubscribe();
-    this.senderSub = this.userService
-      .getUserRealtime(this.message.senderId)
-      .subscribe({
-        next: (u) => (this.senderData = u),
-        error: (err) => console.error('Sender-Live', err),
-      });
-  }
-
-  private loadActiveUserData() {
-    if (!this.activeUserId) return;
-    this.userSub?.unsubscribe();
-    this.userSub = this.userService
-      .getUserRealtime(this.activeUserId)
-      .subscribe({
-        next: (u) => (this.activeUserData = u),
-        error: (err) => console.error('User-Live', err),
-      });
+    if (ch['activeUserId']) {
+      this._activeUserId.set(this.activeUserId);
+    }
   }
 
   private loadThreadInfo() {
@@ -131,7 +123,7 @@ export class MessageComponent implements OnInit {
       .toggleReaction(this.message.id, {
         emoji: reaction,
         userId: this.activeUserId,
-        userName: this.activeUserData?.name ?? '',
+        userName: this.activeUserData()?.name ?? '',
       })
       .catch(console.error);
   }
@@ -167,8 +159,8 @@ export class MessageComponent implements OnInit {
     this.isPermanentDeleteOpen = !this.isPermanentDeleteOpen;
   }
 
-  onEmojiPicked(e: any) {
-    const char = e.emoji?.native ?? e.emoji;
+  onEmojiPicked(e: { emoji?: { native?: string } }) {
+    const char = e.emoji?.native ?? '';
     if (this.isEditOpen && this.editTextareaRef) {
       const ta = this.editTextareaRef.nativeElement;
       const pos = ta.selectionStart ?? this.editText.length;

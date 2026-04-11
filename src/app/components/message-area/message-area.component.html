@@ -37,33 +37,33 @@
   } @else {
   <div class="chatbox-header">
     @if (chatType === 'private') {
-    <div class="private-header" (click)="toggleProfile(chatPartner)">
+    <div class="private-header" (click)="toggleProfile(chatPartner())">
       <div class="user-img-status">
         <img
-          [src]="chatPartner?.userImage || 'assets/img/profile.png'"
+          [src]="chatPartner()?.userImage || 'assets/img/profile.png'"
           loading="lazy"
           (error)="onAvatarError($event)"
-          [alt]="(chatPartner?.name || 'Benutzer') + ' Profilbild'"
+          [alt]="(chatPartner()?.name || 'Benutzer') + ' Profilbild'"
         />
-        <span [ngClass]="chatPartner?.status ? 'online' : 'offline'"></span>
+        <span [ngClass]="chatPartner()?.status ? 'online' : 'offline'"></span>
       </div>
-      <h1>{{ chatPartner?.name }}</h1>
+      <h1>{{ chatPartner()?.name }}</h1>
     </div>
     } @else if (chatType === 'channel') {
     <div class="channel-header">
       <a class="channel-name" (click)="toggleEdit()">
         <div class="material-symbols tag-icon">tag</div>
-        <h1>{{ channelData?.name }}</h1>
+        <h1>{{ channelData()?.name }}</h1>
         <div class="material-symbols tag-icon">keyboard_arrow_down</div>
       </a>
       <div class="channel-members">
         <div class="channel-every-member" (click)="toggleChannelMembers()">
-          @for (member of channelMembers.slice(0,3); track member) {
+          @for (member of channelMembers().slice(0,3); track member) {
           <img src="{{ member.userImage }}" [alt]="member.name" />
-          } @if (channelMembers.length > 3) {
+          } @if (channelMembers().length > 3) {
           <div>...</div>
           }
-          <h2>{{ channelMembers.length }}</h2>
+          <h2>{{ channelMembers().length }}</h2>
         </div>
         <app-button class="addButtonBefore" variant="icon" color="white" icon="person_add" ariaLabel="Mitglied hinzufügen" (clicked)="openAddMemberPopUp()"></app-button>
         <app-button class="addButtonAfter" variant="icon" color="white" icon="person_add" ariaLabel="Mitglieder anzeigen" (clicked)="toggleChannelMembers()"></app-button>
@@ -118,13 +118,13 @@
     'private'){
     <div class="empty-private-chat">
       <div>
-        <img src="{{ chatPartner?.userImage }}" [alt]="(chatPartner?.name || '') + ' Profilbild'" />
-        <h1>{{ chatPartner?.name }}</h1>
+        <img src="{{ chatPartner()?.userImage }}" [alt]="(chatPartner()?.name || '') + ' Profilbild'" />
+        <h1>{{ chatPartner()?.name }}</h1>
       </div>
       <p>
         Diese Unterhaltung findet nur zwischen
-        <span (click)="toggleProfile(chatPartner)"
-          >&#64;{{ chatPartner?.name }}</span
+        <span (click)="toggleProfile(chatPartner())"
+          >&#64;{{ chatPartner()?.name }}</span
         >
         und dir statt
       </p>
@@ -133,11 +133,11 @@
     <div class="empty-channel-chat">
       <div>
         <div class="material-symbols tag-icon">tag</div>
-        <h1>{{ channelData?.name }}</h1>
+        <h1>{{ channelData()?.name }}</h1>
       </div>
       <p>
         Du hast diesen Channel heute erstellt. Das ist der Anfang des Channels
-        <span>&#64;{{ channelData?.name }}.</span>
+        <span>&#64;{{ channelData()?.name }}.</span>
       </p>
     </div>
     } } @else { @for (message of messages; track message.id; let i = $index) {
@@ -170,9 +170,9 @@
   } @if (isEditChannelOpen) {
   <app-channel-leave
     [(newChannelMembers)]="newChannelMembers"
-    [channelMembers]="channelMembers"
+    [channelMembers]="channelMembers()"
     [activeUserId]="activeUserId"
-    [channelData]="channelData"
+    [channelData]="channelData()"
     (addMember)="addChannelMember()"
     (close)="toggleEdit()"
   ></app-channel-leave>
@@ -193,10 +193,10 @@
   } @if (isChannelMemberOpen) {
   <app-channel-members
     [newChannelMembers]="newChannelMembers"
-    [channelName]="channelData?.name"
-    [channelMembers]="channelMembers"
+    [channelName]="channelData()?.name"
+    [channelMembers]="channelMembers()"
     [activeUserId]="activeUserId"
-    [channelId]="channelData?.id"
+    [channelId]="channelData()?.id"
     (addMember)="addChannelMember()"
     (close)="toggleChannelMembers()"
     (openChat)="openChat.emit($event)"
@@ -209,9 +209,9 @@
   <app-add-new-members
     (click)="$event.stopPropagation()"
     [activeUserId]="activeUserId"
-    [channelId]="chatId"
-    [channelMembers]="channelMembers"
-    [channelName]="channelData?.name"
+    [channelId]="chatId ?? ''"
+    [channelMembers]="channelMembers()"
+    [channelName]="channelData()?.name ?? ''"
     [showInput]="true"
     [showXLine]="false"
     (close)="closeAddMember()"

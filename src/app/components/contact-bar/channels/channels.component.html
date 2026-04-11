@@ -19,7 +19,7 @@
     @if (!showChannels) {
         <section>
             <ul class="newChannels" role="list">
-                @for (channel of channels$ | async; track channel.id) {
+                @for (channel of sortedChannels(); track channel.id) {
                     <li class="everyChannel">
                         <button (click)="selectChannel(channel.id); someAction()" class="tagName">
                             <span class="tagImage">

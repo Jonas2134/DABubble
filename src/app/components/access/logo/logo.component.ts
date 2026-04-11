@@ -9,8 +9,9 @@ import {
   animate,
   keyframes,
 } from '@angular/animations';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { take } from 'rxjs';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-logo',
@@ -34,7 +35,7 @@ import { take } from 'rxjs';
         left: '50%',
         transform: 'translate(-50%, -50%) scale(1.5)'
       })),
-      state('topLeftMobile', style({ 
+      state('topLeftMobile', style({
         top: '30px',
         left: '50%',
         transform: 'translate(-50%, 0) scale(1)'
@@ -84,25 +85,25 @@ import { take } from 'rxjs';
 })
 export class LogoComponent implements OnInit {
   private bp = inject(BreakpointObserver);
+  private isMobileSignal = toSignal(
+    this.bp.observe(['(max-width: 700px)']).pipe(map(r => r.matches)),
+    { initialValue: false }
+  );
+
   logoPosition: 'center' | 'topLeft' | 'centerMobile' | 'topLeftMobile' = 'center';
   textState = 'hidden';
   backgroundState = 'visible';
 
-  private isMobile = false;
-
   ngOnInit(): void {
     localStorage.setItem('showAnimation', 'true');
-    
-    this.bp.observe(['(max-width: 700px)']).pipe(take(1)).subscribe(result => {
-      this.isMobile = result.matches;
-      this.logoPosition = this.isMobile ? 'centerMobile' : 'center';
-    });
+
+    const isMobile = this.isMobileSignal();
+    this.logoPosition = isMobile ? 'centerMobile' : 'center';
 
     setTimeout(() => this.textState = 'visible', 1000);
 
     setTimeout(() => {
-      const endState = this.isMobile ? 'topLeftMobile' : 'topLeft';
-      this.logoPosition = endState;
+      this.logoPosition = isMobile ? 'topLeftMobile' : 'topLeft';
     }, 1800);
 
     setTimeout(() => this.backgroundState = 'hidden', 2400);

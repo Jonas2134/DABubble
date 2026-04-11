@@ -1,4 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, DestroyRef, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ButtonComponent } from '../../button/button.component';
 import { IconComponent } from '../../icon/icon.component';
 import { ComponentSwitcherService } from '../../../shared/services/component-switcher.service';
@@ -13,14 +14,11 @@ import {
 } from '@angular/forms';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
 import { CustomInputComponent } from '../../custom-input/custom-input.component';
-import { Subscription } from 'rxjs';
 
 function strongPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value as string;
-    if (!value) {
-      return null;
-    }
+    if (!value) return null;
     const hasUpper   = /[A-Z]/.test(value);
     const hasLower   = /[a-z]/.test(value);
     const hasNumber  = /\d/.test(value);
@@ -37,12 +35,12 @@ function strongPasswordValidator(): ValidatorFn {
   templateUrl: './create-account.component.html',
   styleUrls: ['./create-account.component.scss', './create-account-checkbox.component.scss'],
 })
-export class CreateAccountComponent implements OnInit, OnDestroy {
+export class CreateAccountComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   componentSwitcher = inject(ComponentSwitcherService);
   private authService = inject(AuthentificationService);
   registerForm!: FormGroup;
-  confError: string = '';
-  private sub?: Subscription;
+  confError = '';
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -51,13 +49,12 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
       regPassword: new FormControl('', [Validators.required, Validators.minLength(8), strongPasswordValidator()]),
       acceptPrivacy: new FormControl(false, Validators.requiredTrue),
     });
-    this.sub = this.registerForm.valueChanges.subscribe(() => {
-      if (this.confError) this.confError = '';
-    });
-  }
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
+    this.registerForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        if (this.confError) this.confError = '';
+      });
   }
 
   onSubmit(): void {
@@ -72,8 +69,8 @@ export class CreateAccountComponent implements OnInit, OnDestroy {
     .then(() => this.changeComponent('avatar'))
     .catch(error => this.handleRegisterError(error));
   }
-  
-  private handleRegisterError(error: any): void {
+
+  private handleRegisterError(error: unknown): void {
     console.error('Email is taken:', error);
     this.confError = 'Diese E-Mail ist bereits vorhanden! Bitte geben Sie eine andere E-Mail-Adresse ein.';
   }

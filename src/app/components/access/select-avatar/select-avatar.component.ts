@@ -26,7 +26,7 @@ export class SelectAvatarComponent {
     'avatar-6.png',
   ];
   selectedAvatar: string | null = null;
-  username: string | undefined | null = this.authService.registrationData?.username;
+  username: string | undefined | null = this.authService.registrationData()?.username;
   isConfirmationVisible: boolean = false;
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
@@ -36,7 +36,7 @@ export class SelectAvatarComponent {
   }
 
   goBack(): void {
-    this.authService.registrationData = null;
+    this.authService.clearRegistrationData();
     this.changeComponent('signin');
   }
 

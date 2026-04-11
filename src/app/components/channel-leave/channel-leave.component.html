@@ -58,8 +58,8 @@
         (close)="closeAddMember()"
         [channelMembers]="channelMembers"
         [activeUserId]="activeUserId"
-        [channelId]="channelData?.id"
-        [channelName]="channelData?.name"
+        [channelId]="channelData?.id ?? ''"
+        [channelName]="channelData?.name ?? ''"
         [showInput]="true"
         [showXLine]="true"
       ></app-add-new-members>

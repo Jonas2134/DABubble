@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, OnDestroy, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, computed } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
 import { Channel } from '../../../shared/interfaces/channel.interface';
 import { ChannelService } from '../../../shared/services/channel.service';
 import { UserService } from '../../../shared/services/user.service';
@@ -15,10 +13,9 @@ import { fadeSlide } from '../../../shared/animations/animations';
   styleUrl: './channel-description-editor.component.scss',
   animations: [fadeSlide],
 })
-export class ChannelDescriptionEditorComponent implements OnInit, OnDestroy {
+export class ChannelDescriptionEditorComponent {
   private channelService = inject(ChannelService);
   private userService = inject(UserService);
-  private destroy$ = new Subject<void>();
 
   @Input() channelData: Channel | null = null;
   @Output() descriptionUpdated = new EventEmitter<string>();
@@ -26,25 +23,11 @@ export class ChannelDescriptionEditorComponent implements OnInit, OnDestroy {
   editDescription = true;
   editedDescription = new FormControl('');
   hasInteracted = false;
-  createdByUserName = 'Unbekannt';
 
-  ngOnInit(): void {
-    this.userService.getEveryUsers()
-      .pipe(
-        map(users => users.find(u => u.id === this.channelData?.createdByUser)),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(user => {
-        if (user) {
-          this.createdByUserName = user.name;
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  readonly createdByUserName = computed(() => {
+    const user = this.userService.users().find(u => u.id === this.channelData?.createdByUser);
+    return user?.name ?? 'Unbekannt';
+  });
 
   toggleDescription() {
     this.hasInteracted = true;

@@ -1,20 +1,25 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+
+interface RegistrationData {
+  email: string;
+  password: string;
+  username: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthentificationService {
   private supabase = inject(SupabaseService);
 
-  public currentUid: string | null = null;
-  public registrationData: {
-    email: string;
-    password: string;
-    username: string;
-  } | null = null;
+  private _currentUid = signal<string | null>(null);
+  readonly currentUid = this._currentUid.asReadonly();
+
+  private _registrationData = signal<RegistrationData | null>(null);
+  readonly registrationData = this._registrationData.asReadonly();
 
   constructor() {
     this.supabase.supabase.auth.onAuthStateChange((_event, session) => {
-      this.currentUid = session?.user?.id ?? null;
+      this._currentUid.set(session?.user?.id ?? null);
     });
   }
 
@@ -27,14 +32,15 @@ export class AuthentificationService {
 
     if (data) throw { code: 'auth/email-already-in-use' };
 
-    this.registrationData = { email, password, username };
+    this._registrationData.set({ email, password, username });
   }
 
-  async completeRegistration(profilePictureUrl: string): Promise<any> {
-    if (!this.registrationData) throw new Error('No registration data');
-    const { email, password, username } = this.registrationData;
+  async completeRegistration(profilePictureUrl: string): Promise<void> {
+    const regData = this._registrationData();
+    if (!regData) throw new Error('No registration data');
+    const { email, password, username } = regData;
 
-    const { data, error } = await this.supabase.supabase.auth.signUp({
+    const { error } = await this.supabase.supabase.auth.signUp({
       email,
       password,
       options: {
@@ -46,8 +52,7 @@ export class AuthentificationService {
     });
 
     if (error) throw error;
-    this.registrationData = null;
-    return data;
+    this._registrationData.set(null);
   }
 
   async loginWithEmail(email: string, password: string): Promise<boolean> {
@@ -57,24 +62,22 @@ export class AuthentificationService {
     });
 
     if (error) throw error;
-    this.currentUid = data.user?.id ?? null;
+    this._currentUid.set(data.user?.id ?? null);
     return !!data.user;
   }
 
-  async loginWithGoogle(): Promise<any> {
-    const { data, error } = await this.supabase.supabase.auth.signInWithOAuth({
+  async loginWithGoogle(): Promise<void> {
+    const { error } = await this.supabase.supabase.auth.signInWithOAuth({
       provider: 'google',
     });
-
     if (error) throw error;
-    return data;
   }
 
-  async loginAsGuest(): Promise<any> {
+  async loginAsGuest(): Promise<void> {
     const { data, error } = await this.supabase.supabase.auth.signInAnonymously();
-
     if (error) throw error;
-    this.currentUid = data.user?.id ?? null;
+
+    this._currentUid.set(data.user?.id ?? null);
 
     if (data.user) {
       await this.supabase.supabase.from('users').upsert({
@@ -85,8 +88,6 @@ export class AuthentificationService {
         user_image: 'assets/img/profile.png',
       });
     }
-
-    return data;
   }
 
   async sendResetPasswordEmail(email: string): Promise<void> {
@@ -101,9 +102,13 @@ export class AuthentificationService {
     if (error) throw error;
   }
 
+  clearRegistrationData(): void {
+    this._registrationData.set(null);
+  }
+
   async logout(): Promise<void> {
     const { error } = await this.supabase.supabase.auth.signOut();
     if (error) throw error;
-    this.currentUid = null;
+    this._currentUid.set(null);
   }
 }
