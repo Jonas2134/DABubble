@@ -1,19 +1,19 @@
 <div class="overlay" role="dialog" aria-modal="true" aria-label="Mitglieder verwalten" (click)="onOverlayClick($event)">
   <div #memberAddWrapper (click)="$event.stopPropagation()" [class.hidden]="!newChannelMembers">
-    <app-add-new-members 
+    <app-add-new-members
       [channelMembers]="channelMembers"
       [activeUserId]="activeUserId"
       [channelId]="channelId"
       [channelName]="channelName"
       (close)="closeAddMembers()"
-      [showInput]="true" 
+      [showInput]="true"
     ></app-add-new-members>
   </div>
   <section #channelWrapper (click)="$event.stopPropagation()" [class.hidden]="newChannelMembers">
     <div class="memberlist-header">
       <h1>Mitglieder</h1>
       <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="closeChannelMembers()"></app-button>
-    </div>  
+    </div>
     <app-member-list
       [channelMembers]="channelMembers"
       [activeUserId]="activeUserId"
@@ -22,17 +22,17 @@
     ></app-member-list>
   </section>
 </div>
-  
+
 @if (isChannelMemberProfilOpen) {
   <app-profil
     [activeUserId]="activeUserId ?? ''"
-    [userImage]="activChannelMemberProfil?.uUserImage ?? ''"
-    [userName]="activChannelMemberProfil?.uName ?? ''"
-    [userEmail]="activChannelMemberProfil?.uEmail ?? ''"
-    [userStatus]="activChannelMemberProfil?.uStatus ?? false"
+    [userImage]="activChannelMemberProfil?.userImage ?? ''"
+    [userName]="activChannelMemberProfil?.name ?? ''"
+    [userEmail]="activChannelMemberProfil?.email ?? ''"
+    [userStatus]="activChannelMemberProfil?.status ?? false"
     #profilRef
     size="big"
-    [showButton]="activeUserId !== activChannelMemberProfil?.uId"
+    [showButton]="activeUserId !== activChannelMemberProfil?.id"
     (close)="toggleMemberProfil()"
   ></app-profil>
 }

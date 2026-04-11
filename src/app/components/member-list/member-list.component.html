@@ -4,11 +4,11 @@
         <li>
           <button class="member-btn" (click)="showProfil.emit(member)">
             <div class="user-img-status">
-              <img src="{{ member?.uUserImage }}" [alt]="member?.uName + ' Profilbild'" />
-              <span [ngClass]="member?.uStatus ? 'online' : 'offline'"></span>
+              <img src="{{ member?.userImage }}" [alt]="member?.name + ' Profilbild'" />
+              <span [ngClass]="member?.status ? 'online' : 'offline'"></span>
             </div>
-            <span>{{ member?.uName }}
-              @if (member.uId === activeUserId) {
+            <span>{{ member?.name }}
+              @if (member.id === activeUserId) {
                 <span>(Du)</span>
               }
             </span>

@@ -9,13 +9,13 @@
   @for(user of foundUsers; track user) {
   <li role="option" (click)="insertUserSuggestion(user)">
     <div class="user-img-status">
-      <img src="{{ user?.uUserImage }}" [alt]="user?.uName + ' Profilbild'" />
-      <span [ngClass]="user?.uStatus ? 'online' : 'offline'"></span>
+      <img src="{{ user?.userImage }}" [alt]="user?.name + ' Profilbild'" />
+      <span [ngClass]="user?.status ? 'online' : 'offline'"></span>
     </div>
-    <span>{{ user?.uName }}</span>
+    <span>{{ user?.name }}</span>
   </li>
   } @for(channel of foundChannels; track channel) {
-  <li role="option" (click)="insertChannelSuggestion(channel)">#{{ channel?.cName }}</li>
+  <li role="option" (click)="insertChannelSuggestion(channel)">#{{ channel?.name }}</li>
   }
 </ul>
 }

@@ -58,8 +58,8 @@ export class ChannelLeaveComponent {
   }
 
   async removeMember() {
-    if (!this.activeUserId || !this.channelData?.cId) return;
-    await this.channelService.removeUserFromChannel(this.channelData.cId, this.activeUserId);
+    if (!this.activeUserId || !this.channelData?.id) return;
+    await this.channelService.removeUserFromChannel(this.channelData.id, this.activeUserId);
   }
 
   closeWindow() {

@@ -1,23 +1,22 @@
-import { Timestamp } from '@angular/fire/firestore';
 import { Reaction } from './reaction.interface';
 
 /**
- * Nachricht in der `messages` Firestore-Collection.
+ * Nachricht in der messages-Tabelle.
  *
  * Nachrichtentyp wird durch das gesetzte Zielfeld bestimmt:
- * - Private Nachricht: mSenderId + mUserId
- * - Channel-Nachricht:  mSenderId + mChannelId
- * - Thread-Antwort:     mSenderId + mThreadId
+ * - Private Nachricht: senderId + userId
+ * - Channel-Nachricht:  senderId + channelId
+ * - Thread-Antwort:     senderId + threadId
  *
  * Nicht genutzte Zielfelder sind leer ('').
  */
 export interface Message {
-  mId: string;
-  mText: string;
-  mReactions: Reaction[];
-  mTime: Timestamp;
-  mSenderId: string;
-  mUserId: string | null;
-  mThreadId: string | null;
-  mChannelId: string | null;
+  id: string;
+  text: string;
+  reactions: Reaction[];
+  createdAt: Date | string;
+  senderId: string;
+  userId: string | null;
+  threadId: string | null;
+  channelId: string | null;
 }

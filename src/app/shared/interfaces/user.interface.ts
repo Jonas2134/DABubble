@@ -1,8 +1,8 @@
 export interface User {
-  uId: string;
-  uName: string;
-  uEmail: string;
-  uStatus: boolean;
-  uUserImage: string;
-  uLastReactions: string[];
+  id: string;
+  name: string;
+  email: string;
+  status: boolean;
+  userImage: string;
+  lastReactions: string[];
 }

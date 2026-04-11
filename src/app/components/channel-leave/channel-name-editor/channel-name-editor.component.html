@@ -9,7 +9,7 @@
     </div>
     <div class="channelHashtagName">
       <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
-      <span>{{ channelData?.cName }}</span>
+      <span>{{ channelData?.name }}</span>
     </div>
   </div>
 } @else {
@@ -31,7 +31,7 @@
     </div>
   </div>
   @if (hasInteractedName && editedChannelName.value?.trim()?.length! > 0 &&
-    editedChannelName.value!.trim().length < 3 && editedChannelName.value?.trim() !== channelData?.cName) {
+    editedChannelName.value!.trim().length < 3 && editedChannelName.value?.trim() !== channelData?.name) {
     <span class="errorText">Der Channel-Name muss mindestens 3 Buchstaben lang sein !</span>
   }
   @if (hasInteractedName && editedChannelName.value!.trim().length >= 3 && nameExists) {

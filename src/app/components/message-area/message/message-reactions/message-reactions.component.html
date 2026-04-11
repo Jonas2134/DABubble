@@ -1,14 +1,14 @@
-@let reactions = message.mReactions | groupReactions:activeUserId;
+@let reactions = message.reactions | groupReactions:activeUserId;
 @if (reactions.length > 0) {
 <div class="reaction-field">
-  @for (reaction of reactions.slice(0, shownReactionNumber); track reaction.reaction) {
+  @for (reaction of reactions.slice(0, shownReactionNumber); track reaction.emoji) {
   <div class="single-reaction">
     <div class="reaction-details">
-      <span>{{ reaction.reaction }}</span>
+      <span>{{ reaction.emoji }}</span>
       <div>{{ reaction.namesLine }}</div>
       <p>{{ reaction.actionLine }}</p>
     </div>
-    <span (click)="reactionAdd.emit(reaction.reaction)">{{ reaction.reaction }} {{ reaction.count }}</span>
+    <span (click)="reactionAdd.emit(reaction.emoji)">{{ reaction.emoji }} {{ reaction.count }}</span>
   </div>
   }
   @if (reactions.length > shownReactionNumber) {

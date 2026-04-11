@@ -65,12 +65,12 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
     const allUsers = await this.userService.allUsers();
     const excluded = new Set<string>();
     for (const u of this.channelMembers) {
-      excluded.add(u.uId);
+      excluded.add(u.id);
     }
     if (this.activeUserId) {
       excluded.add(this.activeUserId);
     }
-    this.availableMembers = allUsers.filter(u => !excluded.has(u.uId));
+    this.availableMembers = allUsers.filter(u => !excluded.has(u.id));
     this.filteredMembers  = [...this.availableMembers];
   }
 
@@ -130,18 +130,18 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
       this.filteredMembers = [...this.availableMembers];
     } else {
       this.filteredMembers = this.availableMembers.filter(u =>
-        u.uName.toLowerCase().startsWith(input)
+        u.name.toLowerCase().startsWith(input)
       );
     }
   }
 
 
   toggleMember(member: User) {
-    const id = member.uId;
+    const id = member.id;
     const idx = this.selectedMemberIds.indexOf(id);
     if (idx > -1) {
       this.selectedMemberIds.splice(idx, 1);
-      this.selectedMembers = this.selectedMembers.filter(m => m.uId !== id);
+      this.selectedMembers = this.selectedMembers.filter(m => m.id !== id);
       this.showOverlay = true;
     } else {
       this.selectedMemberIds.push(id);
@@ -163,11 +163,11 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
   
 
   isSelected(member: User): boolean {
-    return this.selectedMembers.some(m => m.uId === member.uId);
+    return this.selectedMembers.some(m => m.id === member.id);
   }
 
 
-  trackById(_: number, u: User) { return u.uId; }
+  trackById(_: number, u: User) { return u.id; }
 
 
   emitClose() {
@@ -198,7 +198,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
     let ids: string[];
     if (this.selectedOption.value === 'option1') {
       const allUsers = await this.userService.allUsers();
-      ids = allUsers.map((u) => u.uId);
+      ids = allUsers.map((u) => u.id);
     } else {
       ids = [...this.selectedMemberIds];
     }
@@ -206,7 +206,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges{
     if (!ids.includes(this.activeUserId)) {
       ids.unshift(this.activeUserId);
     }
-    await this.userService.createChannelWithUsers(
+    await this.channelService.createChannelWithUsers(
       name,
       description,
       this.activeUserId,

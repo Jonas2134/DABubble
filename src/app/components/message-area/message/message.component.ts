@@ -11,7 +11,6 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Message } from '../../../shared/interfaces/message.interface';
-import { Timestamp } from 'firebase/firestore';
 import { UserService } from '../../../shared/services/user.service';
 import { User } from '../../../shared/interfaces/user.interface';
 import { Subscription } from 'rxjs';
@@ -60,7 +59,7 @@ export class MessageComponent implements OnInit {
   senderData: User | null = null;
   editText = '';
   replyCount = 0;
-  lastReplyTime: Timestamp | null = null;
+  lastReplyTime: Date | string | null = null;
 
   isEmojiPickerOpen = false;
   isPermanentDeleteOpen = false;
@@ -87,7 +86,7 @@ export class MessageComponent implements OnInit {
   private loadSenderData() {
     this.senderSub?.unsubscribe();
     this.senderSub = this.userService
-      .getUserRealtime(this.message.mSenderId)
+      .getUserRealtime(this.message.senderId)
       .subscribe({
         next: (u) => (this.senderData = u),
         error: (err) => console.error('Sender-Live', err),
@@ -110,49 +109,49 @@ export class MessageComponent implements OnInit {
     this.replyCount = 0;
     this.lastReplyTime = null;
 
-    if (!this.message.mThreadId || this.chatType === 'thread') return;
+    if (!this.message.threadId || this.chatType === 'thread') return;
 
     this.threadSub = this.messageService
-      .getThreadMessages(this.message.mThreadId)
+      .getThreadMessages(this.message.threadId)
       .subscribe((msgs) => {
-        const replies = msgs.filter((m) => m.mId !== this.message.mId);
+        const replies = msgs.filter((m) => m.id !== this.message.id);
         this.replyCount = replies.length;
-        this.lastReplyTime = (replies.at(-1)?.mTime as Timestamp) ?? null;
+        this.lastReplyTime = replies.at(-1)?.createdAt ?? null;
       });
   }
 
   addReaction(reaction: string) {
-    if (!this.message.mId || !this.activeUserId) return;
+    if (!this.message.id || !this.activeUserId) return;
 
     this.userService
       .editLastReactions(this.activeUserId, reaction)
       .catch(console.error);
 
     this.messageService
-      .toggleReaction(this.message.mId, {
-        reaction,
+      .toggleReaction(this.message.id, {
+        emoji: reaction,
         userId: this.activeUserId,
-        userName: this.activeUserData?.uName ?? '',
+        userName: this.activeUserData?.name ?? '',
       })
       .catch(console.error);
   }
 
   onThreadClick() {
-    if (!this.message.mId) return;
+    if (!this.message.id) return;
 
-    const tid = this.message.mThreadId || this.message.mId;
-    const ensureThread = this.message.mThreadId
+    const tid = this.message.threadId || this.message.id;
+    const ensureThread = this.message.threadId
       ? Promise.resolve()
-      : this.messageService.startThread(this.message.mId);
+      : this.messageService.startThread(this.message.id);
 
     ensureThread.then(() => {
-      this.message.mThreadId = tid;
+      this.message.threadId = tid;
       this.threadOpen.emit(tid);
     });
   }
 
   openProfil() {
-    if (this.message.mSenderId) this.profileClick.emit(this.message.mSenderId);
+    if (this.message.senderId) this.profileClick.emit(this.message.senderId);
   }
 
   toggleEmojiPicker(e?: MouseEvent) {
@@ -189,22 +188,22 @@ export class MessageComponent implements OnInit {
   }
 
   openEdit() {
-    this.editText = this.message.mText ?? '';
+    this.editText = this.message.text ?? '';
     this.toggleEdit();
     setTimeout(() => this.editTextareaRef?.nativeElement.focus());
   }
 
   saveEdit() {
-    if (!this.message.mId) return;
+    if (!this.message.id) return;
     const trimmed = this.editText.trim();
-    if (trimmed === (this.message.mText ?? '').trim()) {
+    if (trimmed === (this.message.text ?? '').trim()) {
       this.toggleEdit();
       return;
     }
     this.messageService
-      .editMessageText(this.message.mId, trimmed)
+      .editMessageText(this.message.id, trimmed)
       .then(() => {
-        this.message.mText = trimmed;
+        this.message.text = trimmed;
         this.toggleEdit();
       })
       .catch(console.error);

@@ -3,7 +3,7 @@
         <header>
             <div>
                 <img src="assets/icons/hashtag.svg" alt="" aria-hidden="true">
-                <h1>{{ channelData?.cName}}</h1>
+                <h1>{{ channelData?.name}}</h1>
             </div>
             <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="closeWindow()"></app-button>
         </header>
@@ -37,14 +37,14 @@
 @if (isChannelMemberProfilOpen) {
     <app-profil
     [activeUserId]="activeUserId ?? ''"
-    [userImage]="activChannelMemberProfil?.uUserImage ?? ''"
-    [userName]="activChannelMemberProfil?.uName ?? ''"
-    [userEmail]="activChannelMemberProfil?.uEmail ?? ''"
-    [userStatus]="activChannelMemberProfil?.uStatus ?? false"
-    [userId]="activChannelMemberProfil?.uId ?? ''"
+    [userImage]="activChannelMemberProfil?.userImage ?? ''"
+    [userName]="activChannelMemberProfil?.name ?? ''"
+    [userEmail]="activChannelMemberProfil?.email ?? ''"
+    [userStatus]="activChannelMemberProfil?.status ?? false"
+    [userId]="activChannelMemberProfil?.id ?? ''"
     #profilRef
     size="big"
-    [showButton]="activeUserId !== activChannelMemberProfil?.uId"
+    [showButton]="activeUserId !== activChannelMemberProfil?.id"
     (close)="toggleMemberProfil()"
     (openChat)="openChat.emit($event)"
     ></app-profil>
@@ -58,8 +58,8 @@
         (close)="closeAddMember()"
         [channelMembers]="channelMembers"
         [activeUserId]="activeUserId"
-        [channelId]="channelData?.cId"
-        [channelName]="channelData?.cName"
+        [channelId]="channelData?.id"
+        [channelName]="channelData?.name"
         [showInput]="true"
         [showXLine]="true"
       ></app-add-new-members>

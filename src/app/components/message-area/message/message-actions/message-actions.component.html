@@ -1,10 +1,10 @@
 <div
   class="message-actions"
   [class.always]="isOptionsOpen"
-  [class.user-message-actions]="message.mSenderId === activeUserId"
+  [class.user-message-actions]="message.senderId === activeUserId"
 >
   @if (chatType !== 'thread') {
-    @for (reaction of activeUserData?.uLastReactions; track reaction) {
+    @for (reaction of activeUserData?.lastReactions; track reaction) {
     <span (click)="reactionAdd.emit(reaction)">{{ reaction }}</span>
     }
   }
@@ -29,7 +29,7 @@
   <button
     #optionsBtn
     class="material-symbols action-btn"
-    [class.d-none]="message.mSenderId !== activeUserId"
+    [class.d-none]="message.senderId !== activeUserId"
     aria-label="Weitere Optionen"
     [attr.aria-expanded]="isOptionsOpen"
     (click)="toggleOptions($event)"
@@ -42,7 +42,7 @@
     #optionsMenu
     class="options-menu"
     role="menu"
-    [class.active-user-options]="message.mSenderId === activeUserId"
+    [class.active-user-options]="message.senderId === activeUserId"
   >
     <button role="menuitem" (click)="editOpen.emit()">Nachricht bearbeiten</button>
     <button role="menuitem" (click)="deleteOpen.emit()">Nachricht löschen</button>

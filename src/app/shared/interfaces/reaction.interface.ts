@@ -1,11 +1,11 @@
 export interface Reaction {
-  reaction: string;
+  emoji: string;
   userId: string;
   userName: string;
 }
 
 export interface GroupedReaction {
-  reaction: string;
-  count:    number;
-  names:    string[];
+  emoji: string;
+  count: number;
+  names: string[];
 }

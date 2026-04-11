@@ -26,14 +26,14 @@ export class ChannelNameEditorComponent {
   toggleEdit() {
     this.hasInteractedName = true;
     this.editMode = !this.editMode;
-    if (this.editMode && this.channelData?.cName) {
-      this.editedChannelName.setValue(this.channelData.cName);
+    if (this.editMode && this.channelData?.name) {
+      this.editedChannelName.setValue(this.channelData.name);
     }
   }
 
   async onNameInput() {
     const trimmed = this.editedChannelName.value?.trim() ?? '';
-    if (trimmed.length < 3 || trimmed === this.channelData?.cName) {
+    if (trimmed.length < 3 || trimmed === this.channelData?.name) {
       this.nameExists = false;
       return;
     }
@@ -46,11 +46,11 @@ export class ChannelNameEditorComponent {
 
   saveNewName() {
     const newName = this.editedChannelName.value?.trim() ?? '';
-    if (!newName || newName.length < 3 || this.nameExists || !this.channelData?.cId) return;
+    if (!newName || newName.length < 3 || this.nameExists || !this.channelData?.id) return;
     this.channelService
-      .updateChannelName(this.channelData.cId, newName)
+      .updateChannelName(this.channelData.id, newName)
       .then(() => {
-        this.channelData!.cName = newName;
+        this.channelData!.name = newName;
         this.nameUpdated.emit(newName);
         this.toggleEdit();
       })

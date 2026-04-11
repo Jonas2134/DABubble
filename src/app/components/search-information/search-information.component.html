@@ -6,9 +6,9 @@
           <h1>Gefundene Nutzer</h1>
           <ng-container>
             @for (user of users; track $index) {
-              <button (click)="selectChat(user.uId, 'private')" class="userPhoto">
-                <img [src]="user.uUserImage" alt="{{ user.uName }}" />
-                <h3>{{ user.uName }}</h3>
+              <button (click)="selectChat(user.id, 'private')" class="userPhoto">
+                <img [src]="user.userImage" alt="{{ user.name }}" />
+                <h3>{{ user.name }}</h3>
               </button>
             }
           </ng-container>
@@ -19,8 +19,8 @@
           <h1>Gefundene Channels und Nutzer in Channels</h1>
           <ng-container>
             @for (channel of channelsWithNames; track $index) {
-              <button (click)="selectChat(channel.cId, 'channel')" class="channelName">
-                <h3># {{ channel.cName }}</h3>
+              <button (click)="selectChat(channel.id, 'channel')" class="channelName">
+                <h3># {{ channel.name }}</h3>
               </button>
             }
           </ng-container>
@@ -33,7 +33,7 @@
           @for (msg of matchedMessages; track $index) {
             <button (click)="selectChat(msg.channelId, 'channel')" class="messageButton">
               <h3 class="headline"><strong># {{ msg.channelName }}:</strong ></h3>
-                <span>{{ msg.mText }}</span>
+                <span>{{ msg.text }}</span>
             </button>
           }
         </ng-container>
@@ -45,7 +45,7 @@
         <ng-container>
           @for (msg of directMessages; track $index) {
             <button (click)="selectChat(msg.otherUserId, 'private')" class="messagesButton">
-              <h3 class="headline"><strong>{{ msg.otherUserName }}</strong >:{{ msg.mText }}</h3>
+              <h3 class="headline"><strong>{{ msg.otherUserName }}</strong >:{{ msg.text }}</h3>
             </button>
           }
         </ng-container>
@@ -58,8 +58,8 @@
           @for (msg of threadMessages; track $index) {
             <button (click)="selectThread(msg)" class="messageButton">
               <h3 class="headline"><strong>Thread:</strong></h3>
-              <span>{{ msg.mText }}</span>
-            </button> 
+              <span>{{ msg.text }}</span>
+            </button>
           }
         </ng-container>
       </div>

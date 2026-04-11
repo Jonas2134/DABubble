@@ -44,13 +44,13 @@ export class DirectMessageComponent implements OnInit {
   loadUsers(): void {
     const users$ = this.userService.getEveryUsers();
     this.activeUsers$ = users$.pipe(
-      map(users => users.filter(user => user.uId === this.activeUserId))
+      map(users => users.filter(user => user.id === this.activeUserId))
     );
     this.inactiveUsers$ = users$.pipe(
-      map(users => users.filter(user => user.uId !== this.activeUserId))
+      map(users => users.filter(user => user.id !== this.activeUserId))
     );
     users$.subscribe(users => {
-      this.activeUser = users.find(user => user.uId === this.activeUserId);
+      this.activeUser = users.find(user => user.id === this.activeUserId);
     });
   }
 

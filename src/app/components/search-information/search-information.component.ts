@@ -16,19 +16,19 @@ import { Message } from '../../shared/interfaces/message.interface';
 import { Channel } from '../../shared/interfaces/channel.interface';
 
 interface ChannelMessage {
-  mText: string;
+  text: string;
   channelName: string;
   channelId: string;
 }
 
 interface DirectMessage {
-  mText: string;
+  text: string;
   otherUserId: string;
   otherUserName: string;
 }
 
 interface ThreadHit {
-  mText: string;
+  text: string;
   threadId: string;
   chatId: string;
   chatType: 'channel' | 'private';
@@ -107,17 +107,17 @@ export class SearchInformationComponent implements OnInit {
   }
 
   private filterUsers(users: User[], q: string): User[] {
-    return users.filter((u) => (u.uName || '').toLowerCase().includes(q));
+    return users.filter((u) => (u.name || '').toLowerCase().includes(q));
   }
 
   private filterChannels(channels: Channel[], users: User[], q: string) {
     return channels
-      .filter((ch) => (ch.cName || '').toLowerCase().includes(q))
+      .filter((ch) => (ch.name || '').toLowerCase().includes(q))
       .map((ch) => ({
         ...ch,
         memberNames: users
-          .filter((u) => (ch.cUserIds || []).includes(u.uId))
-          .map((u) => u.uName),
+          .filter((u) => (ch.memberIds || []).includes(u.id))
+          .map((u) => u.name),
       }));
   }
 
@@ -125,16 +125,16 @@ export class SearchInformationComponent implements OnInit {
     return msgs
       .filter(
         (m) =>
-          typeof m.mChannelId === 'string' &&
-          m.mChannelId.trim() &&
-          m.mText.toLowerCase().includes(q)
+          typeof m.channelId === 'string' &&
+          m.channelId.trim() &&
+          m.text.toLowerCase().includes(q)
       )
       .map((m) => {
-        const ch = channels.find((c) => c.cId === m.mChannelId);
+        const ch = channels.find((c) => c.id === m.channelId);
         return {
-          mText: m.mText,
-          channelName: ch?.cName || '',
-          channelId: ch?.cId || '',
+          text: m.text,
+          channelName: ch?.name || '',
+          channelId: ch?.id || '',
         };
       });
   }
@@ -143,20 +143,20 @@ export class SearchInformationComponent implements OnInit {
     return msgs
       .filter(
         (m) =>
-          m.mText.toLowerCase().includes(q) &&
-          (m.mUserId === this.activeUserId ||
-            m.mSenderId === this.activeUserId) &&
-          typeof m.mUserId === 'string' &&
-          m.mUserId.trim()
+          m.text.toLowerCase().includes(q) &&
+          (m.userId === this.activeUserId ||
+            m.senderId === this.activeUserId) &&
+          typeof m.userId === 'string' &&
+          m.userId.trim()
       )
       .map((m) => {
         const otherId =
-          m.mUserId === this.activeUserId ? m.mSenderId : m.mUserId!;
-        const otherUser = users.find((u) => u.uId === otherId);
+          m.userId === this.activeUserId ? m.senderId : m.userId!;
+        const otherUser = users.find((u) => u.id === otherId);
         return {
-          mText: m.mText,
+          text: m.text,
           otherUserId: otherId,
-          otherUserName: otherUser?.uName || '',
+          otherUserName: otherUser?.name || '',
         };
       });
   }
@@ -165,31 +165,31 @@ export class SearchInformationComponent implements OnInit {
     const hits: ThreadHit[] = [];
     for (const m of msgs) {
       if (!this.isThreadHit(m, q)) continue;
-      const parent = await this.resolveParent(msgs, m.mThreadId!);
-      const chatType = parent?.mChannelId ? 'channel' : 'private';
+      const parent = await this.resolveParent(msgs, m.threadId!);
+      const chatType = parent?.channelId ? 'channel' : 'private';
       const chatId =
-        parent?.mChannelId ??
+        parent?.channelId ??
         (parent
-          ? parent.mUserId === this.activeUserId
-            ? parent.mSenderId
-            : parent.mUserId!
+          ? parent.userId === this.activeUserId
+            ? parent.senderId
+            : parent.userId!
           : '');
-      hits.push({ mText: m.mText, threadId: m.mThreadId!, chatId, chatType });
+      hits.push({ text: m.text, threadId: m.threadId!, chatId, chatType });
     }
     return hits;
   }
 
   private isThreadHit(m: Message, q: string) {
     return (
-      typeof m.mThreadId === 'string' &&
-      m.mThreadId.trim() &&
-      m.mText.toLowerCase().includes(q)
+      typeof m.threadId === 'string' &&
+      m.threadId.trim() &&
+      m.text.toLowerCase().includes(q)
     );
   }
 
   private async resolveParent(allMsgs: Message[], id: string) {
     return (
-      allMsgs.find((x) => x.mId === id) ??
+      allMsgs.find((x) => x.id === id) ??
       (await this.messageService.getMessageById(id).catch(() => null))
     );
   }

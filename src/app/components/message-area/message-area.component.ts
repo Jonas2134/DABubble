@@ -152,14 +152,14 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   }
 
   private setThreadContextName(parent: Message) {
-    if (parent.mChannelId) {
+    if (parent.channelId) {
       this.channelService
-        .getChannel(parent.mChannelId)
-        .then((ch) => (this.threadContextName = `#${ch.cName}`));
-    } else if (parent.mUserId) {
+        .getChannel(parent.channelId)
+        .then((ch) => (this.threadContextName = `#${ch.name}`));
+    } else if (parent.userId) {
       this.userService
-        .getUser(parent.mUserId)
-        .then((u) => (this.threadContextName = `@${u.uName}`));
+        .getUser(parent.userId)
+        .then((u) => (this.threadContextName = `@${u.name}`));
     }
   }
 
@@ -209,9 +209,9 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
     this.channelMemberSubs = [];
     this.channelMembers = [];
 
-    if (!this.channelData?.cUserIds?.length) return;
+    if (!this.channelData?.memberIds?.length) return;
 
-    for (const uid of this.channelData.cUserIds) {
+    for (const uid of this.channelData.memberIds) {
       const sub = this.userService.getUserRealtime(uid).subscribe({
         next: (u) => this.mergeMember(u),
         error: (err) => console.error('User-Realtime', err),
@@ -222,14 +222,14 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
 
   private mergeMember(u: User | null) {
     if (!u) return;
-    const idx = this.channelMembers.findIndex((m) => m.uId === u.uId);
+    const idx = this.channelMembers.findIndex((m) => m.id === u.id);
     idx > -1 ? (this.channelMembers[idx] = u) : this.channelMembers.push(u);
     this.sortMembers();
   }
   private sortMembers() {
     this.channelMembers.sort((a, b) => {
-      if (a.uId === this.activeUserId) return -1;
-      if (b.uId === this.activeUserId) return 1;
+      if (a.id === this.activeUserId) return -1;
+      if (b.id === this.activeUserId) return 1;
       return 0;
     });
   }
@@ -295,21 +295,21 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
     if (first === '@') {
       this.userService.getAllUsers().then((all) => {
         this.foundUsersNew = all.filter((u) =>
-          u.uName.toLowerCase().includes(query)
+          u.name.toLowerCase().includes(query)
         );
         this.foundChannelsNew = [];
       });
     } else if (first === '#') {
       this.channelService.getAllChannels().then((all) => {
         this.foundChannelsNew = all.filter((c) =>
-          c.cName.toLowerCase().includes(query)
+          c.name.toLowerCase().includes(query)
         );
         this.foundUsersNew = [];
       });
     } else {
       this.userService.getAllUsers().then((all) => {
         this.foundUsersNew = all.filter((u) =>
-          u.uEmail.toLowerCase().includes(val.toLowerCase())
+          u.email.toLowerCase().includes(val.toLowerCase())
         );
         this.foundChannelsNew = [];
       });
@@ -317,10 +317,10 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   }
 
   selectUserNew(u: User) {
-    this.finishNewTarget('private', u.uId);
+    this.finishNewTarget('private', u.id);
   }
   selectChannelNew(c: Channel) {
-    this.finishNewTarget('channel', c.cId!);
+    this.finishNewTarget('channel', c.id!);
   }
 
   private finishNewTarget(type: 'private' | 'channel', id: string) {
@@ -348,12 +348,12 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
       );
     } else {
       const msg: Partial<Message> = {
-        mText: txt,
-        mReactions: [],
-        mSenderId: this.activeUserId!,
-        mUserId: this.chatType === 'private' ? this.chatId! : '',
-        mChannelId: this.chatType === 'channel' ? this.chatId! : '',
-        mThreadId: '',
+        text: txt,
+        reactions: [],
+        senderId: this.activeUserId!,
+        userId: this.chatType === 'private' ? this.chatId! : '',
+        channelId: this.chatType === 'channel' ? this.chatId! : '',
+        threadId: '',
       };
       await this.messageService.createMessage(msg);
     }
@@ -364,18 +364,18 @@ export class MessageAreaComponent implements OnChanges, OnDestroy {
   shouldShowDateSeparator(i: number): boolean {
     if (i === 0) return true;
     return (
-      this.dateFormat.getDay(this.messages[i].mTime) !==
-      this.dateFormat.getDay(this.messages[i - 1].mTime)
+      this.dateFormat.getDay(this.messages[i].createdAt) !==
+      this.dateFormat.getDay(this.messages[i - 1].createdAt)
     );
   }
 
   getPlaceholder(): string {
     switch (this.chatType) {
       case 'private':
-        return `Nachricht an ${this.chatPartner?.uName || 'unbekannter User'}`;
+        return `Nachricht an ${this.chatPartner?.name || 'unbekannter User'}`;
       case 'channel':
         return `Nachricht an #${
-          this.channelData?.cName || 'unbekannter Kanal'
+          this.channelData?.name || 'unbekannter Kanal'
         }`;
       case 'thread':
         return 'Antworten...';

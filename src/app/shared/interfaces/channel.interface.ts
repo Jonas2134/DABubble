@@ -1,10 +1,8 @@
-import { Timestamp } from "firebase/firestore";
-
 export interface Channel {
-    cId?: string | null;
-    cName: string;
-    cDescription: string | null; 
-    cCreatedByUser: string; 
-    cUserIds: string[];
-    cTime: Timestamp | any;
+  id?: string | null;
+  name: string;
+  description: string | null;
+  createdByUser: string;
+  memberIds: string[];
+  createdAt: Date | string;
 }

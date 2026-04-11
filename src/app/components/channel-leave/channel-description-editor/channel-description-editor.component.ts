@@ -31,12 +31,12 @@ export class ChannelDescriptionEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userService.getEveryUsers()
       .pipe(
-        map(users => users.find(u => u.uId === this.channelData?.cCreatedByUser)),
+        map(users => users.find(u => u.id === this.channelData?.createdByUser)),
         takeUntil(this.destroy$)
       )
       .subscribe(user => {
         if (user) {
-          this.createdByUserName = user.uName;
+          this.createdByUserName = user.name;
         }
       });
   }
@@ -49,17 +49,17 @@ export class ChannelDescriptionEditorComponent implements OnInit, OnDestroy {
   toggleDescription() {
     this.hasInteracted = true;
     this.editDescription = !this.editDescription;
-    if (this.editDescription && this.channelData?.cDescription) {
-      this.editedDescription.setValue(this.channelData.cDescription);
+    if (this.editDescription && this.channelData?.description) {
+      this.editedDescription.setValue(this.channelData.description);
     }
   }
 
   saveDescription() {
     const newDesc = this.editedDescription.value?.trim() ?? '';
-    if (!newDesc || !this.channelData?.cId) return;
-    this.channelService.updateChannelDescription(this.channelData.cId, newDesc)
+    if (!newDesc || !this.channelData?.id) return;
+    this.channelService.updateChannelDescription(this.channelData.id, newDesc)
       .then(() => {
-        this.channelData!.cDescription = newDesc;
+        this.channelData!.description = newDesc;
         this.descriptionUpdated.emit(newDesc);
       })
       .catch(() => {});

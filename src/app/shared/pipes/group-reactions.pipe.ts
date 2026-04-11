@@ -17,17 +17,17 @@ export class GroupReactionsPipe implements PipeTransform {
     const grouped = new Map<string, { count: number; names: string[] }>();
     for (const r of reactions) {
       const name = r.userId === activeUserId ? 'Du' : r.userName;
-      const bucket = grouped.get(r.reaction) ?? { count: 0, names: [] };
+      const bucket = grouped.get(r.emoji) ?? { count: 0, names: [] };
       bucket.count++;
       if (!bucket.names.includes(name)) bucket.names.push(name);
-      grouped.set(r.reaction, bucket);
+      grouped.set(r.emoji, bucket);
     }
     return grouped;
   }
 
   private mapBucketsToViewModel(buckets: Map<string, { count: number; names: string[] }>): ReactionViewModel[] {
-    return Array.from(buckets, ([reaction, data]) => ({
-      reaction,
+    return Array.from(buckets, ([emoji, data]) => ({
+      emoji,
       count: data.count,
       names: data.names,
       namesLine: this.buildNameLine(data.names),

@@ -1,164 +1,184 @@
-import { Injectable, inject } from '@angular/core';
-import { Firestore, collectionData, deleteDoc  } from '@angular/fire/firestore';
-import { collection, doc, getDoc, getDocs, setDoc,updateDoc ,serverTimestamp, onSnapshot, query, where, arrayUnion, writeBatch} from 'firebase/firestore';
-import { Channel } from '../interfaces/channel.interface';
+import { Injectable, inject, signal, computed, Injector } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Channel } from '../interfaces/channel.interface';
+import { SupabaseService } from './supabase.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ChannelService {
-  private firestore = inject(Firestore);
+  private supabaseService = inject(SupabaseService);
+  private injector = inject(Injector);
 
-  async getAllChannels(): Promise<Channel[]> {
-    const channelsCollectionRef = collection(this.firestore, 'channels');
-    const querySnapshot = await getDocs(channelsCollectionRef);
-    const allChannels: Channel[] = [];
+  private _channels = signal<Channel[]>([]);
+  readonly channels = this._channels.asReadonly();
 
-    querySnapshot.forEach((docSnap) => {
-      const channelData = { ...(docSnap.data() as Channel), cId: docSnap.id };
-      allChannels.push(channelData);
-    });
-
-    return allChannels;
+  constructor() {
+    this.loadAllChannels();
+    this.subscribeToChanges();
   }
+
+  private async loadAllChannels() {
+    const { data, error } = await this.supabaseService.supabase
+      .from('channels')
+      .select('*, channel_members(user_id)')
+      .order('created_at');
+    if (error) { console.error('loadAllChannels', error); return; }
+    this._channels.set((data ?? []).map(r => this.mapChannel(r)));
+  }
+
+  private subscribeToChanges() {
+    this.supabaseService.supabase
+      .channel('channels-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'channels' }, () => {
+        this.loadAllChannels();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'channel_members' }, () => {
+        this.loadAllChannels();
+      })
+      .subscribe();
+  }
+
+  private mapChannel(row: any): Channel {
+    return {
+      id: row.id,
+      name: row.name ?? '',
+      description: row.description ?? null,
+      createdByUser: row.created_by_user ?? '',
+      memberIds: (row.channel_members ?? []).map((m: any) => m.user_id),
+      createdAt: row.created_at ?? new Date().toISOString(),
+    };
+  }
+
+  // --- Read (Observable, realtime via signal) ---
 
   getChannelRealtime(channelId: string): Observable<Channel> {
-    return new Observable<Channel>((observer) => {
-      const ref = doc(this.firestore, 'channels', channelId);
-      const unsub = onSnapshot(ref, (snap) => {
-        if (snap.exists()) {
-          observer.next({ ...(snap.data() as Channel), cId: snap.id });
-        }
-      });
-      return () => unsub();
-    });
-  }
-
-  async getChannel(channelId: string | null): Promise<Channel> {
-    if (!channelId) {
-      return Promise.reject(new Error('Invalid channelId: null'));
-    }
-    const channelDocRef = doc(this.firestore, 'channels', channelId);
-    return getDoc(channelDocRef).then((docSnap) => {
-      if (docSnap.exists()) {
-        return { ...(docSnap.data() as Channel), cId: docSnap.id };
-      } else {
-        throw new Error('Channel not found');
+    const channelSignal = computed(() =>
+      this._channels().find(c => c.id === channelId) ?? {
+        id: channelId, name: '', description: null, createdByUser: '', memberIds: [], createdAt: new Date().toISOString()
       }
-    });
-  }
-  
-  addUsersToChannel(channelId: string, ...userIds: string[]): Promise<void> {
-    const channelRef = doc(this.firestore, 'channels', channelId);
-    return updateDoc(channelRef, {
-      cUserIds: arrayUnion(...userIds)
-    });
-  }
-
-  async createChannel(name: string, description: string, userId: string): Promise<string | void> {
-    if (!name || !userId) return;
-    const channelsCollectionRef = collection(this.firestore, 'channels');
-    const newDocRef = doc(channelsCollectionRef);
-    const newId = newDocRef.id;
-    const newChannel: Channel = {
-      cId: newId,
-      cName: name,
-      cDescription: description,
-      cCreatedByUser: userId,
-      cUserIds: [userId],
-      cTime: serverTimestamp() as any,
-    };
-    await setDoc(newDocRef, newChannel);
-    return newId;
-  }
-
- 
-  async removeUserFromChannel(channelId: string, userId: string): Promise<void> {
-    const channelRef = doc(this.firestore, 'channels', channelId);
-    const channelSnap = await getDoc(channelRef);
-    if (!channelSnap.exists()) return;
-    const channelData = channelSnap.data();
-    const currentUserIds: string[] = channelData['cUserIds'] || [];
-    if (!currentUserIds.includes(userId)) return;
-    const updatedUserIds = currentUserIds.filter(id => id !== userId);
-    await updateDoc(channelRef, { cUserIds: updatedUserIds });
-  }
-
-  async updateChannelName(channelId: string, newName: string): Promise<void> {
-    if (!channelId || !newName.trim()) return;
-
-    const channelRef = doc(this.firestore, 'channels', channelId);
-    await updateDoc(channelRef, { cName: newName.trim() });
-  }
-
-  async checkChannelNameExists(name: string): Promise<boolean> {
-    const col = collection(this.firestore, 'channels');
-    const q = query(col, where('cName', '==', name));
-    const snap = await getDocs(q);
-    return !snap.empty;
-  }
-
-  async updateChannelDescription(channelId: string, newDescription: string): Promise<void> {
-    const channelRef = doc(this.firestore, 'channels', channelId);
-    await updateDoc(channelRef, { cDescription: newDescription });
+    );
+    return toObservable(channelSignal, { injector: this.injector });
   }
 
   getSortedChannels(userId: string | null): Observable<{ id: string; name: string; createdAt: any }[]> {
-    const channelsRef  = collection(this.firestore, 'channels');
-    const channelQuery = query(channelsRef, where('cUserIds', 'array-contains', userId));
-  
-    return collectionData(channelQuery, { idField: 'id' }).pipe(
-      map((channels: any[]) =>
-        channels
-          .map(ch => ({
-            id:        ch.id,
-            name:      ch.cName, 
-            createdAt: ch.createdAt || 0,
-          }))
-          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
-      )
+    const sorted = computed(() =>
+      this._channels()
+        .filter(c => !userId || c.memberIds.includes(userId))
+        .map(c => ({ id: c.id!, name: c.name, createdAt: c.createdAt }))
     );
+    return toObservable(sorted, { injector: this.injector });
   }
 
+  // --- Read (Promise, snapshot) ---
 
-  allChannels(): Promise<Channel[]> {
-    const channelsCollection = collection(this.firestore, 'channels');
-    return getDocs(channelsCollection).then(snap => snap.docs.map(doc => doc.data() as Channel));
+  async getAllChannels(): Promise<Channel[]> {
+    return this._channels();
   }
-  
 
-  deleteChannel(channelId: string): Promise<void> {
-    const channelRef = doc(this.firestore, 'channels', channelId);
-    return deleteDoc(channelRef);
+  async allChannels(): Promise<Channel[]> {
+    return this._channels();
+  }
+
+  async getChannel(channelId: string | null): Promise<Channel> {
+    if (!channelId) return Promise.reject(new Error('No channelId'));
+    const ch = this._channels().find(c => c.id === channelId);
+    if (ch) return ch;
+
+    const { data, error } = await this.supabaseService.supabase
+      .from('channels')
+      .select('*, channel_members(user_id)')
+      .eq('id', channelId)
+      .maybeSingle();
+    if (error || !data) return Promise.reject(new Error('Channel not found'));
+    return this.mapChannel(data);
+  }
+
+  async checkChannelNameExists(name: string): Promise<boolean> {
+    const { data } = await this.supabaseService.supabase
+      .from('channels')
+      .select('id')
+      .ilike('name', name)
+      .maybeSingle();
+    return !!data;
+  }
+
+  // --- Write ---
+
+  async createChannelWithUsers(
+    name: string,
+    description: string,
+    userId: string,
+    userIds: string[]
+  ): Promise<string | void> {
+    const { data, error } = await this.supabaseService.supabase
+      .from('channels')
+      .insert({ name, description: description || null, created_by_user: userId })
+      .select('id')
+      .single();
+    if (error) throw error;
+
+    const channelId = data.id;
+    const allIds = new Set([userId, ...userIds]);
+    const rows = [...allIds].map(uid => ({ channel_id: channelId, user_id: uid }));
+
+    const { error: memberError } = await this.supabaseService.supabase
+      .from('channel_members')
+      .insert(rows);
+    if (memberError) throw memberError;
+
+    return channelId;
+  }
+
+  async createChannel(name: string, description: string, userId: string): Promise<string | void> {
+    return this.createChannelWithUsers(name, description, userId, [userId]);
+  }
+
+  async addUsersToChannel(channelId: string, ...userIds: string[]): Promise<void> {
+    const rows = userIds.map(uid => ({ channel_id: channelId, user_id: uid }));
+    const { error } = await this.supabaseService.supabase
+      .from('channel_members')
+      .upsert(rows, { onConflict: 'channel_id,user_id' });
+    if (error) throw error;
+  }
+
+  async removeUserFromChannel(channelId: string, userId: string): Promise<void> {
+    const { error } = await this.supabaseService.supabase
+      .from('channel_members')
+      .delete()
+      .eq('channel_id', channelId)
+      .eq('user_id', userId);
+    if (error) throw error;
+  }
+
+  async updateChannelName(channelId: string, newName: string): Promise<void> {
+    const { error } = await this.supabaseService.supabase
+      .from('channels')
+      .update({ name: newName })
+      .eq('id', channelId);
+    if (error) throw error;
+  }
+
+  async updateChannelDescription(channelId: string, newDescription: string): Promise<void> {
+    const { error } = await this.supabaseService.supabase
+      .from('channels')
+      .update({ description: newDescription })
+      .eq('id', channelId);
+    if (error) throw error;
+  }
+
+  async deleteChannel(channelId: string): Promise<void> {
+    const { error } = await this.supabaseService.supabase
+      .from('channels')
+      .delete()
+      .eq('id', channelId);
+    if (error) throw error;
   }
 
   async deleteChannelsByCreator(userId: string): Promise<void> {
-    if (!userId) return;
-  
-    const colRef = collection(this.firestore, 'channels');
-    const q      = query(colRef, where('cCreatedByUser', '==', userId));
-  
-    const snap = await getDocs(q);
-    if (snap.empty) return;
-  
-    let batch   = writeBatch(this.firestore);
-    let counter = 0;
-  
-    snap.forEach(docSnap => {
-      batch.delete(docSnap.ref);
-      counter++;
-  
-      if (counter === 500) {
-        batch.commit();
-        batch   = writeBatch(this.firestore);
-        counter = 0;
-      }
-    });
-  
-    if (counter > 0) {
-      await batch.commit();
-    }
+    const { error } = await this.supabaseService.supabase
+      .from('channels')
+      .delete()
+      .eq('created_by_user', userId);
+    if (error) throw error;
   }
 }

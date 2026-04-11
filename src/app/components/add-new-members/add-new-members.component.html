@@ -42,8 +42,8 @@
           @for (member of selectedMembers | slice:0:displayCount; track trackById) {
           <div class="containerDelete">
             <div class="inputNameImgPush">
-              <img src="{{ member.uUserImage }}" alt="{{ member.uName }}" />
-              <span>{{ member.uName }}</span>
+              <img src="{{ member.userImage }}" alt="{{ member.name }}" />
+              <span>{{ member.name }}</span>
             </div>
             <button class="inputNamePushClose" (click)="toggleMember(member)">
               <div class="material-symbols">close</div>
@@ -66,12 +66,12 @@
         @if (showMember ) {
           <div class="showMembers" (click)="$event.stopPropagation()">
             @for(member of filteredMembers; track trackById) {
-            <button (mousedown)="toggleMember(member)" [class.selected]="selectedMemberIds.includes(member.uId)" class="memberItem">
+            <button (mousedown)="toggleMember(member)" [class.selected]="selectedMemberIds.includes(member.id)" class="memberItem">
               <div class="user-img-status">
-                <img src="{{ member.uUserImage }}" alt="" />
-                <span [ngClass]="member.uStatus ? 'online' : 'offline'"></span>
+                <img src="{{ member.userImage }}" alt="" />
+                <span [ngClass]="member.status ? 'online' : 'offline'"></span>
               </div>
-              <h3>{{ member.uName }}</h3>
+              <h3>{{ member.name }}</h3>
             </button>
             }
           </div>

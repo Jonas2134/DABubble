@@ -1,11 +1,11 @@
 <section
-  [class.row-reverse]="message.mSenderId === activeUserId"
+  [class.row-reverse]="message.senderId === activeUserId"
   [class.edit-open]="isEditOpen"
   [class.thread]="chatType === 'thread'"
 >
-  <img src="{{ senderData?.uUserImage }}" [alt]="(senderData?.uName || '') + ' Profilbild'" />
+  <img src="{{ senderData?.userImage }}" [alt]="(senderData?.name || '') + ' Profilbild'" />
 
-  @if (isEditOpen && message.mSenderId === activeUserId) {
+  @if (isEditOpen && message.senderId === activeUserId) {
   <div class="edit-message">
     <textarea #editTextarea type="text" [value]="editText" (input)="onEditTextInput($event)"></textarea>
     <div>
@@ -19,14 +19,14 @@
   } @else {
   <div
     class="message"
-    [class.user-message]="message.mSenderId === activeUserId"
+    [class.user-message]="message.senderId === activeUserId"
   >
     <div class="message-header">
-      <h3 (click)="openProfil()">{{ senderData?.uName }}</h3>
-      <h5>{{ message.mTime | timeInHours }} Uhr</h5>
+      <h3 (click)="openProfil()">{{ senderData?.name }}</h3>
+      <h5>{{ message.createdAt | timeInHours }} Uhr</h5>
     </div>
 
-    <div class="message-text">{{ message.mText }}</div>
+    <div class="message-text">{{ message.text }}</div>
 
     <div class="message-attachments">
       <app-message-reactions
@@ -36,7 +36,7 @@
         (emojiPickerToggle)="toggleEmojiPicker($event)"
       ></app-message-reactions>
 
-      @if (message.mThreadId && chatType !== 'thread' && replyCount > 0) {
+      @if (message.threadId && chatType !== 'thread' && replyCount > 0) {
       <div class="thread-field" (click)="onThreadClick()">
         <h4>{{ replyCount }} Antwort{{ replyCount !== 1 ? "en" : "" }}</h4>
         <h5>
@@ -66,7 +66,7 @@
   <emoji-mart
     #emojiPicker
     (emojiClick)="onEmojiPicked($event)"
-    [class.active-user-emoji]="message.mSenderId === activeUserId"
+    [class.active-user-emoji]="message.senderId === activeUserId"
     [class.thread-emoji]="chatType === 'thread'"
   ></emoji-mart>
   } @loading {
@@ -77,7 +77,7 @@
 @if (isPermanentDeleteOpen) {
 <app-permanent-delete
   [target]="'message'"
-  [id]="message.mId"
+  [id]="message.id"
   (close)="isPermanentDeleteOpen = false"
 ></app-permanent-delete>
 }

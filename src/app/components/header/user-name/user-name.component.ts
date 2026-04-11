@@ -59,11 +59,11 @@ export class UserNameComponent {
     if (!userId) return;
     this.userService.getUserById(userId).subscribe((user) => {
       if (user) {
-        this.userName = user.uName;
-        this.userEmail = user.uEmail;
-        this.userImage = user.uUserImage;
-        this.userStatus = user.uStatus;
-        this.userId = user.uId;
+        this.userName = user.name;
+        this.userEmail = user.email;
+        this.userImage = user.userImage;
+        this.userStatus = user.status;
+        this.userId = user.id;
       }
     });
   }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Timestamp } from 'firebase/firestore';
 
 @Injectable({ providedIn: 'root' })
 export class DateFormatService {
@@ -33,10 +32,10 @@ export class DateFormatService {
     return this.formatAsGermanDate(d);
   }
 
-  getTimeInHours(ts: Timestamp | null): string | undefined {
-    return ts instanceof Timestamp
-      ? ts.toDate().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-      : undefined;
+  getTimeInHours(ts: Date | string | null): string | undefined {
+    if (!ts) return undefined;
+    const d = this.toDate(ts);
+    return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
 
   private formatAsGermanDate(d: Date): string {

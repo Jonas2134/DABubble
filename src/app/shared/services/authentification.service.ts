@@ -1,34 +1,9 @@
-import { inject, Injectable } from '@angular/core';
-import { User } from '../interfaces/user.interface';
-import {
-  deleteDoc,
-  doc,
-  Firestore,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from '@angular/fire/firestore';
-import {
-  Auth,
-  confirmPasswordReset,
-  createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  sendPasswordResetEmail,
-  signInAnonymously,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  UserCredential,
-} from '@angular/fire/auth';
-import { arrayUnion, collection } from 'firebase/firestore';
+import { Injectable, inject } from '@angular/core';
+import { SupabaseService } from './supabase.service';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthentificationService {
-  private auth: Auth = inject(Auth);
-  private firestore: Firestore = inject(Firestore);
+  private supabase = inject(SupabaseService);
 
   public currentUid: string | null = null;
   public registrationData: {
@@ -37,162 +12,98 @@ export class AuthentificationService {
     username: string;
   } | null = null;
 
-  constructor() {}
-
-  async prepareRegistration(email: string, password: string, username: string): Promise<void | UserCredential> {
-    const usersCollection = collection(this.firestore, 'users');
-    const q = query(usersCollection, where('uEmail', '==', email));
-    return getDocs(q).then((querySnapshot) => {
-      if (!querySnapshot.empty) return Promise.reject('User with this email is found');
-      this.registrationData = {
-        email,
-        password,
-        username
-      };
-      return Promise.resolve();
+  constructor() {
+    this.supabase.supabase.auth.onAuthStateChange((_event, session) => {
+      this.currentUid = session?.user?.id ?? null;
     });
   }
 
-  async completeRegistration(profilePictureUrl: string): Promise<UserCredential> {
-    if (!this.registrationData) {
-      return Promise.reject('No active registration available');
-    }
-  
+  async prepareRegistration(email: string, password: string, username: string): Promise<void> {
+    const { data } = await this.supabase.supabase
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .maybeSingle();
+
+    if (data) throw { code: 'auth/email-already-in-use' };
+
+    this.registrationData = { email, password, username };
+  }
+
+  async completeRegistration(profilePictureUrl: string): Promise<any> {
+    if (!this.registrationData) throw new Error('No registration data');
     const { email, password, username } = this.registrationData;
-  
-    const userCredential = await createUserWithEmailAndPassword(
-      this.auth,
+
+    const { data, error } = await this.supabase.supabase.auth.signUp({
       email,
-      password
-    );
-    const uid = userCredential.user.uid;
-  
-    const userData: User = {
-      uId:            uid,
-      uName:          username,
-      uEmail:         email,
-      uUserImage:     'assets/img/' + profilePictureUrl,
-      uStatus:        false,
-      uLastReactions: ['👍', '😊'],
-    };
-  
-    const userRef    = collection(this.firestore, 'users');
-    const userDocRef = doc(userRef, uid);
-    await setDoc(userDocRef, userData);
-  
-    const defaultChannelId = 'KV14uSorBJhrWW92IeDS';
-    const channelRef       = doc(this.firestore, 'channels', defaultChannelId);
-    await updateDoc(channelRef, {
-      cUserIds: arrayUnion(uid),
+      password,
+      options: {
+        data: {
+          name: username,
+          user_image: profilePictureUrl,
+        },
+      },
     });
-  
+
+    if (error) throw error;
     this.registrationData = null;
-    return userCredential;
+    return data;
   }
 
-  async loginWithEmail(email: string, password: string): Promise<void | UserCredential> {
-    return signInWithEmailAndPassword(this.auth, email, password)
-    .then(async (result) => {
-      this.currentUid = result.user.uid;
-      const userRef = collection(this.firestore, 'users');
-      const userDocRef = doc(userRef, this.currentUid);
-      await updateDoc(userDocRef, { uStatus: true });
-      return result;
+  async loginWithEmail(email: string, password: string): Promise<boolean> {
+    const { data, error } = await this.supabase.supabase.auth.signInWithPassword({
+      email,
+      password,
     });
+
+    if (error) throw error;
+    this.currentUid = data.user?.id ?? null;
+    return !!data.user;
   }
 
-  async loginWithGoogle(): Promise<void | UserCredential> {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(this.auth, provider)
-    .then(async (result) => {
-      this.currentUid = result.user.uid;
-      const userData: User = {
-        uId: this.currentUid,
-        uName: result.user.displayName || '',
-        uEmail: result.user.email || '',
-        uUserImage: result.user.photoURL || 'assets/img/profile.png',
-        uStatus: true,
-        uLastReactions: ['👍', '😊']
-      };
-      const userRef = collection(this.firestore, 'users');
-      const userDocRef = doc(userRef, result.user.uid);
-      await setDoc(userDocRef, userData, { merge: true });
-      const defaultChannelId = 'KV14uSorBJhrWW92IeDS';
-      const channelRef = doc(this.firestore, 'channels', defaultChannelId);
-      await updateDoc(channelRef, { cUserIds: arrayUnion(this.currentUid) });
-      return result;
+  async loginWithGoogle(): Promise<any> {
+    const { data, error } = await this.supabase.supabase.auth.signInWithOAuth({
+      provider: 'google',
     });
+
+    if (error) throw error;
+    return data;
   }
 
-  async loginAsGuest(): Promise<void | UserCredential> {
-    return signInAnonymously(this.auth)
-    .then(async (result) => {
-      this.currentUid = result.user.uid;
-      const guestData: User = {
-        uId: this.currentUid,
-        uName: 'Gast',
-        uEmail: '',
-        uUserImage: 'assets/img/profile.png',
-        uStatus: true,
-        uLastReactions: ['👍', '😊']
-      };
-      const userRef = collection(this.firestore, 'users');
-      const userDocRef = doc(userRef, this.currentUid);
-      await setDoc(userDocRef, guestData, { merge: true });
-      const defaultChannelId = 'KV14uSorBJhrWW92IeDS';
-      const channelRef = doc(this.firestore, 'channels', defaultChannelId);
-      await updateDoc(channelRef, { cUserIds: arrayUnion(this.currentUid) });
-      return result;
-    });
+  async loginAsGuest(): Promise<any> {
+    const { data, error } = await this.supabase.supabase.auth.signInAnonymously();
+
+    if (error) throw error;
+    this.currentUid = data.user?.id ?? null;
+
+    if (data.user) {
+      await this.supabase.supabase.from('users').upsert({
+        id: data.user.id,
+        name: 'Gast',
+        email: '',
+        status: true,
+        user_image: 'assets/img/profile.png',
+      });
+    }
+
+    return data;
   }
 
   async sendResetPasswordEmail(email: string): Promise<void> {
-    const usersCollection = collection(this.firestore, 'users');
-    const q = query(usersCollection, where('uEmail', '==', email));
-    return getDocs(q).then((querySnapshot) => {
-      if (querySnapshot.empty) return Promise.reject('No user with this email found');
-      return sendPasswordResetEmail(this.auth, email);
-    });
+    const { error } = await this.supabase.supabase.auth.resetPasswordForEmail(email);
+    if (error) throw error;
   }
 
-  async confirmResetPassword(oobCode: string, newPassword: string): Promise<void> {
-    return confirmPasswordReset(this.auth, oobCode, newPassword);
+  async confirmResetPassword(_oobCode: string, newPassword: string): Promise<void> {
+    const { error } = await this.supabase.supabase.auth.updateUser({
+      password: newPassword,
+    });
+    if (error) throw error;
   }
 
   async logout(): Promise<void> {
-    const uid = this.currentUid;
-    const user = this.auth.currentUser;
-    
-    await this.handleAnonymousGuest(user, uid);
-    await this.updateUserStatus(uid);
-    await this.signOutUser();
-  }
-
-  private async handleAnonymousGuest(user: any | null, uid: string | null): Promise<void> {
-    if (user?.isAnonymous && uid) {
-      const userDocRef = doc(collection(this.firestore, 'users'), uid);
-      try {
-        await deleteDoc(userDocRef);
-        await user.delete();
-      } catch (deleteErr) {
-        console.warn('Gast-Löschen fehlgeschlagen, weiter mit Sign-Out', deleteErr);
-      }
-    }
-  }
-
-  private async updateUserStatus(uid: string | null): Promise<void> {
-    if (!uid) return;
-
-    const userDoc = doc(collection(this.firestore, 'users'), uid);
-    try {
-      await updateDoc(userDoc, { uStatus: false });
-    } catch (err) {
-      console.warn('Status-Update fehlgeschlagen (Dokument evtl. gelöscht)', err);
-    }
-  }
-
-  private async signOutUser(): Promise<void> {
-    await this.auth.signOut();
+    const { error } = await this.supabase.supabase.auth.signOut();
+    if (error) throw error;
     this.currentUid = null;
   }
 }

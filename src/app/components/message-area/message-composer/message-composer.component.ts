@@ -93,7 +93,7 @@ export class MessageComposerComponent {
   private searchUsers(input: string) {
     this.userService.getAllUsers().then((all) => {
       this.foundUsers = all.filter((u) =>
-        u.uName.toLowerCase().includes(input.toLowerCase())
+        u.name.toLowerCase().includes(input.toLowerCase())
       );
       this.foundChannels = [];
       this.displaySuggestions = this.foundUsers.length > 0;
@@ -103,7 +103,7 @@ export class MessageComposerComponent {
   private searchChannels(input: string) {
     this.channelService.getAllChannels().then((all) => {
       this.foundChannels = all.filter((c) =>
-        c.cName.toLowerCase().includes(input.toLowerCase())
+        c.name.toLowerCase().includes(input.toLowerCase())
       );
       this.foundUsers = [];
       this.displaySuggestions = this.foundChannels.length > 0;
@@ -128,10 +128,10 @@ export class MessageComposerComponent {
   }
 
   insertUserSuggestion(user: User) {
-    if (user?.uName) this.insertSuggestion(user.uName);
+    if (user?.name) this.insertSuggestion(user.name);
   }
   insertChannelSuggestion(ch: Channel) {
-    if (ch?.cName) this.insertSuggestion(ch.cName);
+    if (ch?.name) this.insertSuggestion(ch.name);
   }
 
   private insertSuggestion(text: string) {
