@@ -5,7 +5,7 @@
 >
   @if (chatType !== 'thread') {
     @for (reaction of activeUserData?.lastReactions; track reaction) {
-    <span (click)="reactionAdd.emit(reaction)">{{ reaction }}</span>
+    <span tabindex="0" role="button" (click)="reactionAdd.emit(reaction)" (keydown.enter)="reactionAdd.emit(reaction)">{{ reaction }}</span>
     }
   }
 

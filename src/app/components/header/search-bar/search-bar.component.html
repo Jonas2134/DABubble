@@ -13,7 +13,7 @@
     @if (showInformation) {
       <app-search-information
       [searchText]="searchValue"
-      (close)="closeSearchInfo()"
+      (closed)="closeSearchInfo()"
       (openChat)="openChat.emit($event)"
       (openThread)="openThread.emit($event)">
     </app-search-information>
@@ -22,9 +22,9 @@
 </div>
 
 @if (showInformation) {
-  <div 
-  class="backdrop" 
-  (click)="closeSearchInfo()">
+  <div
+  class="backdrop" tabindex="0" role="button"
+  (click)="closeSearchInfo()" (keydown.enter)="closeSearchInfo()">
 </div>
 }
  

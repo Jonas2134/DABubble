@@ -22,7 +22,7 @@ function strongPasswordValidator(): ValidatorFn {
     const hasUpper   = /[A-Z]/.test(value);
     const hasLower   = /[a-z]/.test(value);
     const hasNumber  = /\d/.test(value);
-    const hasSpecial = /[!@#\$%\^&\*\(\)_\+\-\=\[\]\{\};:'"\\|,.<>\/\?]/.test(value);
+    const hasSpecial = /[!@#$%^&*()_+\-=[\]{};:'"\\|,.<>/?]/.test(value);
 
     const valid = hasUpper && hasLower && hasNumber && hasSpecial;
     return valid ? null : { strongPassword: true };

@@ -10,10 +10,9 @@ import {
   inject,
   signal,
   computed,
-  DestroyRef,
+  DestroyRef, AfterViewInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
 import { MessageService } from '../../shared/services/message.service';
 import { UserService } from '../../shared/services/user.service';
 import { ChannelService } from '../../shared/services/channel.service';
@@ -47,14 +46,14 @@ import { DateStringPipe } from '../../shared/pipes/date-string.pipe';
   templateUrl: './message-area.component.html',
   styleUrls: ['./message-area.component.scss'],
 })
-export class MessageAreaComponent implements OnChanges {
+export class MessageAreaComponent implements OnChanges, AfterViewInit {
   private userService = inject(UserService);
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
   private dateFormat = inject(DateFormatService);
   private destroyRef = inject(DestroyRef);
 
-  private messagesSub?: Subscription;
+  private cleanupMessages?: () => void;
 
   @Input() chatType: 'private' | 'channel' | 'thread' | 'new' = 'private';
   @Input() chatId: string | null = null;
@@ -101,7 +100,7 @@ export class MessageAreaComponent implements OnChanges {
   isEditChannelOpen = false;
   isProfilOpen = false;
   isChannelMemberOpen = false;
-  messages: Message[] = [];
+  messages = signal<Message[]>([]);
   userProfil: User | null = null;
   threadContextName = '';
   threadReplyCount = 0;
@@ -113,7 +112,7 @@ export class MessageAreaComponent implements OnChanges {
   addMemberPopUp = false;
 
   constructor() {
-    this.destroyRef.onDestroy(() => this.messagesSub?.unsubscribe());
+    this.destroyRef.onDestroy(() => this.cleanupMessages?.());
   }
 
   ngAfterViewInit(): void {
@@ -141,27 +140,29 @@ export class MessageAreaComponent implements OnChanges {
   }
 
   private loadMessages() {
-    this.messagesSub?.unsubscribe();
+    this.cleanupMessages?.();
 
     if (!this.chatType || !this.chatId || !this.activeUserId) {
       this.resetMessages();
       return;
     }
 
-    this.messagesSub = this.messageService
-      .getMessages(this.chatType, this.chatId, this.activeUserId)
-      .subscribe((msgs) => this.handleIncomingMessages(msgs));
+    this.cleanupMessages = this.messageService.subscribeMessages(
+      this.chatType, this.chatId, this.activeUserId,
+      (msgs) => this.handleIncomingMessages(msgs)
+    );
   }
 
   private resetMessages() {
-    this.messages = [];
+    this.messages.set([]);
     this.threadReplyCount = 0;
   }
 
   private handleIncomingMessages(msgs: Message[]) {
-    const initial = this.messages.length === 0;
-    const more = msgs.length > this.messages.length;
-    this.messages = msgs;
+    const current = this.messages();
+    const initial = current.length === 0;
+    const more = msgs.length > current.length;
+    this.messages.set(msgs);
 
     if (this.chatType === 'thread') {
       this.threadReplyCount = Math.max(0, msgs.length - 1);
@@ -302,9 +303,10 @@ export class MessageAreaComponent implements OnChanges {
 
   shouldShowDateSeparator(i: number): boolean {
     if (i === 0) return true;
+    const msgs = this.messages();
     return (
-      this.dateFormat.getDay(this.messages[i].createdAt) !==
-      this.dateFormat.getDay(this.messages[i - 1].createdAt)
+      this.dateFormat.getDay(msgs[i].createdAt) !==
+      this.dateFormat.getDay(msgs[i - 1].createdAt)
     );
   }
 

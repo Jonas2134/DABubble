@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AddChannelComponent } from './add-channel/add-channel.component';
 import { ButtonComponent } from '../../button/button.component';
-import { Component, Input, EventEmitter, Output, inject, computed, signal } from '@angular/core';
+import { Component, Input, EventEmitter, Output, inject, computed } from '@angular/core';
 import { ChannelService } from '../../../shared/services/channel.service';
 import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delete.component';
 

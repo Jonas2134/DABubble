@@ -30,5 +30,5 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
   ]
 })
 export class SuccessIndicatorComponent {
-  @Input() visible: boolean = false;
+  @Input() visible = false;
 }

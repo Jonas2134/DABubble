@@ -40,7 +40,7 @@
         </section>
     }
     @if (showAddChannel) {
-        <app-add-channel [activeUserId]="activeUserId" (close)="toggleAddChannel()"></app-add-channel>
+        <app-add-channel [activeUserId]="activeUserId" (closed)="toggleAddChannel()"></app-add-channel>
     }
 
 </div>
@@ -49,6 +49,6 @@
     <app-permanent-delete
       [target]="'channel'"
       [id]="openChannelId"
-      (close)="isPermanentDeleteOpen = false"
+      (closed)="isPermanentDeleteOpen = false"
     ></app-permanent-delete>
 }

@@ -18,12 +18,12 @@
     @if (showNewSuggestions) {
     <ul class="new-suggestions" role="listbox">
       @for (ch of foundChannelsNew; track ch.id) {
-      <li role="option" (click)="selectChannelNew(ch)">
+      <li role="option" aria-selected="false" tabindex="0" (click)="selectChannelNew(ch)" (keydown.enter)="selectChannelNew(ch)">
         <span class="material-symbols">tag</span>
         <span>{{ ch.name }}</span>
       </li>
       } @for (u of foundUsersNew; track u.id) {
-      <li role="option" (click)="selectUserNew(u)">
+      <li role="option" aria-selected="false" tabindex="0" (click)="selectUserNew(u)" (keydown.enter)="selectUserNew(u)">
         <div class="user-img-status">
           <img src="{{ u.userImage }}" [alt]="u.name + ' Profilbild'" />
           <span [ngClass]="u.status ? 'online' : 'offline'"></span>
@@ -37,7 +37,7 @@
   } @else {
   <div class="chatbox-header">
     @if (chatType === 'private') {
-    <div class="private-header" (click)="toggleProfile(chatPartner())">
+    <div class="private-header" tabindex="0" role="button" (click)="toggleProfile(chatPartner())" (keydown.enter)="toggleProfile(chatPartner())">
       <div class="user-img-status">
         <img
           [src]="chatPartner()?.userImage || 'assets/img/profile.png'"
@@ -51,13 +51,13 @@
     </div>
     } @else if (chatType === 'channel') {
     <div class="channel-header">
-      <a class="channel-name" (click)="toggleEdit()">
+      <a class="channel-name" tabindex="0" role="button" (click)="toggleEdit()" (keydown.enter)="toggleEdit()">
         <div class="material-symbols tag-icon">tag</div>
         <h1>{{ channelData()?.name }}</h1>
         <div class="material-symbols tag-icon">keyboard_arrow_down</div>
       </a>
       <div class="channel-members">
-        <div class="channel-every-member" (click)="toggleChannelMembers()">
+        <div class="channel-every-member" tabindex="0" role="button" (click)="toggleChannelMembers()" (keydown.enter)="toggleChannelMembers()">
           @for (member of channelMembers().slice(0,3); track member) {
           <img src="{{ member.userImage }}" [alt]="member.name" />
           } @if (channelMembers().length > 3) {
@@ -85,7 +85,7 @@
     @if (chatType === 'thread') {
 
     <app-message
-      [message]="messages[0]"
+      [message]="messages()[0]"
       [activeUserId]="activeUserId"
       [chatType]="chatType"
       (profileClick)="openUserProfil($event)"
@@ -98,7 +98,7 @@
       <span></span>
     </div>
 
-    @for (reply of messages.slice(1); track reply.id; let i = $index) { @if
+    @for (reply of messages().slice(1); track reply.id; let i = $index) { @if
     (shouldShowDateSeparator(i + 1)) {
     <div class="date-separator">
       <span></span>
@@ -114,7 +114,7 @@
       (profileClick)="openUserProfil($event)"
       (threadOpen)="handleThreadClick($event)"
     ></app-message>
-    } } @else { @if (messages && messages.length === 0) { @if(chatType ===
+    } } @else { @if (messages().length === 0) { @if(chatType ===
     'private'){
     <div class="empty-private-chat">
       <div>
@@ -123,7 +123,7 @@
       </div>
       <p>
         Diese Unterhaltung findet nur zwischen
-        <span (click)="toggleProfile(chatPartner())"
+        <span tabindex="0" role="link" (click)="toggleProfile(chatPartner())" (keydown.enter)="toggleProfile(chatPartner())"
           >&#64;{{ chatPartner()?.name }}</span
         >
         und dir statt
@@ -140,7 +140,7 @@
         <span>&#64;{{ channelData()?.name }}.</span>
       </p>
     </div>
-    } } @else { @for (message of messages; track message.id; let i = $index) {
+    } } @else { @for (message of messages(); track message.id; let i = $index) {
     @if (shouldShowDateSeparator(i)) {
     <div class="date-separator">
       <span></span>
@@ -158,7 +158,7 @@
     } } }
   </div>
 
-  @if (chatType != 'new') {
+  @if (chatType !== 'new') {
   <div class="chatbox-textfield thread-margin">
     <app-message-composer
       #composer
@@ -174,7 +174,7 @@
     [activeUserId]="activeUserId"
     [channelData]="channelData()"
     (addMember)="addChannelMember()"
-    (close)="toggleEdit()"
+    (closed)="toggleEdit()"
   ></app-channel-leave>
   } @if (isProfilOpen) {
   <app-profil
@@ -187,25 +187,25 @@
     #profilRef
     size="big"
     [showButton]="activeUserId !== userProfil?.id"
-    (close)="toggleProfile(null)"
+    (closed)="toggleProfile(null)"
     (openChat)="openChat.emit($event)"
   ></app-profil>
   } @if (isChannelMemberOpen) {
   <app-channel-members
     [newChannelMembers]="newChannelMembers"
-    [channelName]="channelData()?.name"
+    [channelName]="channelData()?.name ?? ''"
     [channelMembers]="channelMembers()"
     [activeUserId]="activeUserId"
-    [channelId]="channelData()?.id"
+    [channelId]="channelData()?.id ?? ''"
     (addMember)="addChannelMember()"
-    (close)="toggleChannelMembers()"
+    (closed)="toggleChannelMembers()"
     (openChat)="openChat.emit($event)"
   ></app-channel-members>
 
   }
 </section>
 } @if (addMemberPopUp) {
-<div (click)="closeAddMember()" class="memberAddMessage" #memberAddWrapper>
+<div tabindex="0" role="button" (click)="closeAddMember()" (keydown.enter)="closeAddMember()" class="memberAddMessage" #memberAddWrapper>
   <app-add-new-members
     (click)="$event.stopPropagation()"
     [activeUserId]="activeUserId"
@@ -214,7 +214,7 @@
     [channelName]="channelData()?.name ?? ''"
     [showInput]="true"
     [showXLine]="false"
-    (close)="closeAddMember()"
+    (closed)="closeAddMember()"
   ></app-add-new-members>
 </div>
 }

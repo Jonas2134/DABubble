@@ -21,7 +21,7 @@ export class AccessComponent implements OnInit {
   private route = inject(ActivatedRoute);
   public componentSwitcher = inject(ComponentSwitcherService);
 
-  showAnimation: boolean = false;
+  showAnimation = false;
   LoginComponent = LoginComponent;
   ImprintComponent = ImprintComponent;
   PrivacyComponent = PrivacyComponent;

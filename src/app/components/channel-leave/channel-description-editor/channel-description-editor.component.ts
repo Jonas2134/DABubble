@@ -45,6 +45,7 @@ export class ChannelDescriptionEditorComponent {
         this.channelData!.description = newDesc;
         this.descriptionUpdated.emit(newDesc);
       })
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       .catch(() => {});
   }
 }

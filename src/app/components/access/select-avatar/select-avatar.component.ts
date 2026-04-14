@@ -27,7 +27,7 @@ export class SelectAvatarComponent {
   ];
   selectedAvatar: string | null = null;
   username: string | undefined | null = this.authService.registrationData()?.username;
-  isConfirmationVisible: boolean = false;
+  isConfirmationVisible = false;
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
@@ -69,7 +69,7 @@ export class SelectAvatarComponent {
     this.isConfirmationVisible = visible;
   }
 
-  private handleAvatarError(error: any): void {
+  private handleAvatarError(error: unknown): void {
     this.visibleBtn.show();
     console.error('Error when adding the profile picture:', error);
   }

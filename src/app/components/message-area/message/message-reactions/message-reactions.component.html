@@ -8,17 +8,17 @@
       <div>{{ reaction.namesLine }}</div>
       <p>{{ reaction.actionLine }}</p>
     </div>
-    <span (click)="reactionAdd.emit(reaction.emoji)">{{ reaction.emoji }} {{ reaction.count }}</span>
+    <span tabindex="0" role="button" (click)="reactionAdd.emit(reaction.emoji)" (keydown.enter)="reactionAdd.emit(reaction.emoji)">{{ reaction.emoji }} {{ reaction.count }}</span>
   </div>
   }
   @if (reactions.length > shownReactionNumber) {
-  <div (click)="setShownReactionNumber(reactions.length)">
+  <div tabindex="0" role="button" (click)="setShownReactionNumber(reactions.length)" (keydown.enter)="setShownReactionNumber(reactions.length)">
     +{{ reactions.length - shownReactionNumber }} weitere
   </div>
   }
   @if (reactions.length === shownReactionNumber && shownReactionNumber > 7) {
-  <div (click)="setShownReactionNumber(reactions.length)">Weniger anzeigen</div>
+  <div tabindex="0" role="button" (click)="setShownReactionNumber(reactions.length)" (keydown.enter)="setShownReactionNumber(reactions.length)">Weniger anzeigen</div>
   }
-  <span class="material-symbols" (click)="emojiPickerToggle.emit($event)">add_reaction</span>
+  <span class="material-symbols" tabindex="0" role="button" (click)="emojiPickerToggle.emit($event)" (keydown.enter)="emojiPickerToggle.emit()">add_reaction</span>
 </div>
 }

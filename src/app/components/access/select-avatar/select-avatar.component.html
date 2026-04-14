@@ -18,7 +18,8 @@
   <div class="avatar-container">
     @for (avatar of avatars; track $index) {
     <img
-      (click)="selectAvatar(avatar)"
+      tabindex="0" role="button"
+      (click)="selectAvatar(avatar)" (keydown.enter)="selectAvatar(avatar)"
       [class.selected]="selectedAvatar === avatar"
       [src]="'assets/img/' + avatar"
       [alt]="avatar"

@@ -6,7 +6,7 @@ import {
   EventEmitter,
   ElementRef,
   ViewChild,
-  inject,
+  inject, OnInit,
 } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -21,26 +21,26 @@ import { UserService } from '../../shared/services/user.service';
   styleUrl: './profil.component.scss',
 })
 
-export class ProfilComponent {
+export class ProfilComponent implements OnInit {
   private originalUserImage!: string;
   
   private router = inject(Router);
   private userService = inject(UserService);
-  isActive: boolean = true;
-  showEditProfil: boolean = false;
+  isActive = true;
+  showEditProfil = false;
   showAvatarChoice = false;
   editedUserName = new FormControl('');
   items = [1, 2, 3, 4, 5, 6];
 
-  @Input() showButton: boolean = false;
-  @Input() userName: string = '';
-  @Input() userEmail: string = '';
-  @Input() userImage: string = '';
-  @Input() userStatus: boolean = false;
-  @Input() userId: string = '';
-  @Input() activeUserId: string = '';
+  @Input() showButton = false;
+  @Input() userName = '';
+  @Input() userEmail = '';
+  @Input() userImage = '';
+  @Input() userStatus = false;
+  @Input() userId = '';
+  @Input() activeUserId = '';
   @Input() size: 'small' | 'big' = 'small';
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{chatType: 'private'; chatId: string}>();
   @ViewChild('profilWrapper') profilWrapper?: ElementRef;
 
@@ -52,7 +52,7 @@ export class ProfilComponent {
 
   closeProfil() {
     this.showAvatarChoice = false;
-    this.close.emit();
+    this.closed.emit();
   }
 
 
@@ -81,7 +81,7 @@ export class ProfilComponent {
       event.target
     );
     if (!insideSection) {
-      this.close.emit();
+      this.closed.emit();
     }
   }
 
@@ -116,6 +116,6 @@ export class ProfilComponent {
 
   onStartChat() {
     this.openChat.emit({ chatType: 'private', chatId: this.userId! });
-    this.close.emit();
+    this.closed.emit();
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { IconComponent } from '../../icon/icon.component';
 import {
   trigger,
@@ -9,9 +9,6 @@ import {
   animate,
   keyframes,
 } from '@angular/animations';
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-logo',
@@ -84,17 +81,19 @@ import { map } from 'rxjs';
   ],
 })
 export class LogoComponent implements OnInit {
-  private bp = inject(BreakpointObserver);
-  private isMobileSignal = toSignal(
-    this.bp.observe(['(max-width: 700px)']).pipe(map(r => r.matches)),
-    { initialValue: false }
-  );
+  private destroyRef = inject(DestroyRef);
+  private mobileQuery = window.matchMedia('(max-width: 700px)');
+  private isMobileSignal = signal(this.mobileQuery.matches);
 
   logoPosition: 'center' | 'topLeft' | 'centerMobile' | 'topLeftMobile' = 'center';
   textState = 'hidden';
   backgroundState = 'visible';
 
   ngOnInit(): void {
+    const handler = (e: MediaQueryListEvent) => this.isMobileSignal.set(e.matches);
+    this.mobileQuery.addEventListener('change', handler);
+    this.destroyRef.onDestroy(() => this.mobileQuery.removeEventListener('change', handler));
+
     localStorage.setItem('showAnimation', 'true');
 
     const isMobile = this.isMobileSignal();

@@ -1,5 +1,4 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Message } from '../interfaces/message.interface';
 import { Reaction } from '../interfaces/reaction.interface';
 import { SupabaseService } from './supabase.service';
@@ -74,61 +73,55 @@ export class MessageService {
     return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
 
-  getMessages(
+  subscribeMessages(
     chatType: 'private' | 'channel' | 'thread' | 'new',
     chatId: string | null,
-    activeUserId: string | null
-  ): Observable<Message[]> {
+    activeUserId: string | null,
+    onUpdate: (messages: Message[]) => void
+  ): () => void {
     if (chatType === 'new' || !chatId) {
-      return new Observable(sub => { sub.next([]); });
+      onUpdate([]);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
     }
 
-    return new Observable(subscriber => {
-      this.fetchMessages(chatType, chatId, activeUserId).then(msgs =>
-        subscriber.next(msgs)
-      );
+    this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
 
-      const channelName = `msgs-${chatType}-${chatId}-${++this.subCounter}`;
-      const sub = this.supabaseService.supabase
-        .channel(channelName)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
-          this.fetchMessages(chatType, chatId, activeUserId).then(msgs =>
-            subscriber.next(msgs)
-          );
-        })
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, () => {
-          this.fetchMessages(chatType, chatId, activeUserId).then(msgs =>
-            subscriber.next(msgs)
-          );
-        })
-        .subscribe();
+    const channelName = `msgs-${chatType}-${chatId}-${++this.subCounter}`;
+    const sub = this.supabaseService.supabase
+      .channel(channelName)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
+        this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, () => {
+        this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
+      })
+      .subscribe();
 
-      return () => {
-        this.supabaseService.supabase.removeChannel(sub);
-      };
-    });
+    return () => this.supabaseService.supabase.removeChannel(sub);
   }
 
-  getThreadMessages(chatId: string | null): Observable<Message[]> {
-    if (!chatId) {
-      return new Observable(sub => { sub.next([]); });
+  subscribeThreadMessages(
+    threadId: string | null,
+    onUpdate: (messages: Message[]) => void
+  ): () => void {
+    if (!threadId) {
+      onUpdate([]);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      return () => {};
     }
 
-    return new Observable(subscriber => {
-      this.fetchThreadMessages(chatId).then(msgs => subscriber.next(msgs));
+    this.fetchThreadMessages(threadId).then(onUpdate);
 
-      const channelName = `thread-${chatId}-${++this.subCounter}`;
-      const sub = this.supabaseService.supabase
-        .channel(channelName)
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
-          this.fetchThreadMessages(chatId).then(msgs => subscriber.next(msgs));
-        })
-        .subscribe();
+    const channelName = `thread-${threadId}-${++this.subCounter}`;
+    const sub = this.supabaseService.supabase
+      .channel(channelName)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
+        this.fetchThreadMessages(threadId).then(onUpdate);
+      })
+      .subscribe();
 
-      return () => {
-        this.supabaseService.supabase.removeChannel(sub);
-      };
-    });
+    return () => this.supabaseService.supabase.removeChannel(sub);
   }
 
   private async fetchThreadMessages(threadId: string): Promise<Message[]> {

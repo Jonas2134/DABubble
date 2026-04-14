@@ -40,17 +40,19 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
 })
 export class CustomInputComponent implements ControlValueAccessor {
-  @Input() type: string = 'text';
-  @Input() name: string = '';
-  @Input() placeholder: string = '';
-  @Input() autocomplete: string = 'on';
+  @Input() type = 'text';
+  @Input() name = '';
+  @Input() placeholder = '';
+  @Input() autocomplete = 'on';
 
   @ViewChild('inputElement') inputElement!: ElementRef;
 
-  value: string = '';
-  onChange: any = () => {};
-  onTouch: any = () => {};
-  disabled: boolean = false;
+  value = '';
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onChange: (value: string) => void = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onTouch: () => void = () => {};
+  disabled = false;
 
   onInputChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
@@ -69,11 +71,11 @@ export class CustomInputComponent implements ControlValueAccessor {
     }
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (value: string) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
 

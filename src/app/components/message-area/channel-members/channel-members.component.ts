@@ -29,20 +29,20 @@ import { ButtonComponent } from '../../button/button.component';
 export class ChannelMembersComponent{
   @Input() channelMembers: User[] = [];
   @Input() activeUserId: string | null = null;
-  @Input() channelId: any;
-  @Input() channelName: any = '';
+  @Input() channelId = '';
+  @Input() channelName = '';
   @Input() activChannelMemberProfil: User | null = null;
-  @Input() newChannelMembers: boolean = false;
-  @Input() isChannelMemberProfilOpen: boolean = false;
+  @Input() newChannelMembers = false;
+  @Input() isChannelMemberProfilOpen = false;
   @Output() newChannelMembersChange = new EventEmitter<boolean>();
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{chatType: 'private'; chatId: string}>();
   @ViewChild('channelWrapper') channelWrapper?: ElementRef;
   @ViewChild('memberAddWrapper') memberAddWrapper?: ElementRef;
 
   
   closeChannelMembers() { 
-    this.close.emit();
+    this.closed.emit();
   }
 
 

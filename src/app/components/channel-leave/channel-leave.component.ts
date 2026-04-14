@@ -36,14 +36,14 @@ export class ChannelLeaveComponent {
   @Input() channelMembers: User[] = [];
   @Input() activeUserId: string | null = null;
   @Input() activChannelMemberProfil: User | null = null;
-  @Input() newChannelMembers: boolean = false;
-  @Input() channelName: string = '';
-  @Input() isChannelMemberProfilOpen: boolean = false;
+  @Input() newChannelMembers = false;
+  @Input() channelName = '';
+  @Input() isChannelMemberProfilOpen = false;
 
   @Output() newChannelMembersChange = new EventEmitter<boolean>();
   @Output() addMember = new EventEmitter<void>();
   @Output() showProfil = new EventEmitter<User>();
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   @Output() nameUpdated = new EventEmitter<string>();
   @Output() openChat = new EventEmitter<{ chatType: 'private'; chatId: string }>();
 
@@ -63,7 +63,7 @@ export class ChannelLeaveComponent {
   }
 
   closeWindow() {
-    this.close.emit();
+    this.closed.emit();
   }
 
   closeAddMember() {

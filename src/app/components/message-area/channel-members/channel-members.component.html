@@ -1,15 +1,15 @@
-<div class="overlay" role="dialog" aria-modal="true" aria-label="Mitglieder verwalten" (click)="onOverlayClick($event)">
-  <div #memberAddWrapper (click)="$event.stopPropagation()" [class.hidden]="!newChannelMembers">
+<div class="overlay" role="dialog" aria-modal="true" aria-label="Mitglieder verwalten" (click)="onOverlayClick($event)" (keydown.escape)="closeChannelMembers()">
+  <div #memberAddWrapper tabindex="0" role="document" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" [class.hidden]="!newChannelMembers">
     <app-add-new-members
       [channelMembers]="channelMembers"
       [activeUserId]="activeUserId"
       [channelId]="channelId"
       [channelName]="channelName"
-      (close)="closeAddMembers()"
+      (closed)="closeAddMembers()"
       [showInput]="true"
     ></app-add-new-members>
   </div>
-  <section #channelWrapper (click)="$event.stopPropagation()" [class.hidden]="newChannelMembers">
+  <section #channelWrapper tabindex="0" role="document" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()" [class.hidden]="newChannelMembers">
     <div class="memberlist-header">
       <h1>Mitglieder</h1>
       <app-button variant="icon" color="white" icon="close" ariaLabel="Schließen" (clicked)="closeChannelMembers()"></app-button>
@@ -33,7 +33,7 @@
     #profilRef
     size="big"
     [showButton]="activeUserId !== activChannelMemberProfil?.id"
-    (close)="toggleMemberProfil()"
+    (closed)="toggleMemberProfil()"
   ></app-profil>
 }
 

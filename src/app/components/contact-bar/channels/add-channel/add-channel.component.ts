@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { AnimationEvent } from '@angular/animations';
-import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild, inject, DestroyRef } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, ElementRef, EventEmitter, HostListener, Output, Input, ViewChild, inject, effect, signal } from '@angular/core';
 import { AddNewMembersComponent } from '../../../add-new-members/add-new-members.component';
 import { ButtonComponent } from '../../../button/button.component';
-import { debounceTime, distinctUntilChanged, Subject, switchMap, tap } from 'rxjs';
 import { ChannelService } from '../../../../shared/services/channel.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -40,9 +38,8 @@ const popupAnim = trigger('popupAnim', [
 export class AddChannelComponent {
   private elRef = inject(ElementRef);
   private channelService = inject(ChannelService);
-  private destroyRef = inject(DestroyRef);
 
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   @Input() activeUserId!: string | null;
 
   showAddMember = true;
@@ -52,22 +49,24 @@ export class AddChannelComponent {
   isMobile = window.innerWidth <= 600;
   nameExists = false;
   isVisible = true;
-  private nameCheck$ = new Subject<string>();
+  private nameToCheck = signal('');
   @ViewChild('addChannel') channelWrapper?: ElementRef;
   @ViewChild('addChannelAll') memberAddWrapper?: ElementRef;
 
   get animMode() { return this.isMobile ? 'mobile' : 'desktop'; }
 
   constructor() {
-    this.nameCheck$
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        switchMap(name => this.channelService.checkChannelNameExists(name)),
-        tap(exists => (this.nameExists = exists)),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe();
+    effect((onCleanup) => {
+      const name = this.nameToCheck();
+      if (!name) {
+        this.nameExists = false;
+        return;
+      }
+      const timeout = setTimeout(async () => {
+        this.nameExists = await this.channelService.checkChannelNameExists(name);
+      }, 300);
+      onCleanup(() => clearTimeout(timeout));
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -82,7 +81,7 @@ export class AddChannelComponent {
 
   triggerSlideOut() {
     if (this.showAddMember) {
-      this.close.emit();
+      this.closed.emit();
     } else {
       this.isVisible = false;
     }
@@ -90,7 +89,7 @@ export class AddChannelComponent {
 
   onAnimDone(event: AnimationEvent) {
     if (event.toState === 'void') {
-      this.close.emit();
+      this.closed.emit();
     }
   }
 
@@ -100,16 +99,11 @@ export class AddChannelComponent {
   }
 
   closeWindow() {
-    this.close.emit();
+    this.closed.emit();
   }
 
   checkNameUnique() {
-    const name = this.channelName.value?.trim() ?? '';
-    if (!name) {
-      this.nameExists = false;
-      return;
-    }
-    this.nameCheck$.next(name);
+    this.nameToCheck.set(this.channelName.value?.trim() ?? '');
   }
 
   addNewChannel(description: string) {

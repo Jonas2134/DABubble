@@ -17,12 +17,12 @@ export class PermanentDeleteComponent {
   private channelService = inject(ChannelService);
 
   @Input({ required: true }) target!: DeleteTarget;
-  @Input({ required: true }) id!: any;
+  @Input({ required: true }) id!: string;
 
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
 
   onNo(): void {
-    this.close.emit();
+    this.closed.emit();
   }
 
   onYes(): void {
@@ -30,7 +30,7 @@ export class PermanentDeleteComponent {
       case 'message':
         this.messageService
           .deleteMessage(this.id)
-          .then(() => this.close.emit())
+          .then(() => this.closed.emit())
           .catch((err) =>
             console.error('Fehler beim Löschen der Nachricht', err)
           );
@@ -39,15 +39,15 @@ export class PermanentDeleteComponent {
       case 'channel':
         this.channelService
           .deleteChannel(this.id)
-          .then(() => this.close.emit())
+          .then(() => this.closed.emit())
           .catch((err) =>
             console.error('Fehler beim Löschen des Channels', err)
           );
-        this.close.emit();
+        this.closed.emit();
         break;
       default:
         console.warn('Unbekannter Lösch‑Typ:', this.target);
-        this.close.emit();
+        this.closed.emit();
     }
   }
   get heading(): string {

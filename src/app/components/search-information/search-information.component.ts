@@ -54,7 +54,7 @@ export class SearchInformationComponent implements OnInit {
     this.handleSearch(this._searchText);
   }
 
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{
     chatType: 'private' | 'channel' | 'new';
     chatId: string;
@@ -191,7 +191,7 @@ export class SearchInformationComponent implements OnInit {
 
   selectChat(chatId: string, chatType: 'private' | 'channel') {
     this.openChat.emit({ chatType, chatId });
-    this.close.emit();
+    this.closed.emit();
   }
 
   selectThread(hit: ThreadHit) {
@@ -200,6 +200,6 @@ export class SearchInformationComponent implements OnInit {
       chatId: hit.chatId,
       threadId: hit.threadId,
     });
-    this.close.emit();
+    this.closed.emit();
   }
 }

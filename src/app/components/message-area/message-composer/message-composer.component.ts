@@ -10,6 +10,7 @@ import {
   inject,
 } from '@angular/core';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ButtonComponent } from '../../button/button.component';
 
 import { UserService } from '../../../shared/services/user.service';
@@ -85,9 +86,11 @@ export class MessageComposerComponent {
       return;
     }
 
-    message[mentionPos] === '@'
-      ? this.searchUsers(mentionText)
-      : this.searchChannels(mentionText);
+    if (message[mentionPos] === '@') {
+      this.searchUsers(mentionText);
+    } else {
+      this.searchChannels(mentionText);
+    }
   }
 
   private searchUsers(input: string) {
@@ -165,8 +168,9 @@ export class MessageComposerComponent {
     }
   }
 
-  addEmoji(emoji: any) {
+  addEmoji(emoji: EmojiEvent) {
     const char = emoji.emoji.native;
+    if (!char) return;
     const ta = this.messageInputRef.nativeElement;
     const pos = ta.selectionStart;
 

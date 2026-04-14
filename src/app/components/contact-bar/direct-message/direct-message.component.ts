@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, inject, computed } from '@angular/core';
-import { User } from '../../../shared/interfaces/user.interface';
 import { UserService } from '../../../shared/services/user.service';
 
 @Component({

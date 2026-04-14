@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, Type, signal } from '@angular/core';
 import { LoginComponent } from '../../components/access/login/login.component';
 import { CreateAccountComponent } from '../../components/access/create-account/create-account.component';
 import { ImprintComponent } from '../../components/access/imprint/imprint.component';
@@ -12,8 +12,9 @@ import { GoToEmailComponent } from '../../components/access/go-to-email/go-to-em
   providedIn: 'root'
 })
 export class ComponentSwitcherService {
-  currentComponent = signal<any>(LoginComponent);
+  currentComponent = signal<Type<unknown>>(LoginComponent);
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {}
 
   setComponent(componentName: string): void {

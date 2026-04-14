@@ -21,10 +21,10 @@ import { DeviceVisibleComponent } from '../../device-visible/device-visible.comp
   styleUrl: './search-bar.component.scss',
 })
 export class SearchBarComponent {
-  searchValue: string = '';
-  searchText: string = '';
-  charCount: number = 0;
-  showInformation: boolean = false;
+  searchValue = '';
+  searchText = '';
+  charCount = 0;
+  showInformation = false;
   @ViewChild('searchWrapper', { static: false }) searchWrapper?: ElementRef;
 
   @Output() openChat = new EventEmitter<{

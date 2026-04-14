@@ -38,7 +38,7 @@ export class ConfirmPasswordComponent implements OnInit {
 
   newPassword!: FormGroup;
   oobCode: string | null = null;
-  isConfirmationVisible: boolean = false;
+  isConfirmationVisible = false;
 
   static passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
     const newPassword = group.get('newPassword')?.value;
@@ -103,7 +103,7 @@ export class ConfirmPasswordComponent implements OnInit {
     this.isConfirmationVisible = visible;
   }
   
-  private handleResetError(error: any): void {
+  private handleResetError(error: unknown): void {
     this.visibleBtn.show();
     console.error('Error when resetting the password:', error);
   }

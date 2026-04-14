@@ -1,4 +1,4 @@
-<div class="profil-overlay" role="dialog" aria-modal="true" [attr.aria-label]="showEditProfil ? 'Profil bearbeiten' : 'Profil'" (click)="onMainClick($event)">
+<div class="profil-overlay" role="dialog" aria-modal="true" [attr.aria-label]="showEditProfil ? 'Profil bearbeiten' : 'Profil'" (click)="onMainClick($event)" (keydown.escape)="closeProfil()">
     <section #profilWrapper [ngClass]="size">
         <header>
             @if (!showEditProfil) {
@@ -21,7 +21,7 @@
                     <div class="avatarChoice">
                         @for (item of items; track $index) {
                             <button (click)="selectAvatar(item)" class="avatarButtons">
-                                <img [src]="'assets/img/avatar-' + item + '.png'">
+                                <img [src]="'assets/img/avatar-' + item + '.png'" [alt]="'Avatar ' + item">
                             </button>
                         }
                     </div>
@@ -33,7 +33,7 @@
                 <div class="nameEdit">
                     <span>{{ userName }}</span>
                     @if (!showButton && userName !== 'Gast' && userName !== 'Guest' ) {
-                        <a (click)="onEditClick()">Bearbeiten</a>
+                        <a tabindex="0" role="button" (click)="onEditClick()" (keydown.enter)="onEditClick()">Bearbeiten</a>
                         <button (click)="onEditClick()" class="editIconShow">
                             <div class="material-symbols editIcon">Edit</div>
                         </button>
@@ -77,7 +77,7 @@
         @if (showButton) {
             <div class="messageArea">
                 <button (click)="onStartChat()" class="messageButton messageButtonBackgroundBlue">
-                    <img src="assets/icons/mode_comment.svg">
+                    <img src="assets/icons/mode_comment.svg" alt="Nachricht senden">
                     <span>Nachricht</span>
                 </button>
             </div>

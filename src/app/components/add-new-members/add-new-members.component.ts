@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ViewChildren, ElementRef, QueryList, OnChanges, OnInit, ViewEncapsulation, inject, DestroyRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, ViewChild, ViewChildren, ElementRef, QueryList, OnChanges, OnInit, ViewEncapsulation, inject, DestroyRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { User } from '../../shared/interfaces/user.interface';
 import { ChannelService } from '../../shared/services/channel.service';
 import { UserService } from '../../shared/services/user.service';
@@ -17,7 +17,7 @@ import { ButtonComponent } from '../button/button.component';
     '(click)': '$event.stopPropagation()'
   }
 })
-export class AddNewMembersComponent implements OnInit, OnChanges {
+export class AddNewMembersComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private channelService = inject(ChannelService);
   private userService = inject(UserService);
   private destroyRef = inject(DestroyRef);
@@ -40,12 +40,12 @@ export class AddNewMembersComponent implements OnInit, OnChanges {
 
   @Input() channelMembers: User[] = [];
   @Input() activeUserId!: string | null;
-  @Input() channelId: string = '';
-  @Input() channelName: string = '';
+  @Input() channelId = '';
+  @Input() channelName = '';
   @Input() showInput = true;
   @Input() channelDescription = '';
   @Input() showXLine = false;
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   @ViewChild('memberInput', { static: false }) memberInput?: ElementRef<HTMLElement>;
   @ViewChildren('containerDelete', { read: ElementRef }) pills!: QueryList<ElementRef<HTMLDivElement>>;
 
@@ -159,7 +159,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges {
   trackById(_: number, u: User) { return u.id; }
 
   emitClose() {
-    this.close.emit();
+    this.closed.emit();
   }
 
   inputNameClose(): void {
@@ -177,7 +177,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges {
     );
     this.selectedMemberIds = [];
     this.selectedMembers = [];
-    this.close.emit();
+    this.closed.emit();
   }
 
   async createNewChannel(name: string, description: string) {

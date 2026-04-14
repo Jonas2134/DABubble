@@ -16,7 +16,7 @@
   <div class="addEveryOrOneMember">
     <div class="custom-radio">
       <input type="radio" [formControl]="selectedOption" name="memberOption" value="option1" id="option1"/>
-      <span class="radio-mark" (click)="selectedOption.setValue('option1')"></span>
+      <span class="radio-mark" tabindex="0" role="radio" [attr.aria-checked]="selectedOption.value === 'option1'" (click)="selectedOption.setValue('option1')" (keydown.enter)="selectedOption.setValue('option1')"></span>
       <span class="radio-label">
         Alle Mitglieder von
         <a class="devspaceElement" (click)="selectedOption.setValue('option1')" href="javascript:void(0)">Devspace</a>
@@ -25,7 +25,7 @@
       </div>
     <div class="custom-radio">
       <input type="radio" [formControl]="selectedOption" name="memberOption" value="option2" id="option2"/>
-      <span class="radio-mark" (click)="selectedOption.setValue('option2')"></span>
+      <span class="radio-mark" tabindex="0" role="radio" [attr.aria-checked]="selectedOption.value === 'option2'" (click)="selectedOption.setValue('option2')" (keydown.enter)="selectedOption.setValue('option2')"></span>
       <span class="radio-label">Bestimmte Leute hinzufügen</span>
     </div>
   </div>
@@ -33,9 +33,9 @@
 @if ((!showInput && selectedOption.value === 'option2') || (showInput)) {
   <ng-container >
     @if (showOverlay) {
-      <div [ngClass]="{ 'overlayAddNewMember': showXLine && showInput, 'overlayAddNewMemberAlternative': showXLine && !showInput }" (click)="onFocusOut()"></div>
+      <div [ngClass]="{ 'overlayAddNewMember': showXLine && showInput, 'overlayAddNewMemberAlternative': showXLine && !showInput }" tabindex="0" role="button" (click)="onFocusOut()" (keydown.enter)="onFocusOut()"></div>
     }
-    <div class="popup" (click)="$event.stopPropagation()">
+    <div class="popup" tabindex="0" role="group" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
       <div class="addInputField" #inputWrapper>
         @if (selectedMembers.length > 0) {
         <div class="inputNamePush" #memberInput>
@@ -64,7 +64,7 @@
           } 
         } 
         @if (showMember ) {
-          <div class="showMembers" (click)="$event.stopPropagation()">
+          <div class="showMembers" tabindex="0" role="listbox" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
             @for(member of filteredMembers; track trackById) {
             <button (mousedown)="toggleMember(member)" [class.selected]="selectedMemberIds.includes(member.id)" class="memberItem">
               <div class="user-img-status">

@@ -16,7 +16,7 @@
     <div class="channelFields">
       <span class="channelField">Channel-Name</span>
       <div class="inputSpan">
-        <img src="assets/icons/hashtag_grey.svg" />
+        <img src="assets/icons/hashtag_grey.svg" alt="" aria-hidden="true" />
         <input #channelNameInput [formControl]="channelName" (input)="checkNameUnique()" placeholder="z.B. Kooperationsprojekte" type="text" aria-label="Channel-Name"/>
       </div>
       @if (channelName.value && channelName.value.length < 3) {
@@ -57,7 +57,7 @@
         <div [@popupAnim]="animMode" (@popupAnim.done)="onAnimDone($event)" class="popup-wrapper">
           <app-add-new-members
               [activeUserId]="activeUserId"
-              (close)="triggerSlideOut()"
+              (closed)="triggerSlideOut()"
               [channelId]="channelId"
               [channelName]="channelName.value ?? ''"
               [channelDescription]="channelDescription"

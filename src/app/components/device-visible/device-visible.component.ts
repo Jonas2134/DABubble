@@ -1,12 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-device-visible',
-  template: `<ng-container *ngIf="shouldShow"
-    ><ng-content></ng-content
-  ></ng-container>`,
-  imports: [CommonModule],
+  template: `@if (shouldShow) {<ng-content></ng-content>}`,
   standalone: true,
 })
 export class DeviceVisibleComponent implements OnInit {

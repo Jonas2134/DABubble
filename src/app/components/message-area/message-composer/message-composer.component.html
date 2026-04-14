@@ -7,7 +7,7 @@
 } @if (displaySuggestions) {
 <ul class="suggestions" role="listbox">
   @for(user of foundUsers; track user) {
-  <li role="option" (click)="insertUserSuggestion(user)">
+  <li role="option" aria-selected="false" tabindex="0" (click)="insertUserSuggestion(user)" (keydown.enter)="insertUserSuggestion(user)">
     <div class="user-img-status">
       <img src="{{ user?.userImage }}" [alt]="user?.name + ' Profilbild'" />
       <span [ngClass]="user?.status ? 'online' : 'offline'"></span>
@@ -15,7 +15,7 @@
     <span>{{ user?.name }}</span>
   </li>
   } @for(channel of foundChannels; track channel) {
-  <li role="option" (click)="insertChannelSuggestion(channel)">#{{ channel?.name }}</li>
+  <li role="option" aria-selected="false" tabindex="0" (click)="insertChannelSuggestion(channel)" (keydown.enter)="insertChannelSuggestion(channel)">#{{ channel?.name }}</li>
   }
 </ul>
 }

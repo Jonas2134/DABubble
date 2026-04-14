@@ -37,7 +37,7 @@
         id="contact-bar"
         [sectionVisible]="sectionVisible"
         [activeUserId]="activeUserId"
-        (toggle)="toggleSection()"
+        (toggled)="toggleSection()"
         (openChat)="handleOpenChat($event)"
         (messageInToggle)="handleMessageInToggle($event)"
       ></app-contact-bar>

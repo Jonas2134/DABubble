@@ -9,7 +9,6 @@ import {
   EventEmitter,
   Output,
   computed,
-  signal,
 } from '@angular/core';
 import { ButtonComponent } from '../../button/button.component';
 import { ProfilComponent } from '../../profil/profil.component';

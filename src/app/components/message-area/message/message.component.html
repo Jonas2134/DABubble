@@ -22,7 +22,7 @@
     [class.user-message]="message.senderId === activeUserId"
   >
     <div class="message-header">
-      <h3 (click)="openProfil()">{{ senderData()?.name }}</h3>
+      <h3 tabindex="0" role="button" (click)="openProfil()" (keydown.enter)="openProfil()">{{ senderData()?.name }}</h3>
       <h5>{{ message.createdAt | timeInHours }} Uhr</h5>
     </div>
 
@@ -37,7 +37,7 @@
       ></app-message-reactions>
 
       @if (message.threadId && chatType !== 'thread' && replyCount > 0) {
-      <div class="thread-field" (click)="onThreadClick()">
+      <div class="thread-field" tabindex="0" role="button" (click)="onThreadClick()" (keydown.enter)="onThreadClick()">
         <h4>{{ replyCount }} Antwort{{ replyCount !== 1 ? "en" : "" }}</h4>
         <h5>
           Letzte Antwort {{ lastReplyTime | dayLabel }} um
@@ -78,6 +78,6 @@
 <app-permanent-delete
   [target]="'message'"
   [id]="message.id"
-  (close)="isPermanentDeleteOpen = false"
+  (closed)="isPermanentDeleteOpen = false"
 ></app-permanent-delete>
 }

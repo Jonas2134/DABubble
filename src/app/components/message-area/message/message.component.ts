@@ -10,12 +10,10 @@ import {
   ViewChild,
   computed,
   signal,
-  DestroyRef,
+  DestroyRef, OnInit, OnChanges,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { Message } from '../../../shared/interfaces/message.interface';
 import { UserService } from '../../../shared/services/user.service';
-import { User } from '../../../shared/interfaces/user.interface';
 import { MessageService } from '../../../shared/services/message.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { PermanentDeleteComponent } from '../../permanent-delete/permanent-delete.component';
@@ -39,12 +37,12 @@ import { MessageActionsComponent } from './message-actions/message-actions.compo
   templateUrl: './message.component.html',
   styleUrl: './message.component.scss',
 })
-export class MessageComponent {
+export class MessageComponent implements OnInit, OnChanges {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
   private destroyRef = inject(DestroyRef);
 
-  private threadSub?: Subscription;
+  private cleanupThread?: () => void;
 
   @Input() chatType: 'private' | 'channel' | 'thread' | 'new' | null = null;
   @Input() message!: Message;
@@ -77,7 +75,7 @@ export class MessageComponent {
   isEditOpen = false;
 
   constructor() {
-    this.destroyRef.onDestroy(() => this.threadSub?.unsubscribe());
+    this.destroyRef.onDestroy(() => this.cleanupThread?.());
   }
 
   ngOnInit(): void {
@@ -97,19 +95,20 @@ export class MessageComponent {
   }
 
   private loadThreadInfo() {
-    this.threadSub?.unsubscribe();
+    this.cleanupThread?.();
     this.replyCount = 0;
     this.lastReplyTime = null;
 
     if (!this.message.threadId || this.chatType === 'thread') return;
 
-    this.threadSub = this.messageService
-      .getThreadMessages(this.message.threadId)
-      .subscribe((msgs) => {
+    this.cleanupThread = this.messageService.subscribeThreadMessages(
+      this.message.threadId,
+      (msgs) => {
         const replies = msgs.filter((m) => m.id !== this.message.id);
         this.replyCount = replies.length;
         this.lastReplyTime = replies.at(-1)?.createdAt ?? null;
-      });
+      }
+    );
   }
 
   addReaction(reaction: string) {
