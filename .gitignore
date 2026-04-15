@@ -42,5 +42,8 @@ Thumbs.db
 *-debug.log
 .runtimeconfig.json
 
+# Environment
+src/environments/environment.ts
+
 CLAUDE.md
 .claude/
