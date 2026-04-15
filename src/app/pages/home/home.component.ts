@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderComponent } from '../../components/header/header.component';
-import { ContactBarComponent } from '../../components/contact-bar/contact-bar.component';
-import { MessageAreaComponent } from '../../components/message-area/message-area.component';
-import { SearchBarComponent } from '../../components/header/search-bar/search-bar.component';
-import { DeviceVisibleComponent } from '../../components/device-visible/device-visible.component';
+import { HeaderComponent } from '../../features/header/header.component';
+import { ContactBarComponent } from '../../features/sidebar/contact-bar.component';
+import { MessageAreaComponent } from '../../features/messaging/message-area.component';
+import { SearchBarComponent } from '../../features/header/search-bar/search-bar.component';
+import { DeviceVisibleComponent } from '../../ui/device-visible/device-visible.component';
 import { AuthentificationService } from '../../shared/services/authentification.service';
 
 @Component({
