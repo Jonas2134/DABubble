@@ -14,7 +14,9 @@
                 <h2>Channels</h2>
             </span>
         </button>
+        @if (!isGuest) {
         <app-button variant="icon" color="white" icon="add" ariaLabel="Channel hinzufügen" (clicked)="toggleAddChannel()"></app-button>
+        }
     </header>
     @if (!showChannels) {
         <section>
@@ -27,16 +29,20 @@
                               </span>
                               <span>{{ channel.name }}</span>
                         </button>
+                      @if (!isGuest) {
                       <button class="deleteChannel" aria-label="Channel löschen" (click)="onDeleteClick(channel.id, $event)">
                         <span class="material-symbols closeIcon">delete</span>
                       </button>
+                      }
                     </li>
                 }
             </ul>
+            @if (!isGuest) {
             <button class="addChannel" (click)="toggleAddChannel()">
                 <span class="material-symbols addIconChannel">add_circle</span>
                 <span>Channel hinzufügen</span>
             </button>
+            }
         </section>
     }
     @if (showAddChannel) {

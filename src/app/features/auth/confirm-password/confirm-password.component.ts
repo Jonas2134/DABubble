@@ -10,7 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ButtonComponent } from '../../../ui/button/button.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
 import { CustomInputComponent } from '../../../ui/custom-input/custom-input.component';
 import { SuccessIndicatorComponent } from '../../../ui/success-indicator/success-indicator.component';
@@ -30,13 +30,14 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 })
 export class ConfirmPasswordComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
-  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(AuthentificationService);
 
   newPassword!: FormGroup;
-  oobCode: string | null = null;
   isConfirmationVisible = false;
+  authError = '';
+
+  readonly isRecoveryMode = this.authService.isRecoveryMode;
 
   static passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
     const newPassword = group.get('newPassword')?.value;
@@ -51,13 +52,18 @@ export class ConfirmPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.oobCode = this.route.snapshot.queryParamMap.get('oobCode');
     this.newPassword = new FormGroup({
       newPassword: new FormControl('', [Validators.required, Validators.minLength(8),]),
       conPassword: new FormControl('', [Validators.required, Validators.minLength(8),]),
     },
     { validators: ConfirmPasswordComponent.passwordMatchValidator }
     );
+
+    setTimeout(() => {
+      if (!this.isRecoveryMode()) {
+        this.authError = 'Kein gültiger Wiederherstellungslink. Bitte fordere einen neuen an.';
+      }
+    }, 1500);
   }
 
   isPasswordMismatch(): boolean {
@@ -67,22 +73,18 @@ export class ConfirmPasswordComponent implements OnInit {
   onSubmit(): void {
     if (!this.newPassword.valid) return;
 
-    if (!this.oobCode) {
-      console.error('No valid oobCode found.');
+    if (!this.isRecoveryMode()) {
+      this.authError = 'Kein gültiger Wiederherstellungslink. Bitte fordere einen neuen an.';
       return;
     }
 
     this.visibleBtn.hide();
-    const { newPassword, conPassword } = this.newPassword.value;
-    this.processPasswordReset(newPassword, conPassword);
+    const { newPassword } = this.newPassword.value;
+    this.processPasswordReset(newPassword);
   }
 
-  private processPasswordReset(newPwd: string, confirmPwd: string): void {
-    if (newPwd !== confirmPwd) {
-      return;
-    }
-  
-    this.authService.confirmResetPassword(this.oobCode!, newPwd)
+  private processPasswordReset(newPwd: string): void {
+    this.authService.confirmResetPassword(newPwd)
     .then(() => this.handleResetSuccess())
     .catch(error => this.handleResetError(error));
   }

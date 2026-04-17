@@ -4,12 +4,15 @@
     <app-channels
       (toggleMessage)="messageInToggle.emit($event)"
       [activeUserId]="activeUserId"
+      [isGuest]="isGuest()"
       (openChat)="onChatOpen($event)"
     ></app-channels>
+    @if (!isGuest()) {
     <app-direct-message
       (toggleMessage)="messageInToggle.emit($event)"
       [activeUserId]="activeUserId"
       (openChat)="onChatOpen($event)"
     ></app-direct-message>
+    }
   </section>
 </nav>

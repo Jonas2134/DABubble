@@ -21,14 +21,18 @@ export class ChannelsComponent {
   openChannelId: string | null = null;
 
   @Input() activeUserId!: string | null;
+  @Input() isGuest = false;
   @Output() openChat = new EventEmitter<{ chatType: 'private' | 'channel'; chatId: string }>();
   @Output() toggleMessage = new EventEmitter<boolean>();
 
-  readonly sortedChannels = computed(() =>
-    this.channelService.channels()
-      .filter(c => !this.activeUserId || c.memberIds.includes(this.activeUserId))
-      .map(c => ({ id: c.id!, name: c.name, createdAt: c.createdAt }))
-  );
+  readonly sortedChannels = computed(() => {
+    let channels = this.channelService.channels()
+      .filter(c => !this.activeUserId || c.memberIds.includes(this.activeUserId));
+    if (this.isGuest) {
+      channels = channels.filter(c => c.name === 'Allgemein');
+    }
+    return channels.map(c => ({ id: c.id!, name: c.name, createdAt: c.createdAt }));
+  });
 
   someAction() {
     if (window.innerWidth < 1000) {

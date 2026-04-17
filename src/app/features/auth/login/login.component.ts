@@ -80,19 +80,21 @@ export class LoginComponent implements OnInit {
     this.isConfirmationVisible = visible;
   }
 
-  private handleLoginError(error: { code?: string }): void {
+  private handleLoginError(error: unknown): void {
     this.visibleBtn.show();
     console.error('Login error:', error);
-    this.authError = this.mapErrorToMessage(error.code ?? '');
+    this.authError = this.mapErrorToMessage(error);
   }
 
-  private mapErrorToMessage(code: string): string {
-    switch (code) {
-      case 'auth/invalid-credential':
-        return 'E-Mail oder Passwort ist nicht korrekt.';
-      default:
-        return 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.';
+  private mapErrorToMessage(error: unknown): string {
+    const msg = (error as { message?: string })?.message?.toLowerCase() ?? '';
+    if (msg.includes('invalid login credentials')) {
+      return 'E-Mail oder Passwort ist nicht korrekt.';
     }
+    if (msg.includes('email not confirmed')) {
+      return 'Bitte bestätige zuerst deine E-Mail-Adresse.';
+    }
+    return 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.';
   }
 
   onLoginWithGoogle(): void {

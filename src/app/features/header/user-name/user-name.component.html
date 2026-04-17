@@ -6,7 +6,7 @@
           <img #tabletToggleBtn tabindex="0" role="button" (click)="toggleImage()" (keydown.enter)="toggleImage()" [src]="userImage" [alt]="userName + ' Profilbild'" />
       </app-device-visible>
       <app-device-visible mode="desktopBig">
-        <img class="normalImage" tabindex="0" role="button" (click)="toggleImage()" (keydown.enter)="toggleImage()" [src]="userImage" [alt]="userName + ' Profilbild'" />
+        <img #desktopToggleBtn class="normalImage" tabindex="0" role="button" (click)="toggleImage()" (keydown.enter)="toggleImage()" [src]="userImage" [alt]="userName + ' Profilbild'" />
         <span class="normalImagePoint" [ngClass]="userStatus ? 'online' : 'offline'" [attr.aria-label]="userStatus ? 'Online' : 'Abwesend'"></span>
       </app-device-visible>
     </div>

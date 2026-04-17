@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from '../../shared/services/message.service';
 import { UserService } from '../../shared/services/user.service';
 import { ChannelService } from '../../shared/services/channel.service';
+import { AuthentificationService } from '../../shared/services/authentification.service';
 import { DateFormatService } from '../../shared/services/date-format.service';
 import { Message } from '../../shared/interfaces/message.interface';
 import { User } from '../../shared/interfaces/user.interface';
@@ -51,7 +52,10 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
   private dateFormat = inject(DateFormatService);
+  private authService = inject(AuthentificationService);
   private destroyRef = inject(DestroyRef);
+
+  readonly isGuest = this.authService.isGuest;
 
   private cleanupMessages?: () => void;
 

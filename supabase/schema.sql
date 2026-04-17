@@ -139,11 +139,12 @@ CREATE POLICY "reactions_delete" ON public.reactions
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.users (id, name, email)
+  INSERT INTO public.users (id, name, email, user_image)
   VALUES (
     NEW.id,
     COALESCE(NEW.raw_user_meta_data->>'name', NEW.raw_user_meta_data->>'full_name', 'Neuer User'),
-    NEW.email
+    NEW.email,
+    COALESCE(NEW.raw_user_meta_data->>'user_image', 'assets/img/profile.png')
   );
   RETURN NEW;
 END;
@@ -152,6 +153,19 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================
+-- RPC: Anonymen Guest-User loeschen (CASCADE loescht alle Daten)
+-- ============================================
+
+CREATE OR REPLACE FUNCTION public.delete_anonymous_user()
+RETURNS void AS $$
+BEGIN
+  DELETE FROM auth.users
+  WHERE id = auth.uid()
+    AND is_anonymous = true;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- ============================================
 -- Default-Channel erstellen

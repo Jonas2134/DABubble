@@ -54,7 +54,7 @@ export class SelectAvatarComponent {
   }
 
   private completeAvatarSelection(avatar: string): void {
-    this.authService.completeRegistration(avatar)
+    this.authService.completeRegistration('assets/img/' + avatar)
     .then(() => this.handleAvatarSuccess())
     .catch(error => this.handleAvatarError(error));
   }

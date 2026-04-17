@@ -17,9 +17,23 @@ export class AuthentificationService {
   private _registrationData = signal<RegistrationData | null>(null);
   readonly registrationData = this._registrationData.asReadonly();
 
+  private _isRecoveryMode = signal(false);
+  readonly isRecoveryMode = this._isRecoveryMode.asReadonly();
+
+  private _isGuest = signal(false);
+  readonly isGuest = this._isGuest.asReadonly();
+
   constructor() {
-    this.supabase.supabase.auth.onAuthStateChange((_event, session) => {
+    this.supabase.supabase.auth.onAuthStateChange((event, session) => {
       this._currentUid.set(session?.user?.id ?? null);
+      this._isGuest.set(session?.user?.is_anonymous === true);
+
+      if (event === 'PASSWORD_RECOVERY') {
+        this._isRecoveryMode.set(true);
+      }
+      if (event === 'SIGNED_OUT') {
+        this._isGuest.set(false);
+      }
     });
   }
 
@@ -40,7 +54,7 @@ export class AuthentificationService {
     if (!regData) throw new Error('No registration data');
     const { email, password, username } = regData;
 
-    const { error } = await this.supabase.supabase.auth.signUp({
+    const { data, error } = await this.supabase.supabase.auth.signUp({
       email,
       password,
       options: {
@@ -52,6 +66,15 @@ export class AuthentificationService {
     });
 
     if (error) throw error;
+
+    if (data.session && data.user) {
+      const { error: updateError } = await this.supabase.supabase
+        .from('users')
+        .update({ user_image: profilePictureUrl })
+        .eq('id', data.user.id);
+      if (updateError) console.warn('Fallback user_image update failed:', updateError.message);
+    }
+
     this._registrationData.set(null);
   }
 
@@ -78,6 +101,7 @@ export class AuthentificationService {
     if (error) throw error;
 
     this._currentUid.set(data.user?.id ?? null);
+    this._isGuest.set(true);
 
     if (data.user) {
       await this.supabase.supabase.from('users').upsert({
@@ -87,19 +111,36 @@ export class AuthentificationService {
         status: true,
         user_image: 'assets/img/profile.png',
       });
+
+      const { data: channel } = await this.supabase.supabase
+        .from('channels')
+        .select('id')
+        .eq('name', 'Allgemein')
+        .single();
+
+      if (channel) {
+        await this.supabase.supabase.from('channel_members').upsert({
+          channel_id: channel.id,
+          user_id: data.user.id,
+        });
+      }
     }
   }
 
   async sendResetPasswordEmail(email: string): Promise<void> {
-    const { error } = await this.supabase.supabase.auth.resetPasswordForEmail(email);
+    const redirectTo = `${window.location.origin}/auth/confirm-password`;
+    const { error } = await this.supabase.supabase.auth.resetPasswordForEmail(email, {
+      redirectTo,
+    });
     if (error) throw error;
   }
 
-  async confirmResetPassword(_oobCode: string, newPassword: string): Promise<void> {
+  async confirmResetPassword(newPassword: string): Promise<void> {
     const { error } = await this.supabase.supabase.auth.updateUser({
       password: newPassword,
     });
     if (error) throw error;
+    this._isRecoveryMode.set(false);
   }
 
   clearRegistrationData(): void {
@@ -107,8 +148,14 @@ export class AuthentificationService {
   }
 
   async logout(): Promise<void> {
-    const { error } = await this.supabase.supabase.auth.signOut();
-    if (error) throw error;
+    if (this._isGuest()) {
+      const { error } = await this.supabase.supabase.rpc('delete_anonymous_user');
+      if (error) console.warn('Guest cleanup failed:', error.message);
+    } else {
+      const { error } = await this.supabase.supabase.auth.signOut();
+      if (error) throw error;
+    }
     this._currentUid.set(null);
+    this._isGuest.set(false);
   }
 }

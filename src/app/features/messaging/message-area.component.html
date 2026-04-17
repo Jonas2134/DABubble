@@ -4,7 +4,7 @@
 </div>
 }@else {
 <section>
-  @if (chatType === 'new') {
+  @if (chatType === 'new' && !isGuest()) {
   <div class="new-header">
     <h1>Neue Nachricht</h1>
     <input
@@ -158,7 +158,7 @@
     } } }
   </div>
 
-  @if (chatType !== 'new') {
+  @if (chatType !== 'new' && !isGuest()) {
   <div class="chatbox-textfield thread-margin">
     <app-message-composer
       #composer

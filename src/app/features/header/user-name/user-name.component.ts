@@ -16,8 +16,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceVisibleComponent } from '../../../ui/device-visible/device-visible.component';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
 import { UserService } from '../../../shared/services/user.service';
-import { ChannelService } from '../../../shared/services/channel.service';
-import { MessageService } from '../../../shared/services/message.service';
 import { slideUpDown } from '../../../shared/animations/animations';
 
 @Component({
@@ -30,8 +28,6 @@ import { slideUpDown } from '../../../shared/animations/animations';
 })
 export class UserNameComponent {
   private authService = inject(AuthentificationService);
-  private channelService = inject(ChannelService);
-  private messageService = inject(MessageService);
   private route = inject(ActivatedRoute);
   private userService = inject(UserService);
   private router = inject(Router);
@@ -43,7 +39,8 @@ export class UserNameComponent {
   windowSize = window.innerWidth;
 
   @ViewChild('tabletToggleBtn') tabletToggleBtn?: ElementRef;
-  @ViewChild('arrowToggleBtn') arrowToggleBtn?: ElementRef;
+  @ViewChild('desktopToggleBtn') desktopToggleBtn?: ElementRef;
+  @ViewChild('arrowToggleBtn', { read: ElementRef }) arrowToggleBtn?: ElementRef;
   @ViewChild('logOutBox') logOutBox?: ElementRef;
   @ViewChild('profilWrapper') profilWrapper?: ElementRef;
 
@@ -76,11 +73,13 @@ export class UserNameComponent {
   onDocumentClick(event: MouseEvent) {
     const clickedInsideLogOut = this.logOutBox?.nativeElement?.contains(event.target);
     const clickedToggleTablet = this.tabletToggleBtn?.nativeElement?.contains(event.target);
+    const clickedToggleDesktop = this.desktopToggleBtn?.nativeElement?.contains(event.target);
     const clickedArrow = this.arrowToggleBtn?.nativeElement?.contains(event.target);
     const clickedInsideProfil = this.profilWrapper?.nativeElement?.contains(event.target);
     const clickedOutside =
       !clickedInsideLogOut &&
       !clickedToggleTablet &&
+      !clickedToggleDesktop &&
       !clickedArrow &&
       !clickedInsideProfil;
     if (this.isLogOutVisible && clickedOutside) {
@@ -93,10 +92,6 @@ export class UserNameComponent {
   }
 
   async logOut() {
-    if (this.userName === 'Gast') {
-      await this.channelService.deleteChannelsByCreator(this.activeUserId!);
-      await this.messageService.deleteMessagesBySender(this.activeUserId!);
-    }
     await this.authService.logout();
     await this.router.navigate(['/auth/login']);
   }
