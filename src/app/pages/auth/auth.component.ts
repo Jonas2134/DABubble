@@ -4,6 +4,7 @@ import { LogoComponent } from '../../features/auth/logo/logo.component';
 import { IconComponent } from '../../ui/icon/icon.component';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { VisibleButtonService } from '../../shared/services/visible-button.service';
+import { AnimationStateService } from '../../shared/services/animation-state.service';
 
 @Component({
   selector: 'app-auth',
@@ -13,23 +14,15 @@ import { VisibleButtonService } from '../../shared/services/visible-button.servi
 })
 export class AuthComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
+  private animationState = inject(AnimationStateService);
   private route = inject(ActivatedRoute);
   router = inject(Router);
 
-  showAnimation = false;
-
+  readonly showAnimation = this.animationState.animationShown;
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
   ngOnInit(): void {
     this.handleResetMode();
-    this.isAnimation();
-  }
-
-  isAnimation() {
-    const animationShown = localStorage.getItem('showAnimation');
-    if (animationShown === 'true') {
-      this.showAnimation = true;
-    }
   }
 
   handleResetMode() {

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, DestroyRef, inject, signal } from '@angular/core';
 import { IconComponent } from '../../../ui/icon/icon.component';
+import { AnimationStateService } from '../../../shared/services/animation-state.service';
 import {
   trigger,
   state,
@@ -82,6 +83,7 @@ import {
 })
 export class LogoComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private animationState = inject(AnimationStateService);
   private mobileQuery = window.matchMedia('(max-width: 700px)');
   private isMobileSignal = signal(this.mobileQuery.matches);
 
@@ -94,8 +96,6 @@ export class LogoComponent implements OnInit {
     this.mobileQuery.addEventListener('change', handler);
     this.destroyRef.onDestroy(() => this.mobileQuery.removeEventListener('change', handler));
 
-    localStorage.setItem('showAnimation', 'true');
-
     const isMobile = this.isMobileSignal();
     this.logoPosition = isMobile ? 'centerMobile' : 'center';
 
@@ -106,5 +106,7 @@ export class LogoComponent implements OnInit {
     }, 1800);
 
     setTimeout(() => this.backgroundState = 'hidden', 2400);
+
+    setTimeout(() => this.animationState.markAsShown(), 3900);
   }
 }

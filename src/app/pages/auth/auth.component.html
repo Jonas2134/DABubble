@@ -1,23 +1,25 @@
-@if (showAnimation) {
-  <div class="logo">
-    <app-icon name="da-bubble-logo" />
-
-    <span>DABubble</span>
-  </div>
-}
-@else {
-  <app-logo></app-logo>
-}
-
-@if (isLoginRoute()) {
-  <div class="sign-in-container">
-    <p>Neu bei DABubble?</p>
-
-    <app-button color="transparent" [disabled]="!isButtonVisible()" (click)="router.navigate(['/auth/signup'])">
-      Konto erstellen
-    </app-button>
-  </div>
-}
+<header>
+  @if (showAnimation()) {
+    <div class="logo">
+      <app-icon name="da-bubble-logo" />
+  
+      <span>DABubble</span>
+    </div>
+  }
+  @else {
+    <app-logo></app-logo>
+  }
+  
+  @if (isLoginRoute()) {
+    <div class="sign-in-container">
+      <p>Neu bei DABubble?</p>
+  
+      <app-button color="transparent" [disabled]="!isButtonVisible()" (click)="router.navigate(['/auth/signup'])">
+        Konto erstellen
+      </app-button>
+    </div>
+  }
+</header>
 
 <div class="card">
   <router-outlet></router-outlet>

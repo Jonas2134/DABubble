@@ -1,30 +1,25 @@
 import { Component, Input } from '@angular/core';
-import { trigger, state, style, animate, transition } from '@angular/animations';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-success-indicator',
   imports: [],
   template: `
-    <div [@slideInFromRight]="visible ? 'visible' : 'hidden'">
-      <ng-content></ng-content>
-    </div>
+    @if (visible) {
+      <div @slideInFromRight>
+        <ng-content></ng-content>
+      </div>
+    }
   `,
   styleUrl: './success-indicator.component.scss',
   animations: [
     trigger('slideInFromRight', [
-      state('hidden', style({
-        transform: 'translateX(100%)',
-        opacity: 0
-      })),
-      state('visible', style({
-        transform: 'translateX(0)',
-        opacity: 1
-      })),
-      transition('hidden => visible', [
-        animate('500ms ease-out')
+      transition(':enter', [
+        style({ transform: 'translateX(100%)', opacity: 0 }),
+        animate('500ms ease-out', style({ transform: 'translateX(0)', opacity: 1 }))
       ]),
-      transition('visible => hidden', [
-        animate('500ms ease-in')
+      transition(':leave', [
+        animate('500ms ease-in', style({ transform: 'translateX(100%)', opacity: 0 }))
       ])
     ])
   ]

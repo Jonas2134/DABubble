@@ -3,18 +3,23 @@
 
 :host {
   width: 100vw;
-  height: 100vh;
-  @include mixin.dFlex();
-  position: relative;
-  overflow: hidden;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+header {
+  @include mixin.dFlex($justify: space-between, $align: flex-start);
+  padding: 75px 75px 0;
+
+  @media (max-width: vari.$bp-mobile-lg) {
+    @include mixin.dFlex($direction: column, $align: center, $gap: 10px);
+    padding: 24px 16px 0;
+  }
 }
 
 .logo {
   @include mixin.dFlex();
-  position: absolute;
-  top: 75px;
-  left: 75px;
-  transform: translate(0, 0) scale(1);
 
   > span {
     font-size: 24px;
@@ -23,23 +28,19 @@
   }
 
   @media (max-width: vari.$bp-mobile-lg) {
-    top: 24px;
-    left: 50%;
-    transform: translate(-50%, 0) scale(1);
-    >svg {
+    > svg {
       width: clamp(40px, calc(40px + 30 * (100vw - 350px) / 350), 70px);
       height: clamp(40px, calc(40px + 30 * (100vw - 350px) / 350), 70px);
-    }> span {
-    font-size: clamp(16px, calc(16px + 8 * (100vw - 350px) / 350), 24px);
-  }
+    }
+
+    > span {
+      font-size: clamp(16px, calc(16px + 8 * (100vw - 350px) / 350), 24px);
+    }
   }
 }
 
 .sign-in-container {
   @include mixin.dFlex($align: flex-end, $gap: 20px, $direction: column);
-  position: absolute;
-  top: 75px;
-  right: 75px;
 
   > p {
     font-size: clamp(16px, 4vw, 18px);
@@ -47,29 +48,23 @@
 
   @media (max-width: vari.$bp-mobile-lg) {
     @include mixin.dFlex($gap: clamp(2px, 0.5vw, 10px), $direction: row);
-    margin: 0;
-    top: auto;
-    right: auto;
-    bottom: clamp(60px, calc(60px + 60 * (100vw - 350px) / 350), 120px);
   }
 }
 
 .card {
+  place-self: center;
   position: relative;
   background-color: vari.$white;
   max-width: 650px;
-  width: 100%;
+  width: calc(100% - 32px);
   padding: clamp(18px, 1.5vw, 40px) clamp(18px, 4vw, 54px);
-  margin: 16px;
   border-radius: 30px;
-  box-shadow: 0px 2px 10px 0px #00000014;
+  box-shadow: 0px 0px 10px 0px #00000014;
 }
 
 footer {
   @include mixin.dFlex($gap: 45px);
-  position: absolute;
-  bottom: 0;
-  margin-bottom: clamp(12px, calc(12px + 56 * (100vw - 350px) / 350), 48px);
+  padding-bottom: clamp(12px, calc(12px + 56 * (100vw - 350px) / 350), 48px);
 }
 
 @media (min-width: vari.$bp-max) {
@@ -77,5 +72,4 @@ footer {
     width: 1770px;
     margin-inline: auto;
   }
-  
 }
