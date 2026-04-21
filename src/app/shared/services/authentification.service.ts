@@ -90,10 +90,17 @@ export class AuthentificationService {
   }
 
   async loginWithGoogle(): Promise<void> {
+    sessionStorage.setItem('pendingOAuthLogin', 'true');
     const { error } = await this.supabase.supabase.auth.signInWithOAuth({
       provider: 'google',
+      options: {
+        redirectTo: window.location.origin + '/auth/login'
+      }
     });
-    if (error) throw error;
+    if (error) {
+      sessionStorage.removeItem('pendingOAuthLogin');
+      throw error;
+    }
   }
 
   async loginAsGuest(): Promise<void> {
@@ -151,10 +158,9 @@ export class AuthentificationService {
     if (this._isGuest()) {
       const { error } = await this.supabase.supabase.rpc('delete_anonymous_user');
       if (error) console.warn('Guest cleanup failed:', error.message);
-    } else {
-      const { error } = await this.supabase.supabase.auth.signOut();
-      if (error) throw error;
     }
+    const { error } = await this.supabase.supabase.auth.signOut();
+    if (error) throw error;
     this._currentUid.set(null);
     this._isGuest.set(false);
   }

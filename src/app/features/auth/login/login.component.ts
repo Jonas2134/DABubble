@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
+import { SupabaseService } from '../../../shared/services/supabase.service';
 import { Router } from '@angular/router';
 import { CustomInputComponent } from '../../../ui/custom-input/custom-input.component';
 import { SuccessIndicatorComponent } from '../../../ui/success-indicator/success-indicator.component';
@@ -25,6 +26,7 @@ export class LoginComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
   private destroyRef = inject(DestroyRef);
   private authService = inject(AuthentificationService);
+  private supabaseService = inject(SupabaseService);
   router = inject(Router);
 
   loginForm!: FormGroup;
@@ -35,6 +37,14 @@ export class LoginComponent implements OnInit {
 
   constructor() {
     this.visibleBtn.show();
+
+    const { data: { subscription } } = this.supabaseService.supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session?.user && sessionStorage.getItem('pendingOAuthLogin')) {
+        sessionStorage.removeItem('pendingOAuthLogin');
+        this.router.navigate(['/home', session.user.id]);
+      }
+    });
+    this.destroyRef.onDestroy(() => subscription.unsubscribe());
   }
 
   ngOnInit(): void {
@@ -52,7 +62,6 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (!this.loginForm.valid) return;
-
     this.visibleBtn.hide();
     const { email, password } = this.loginForm.value;
     this.attemptLogin(email, password);
@@ -98,14 +107,7 @@ export class LoginComponent implements OnInit {
   }
 
   onLoginWithGoogle(): void {
-    this.visibleBtn.hide();
-    this.authService.loginWithGoogle()
-    .then(() => {
-      const uid = this.authService.currentUid();
-      this.router.navigate(['/home', uid]);
-    })
-    .catch(error => {
-      this.visibleBtn.show();
+    this.authService.loginWithGoogle().catch(error => {
       console.error('Error during Google login:', error);
     });
   }
