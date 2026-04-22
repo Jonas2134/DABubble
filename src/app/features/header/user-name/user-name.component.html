@@ -7,7 +7,7 @@
       </app-device-visible>
       <app-device-visible mode="desktopBig">
         <img #desktopToggleBtn class="normalImage" tabindex="0" role="button" (click)="toggleImage()" (keydown.enter)="toggleImage()" [src]="userImage" [alt]="userName + ' Profilbild'" />
-        <span class="normalImagePoint" [ngClass]="userStatus ? 'online' : 'offline'" [attr.aria-label]="userStatus ? 'Online' : 'Abwesend'"></span>
+        <span class="normalImagePoint" [ngClass]="userStatus() ? 'online' : 'offline'" [attr.aria-label]="userStatus() ? 'Online' : 'Abwesend'"></span>
       </app-device-visible>
     </div>
   </div>
@@ -39,7 +39,7 @@
     [userImage]="userImage"
     [userName]="userName"
     [userEmail]="userEmail"
-    [userStatus]="userStatus"
+    [userStatus]="userStatus()"
     [userId]="userId"
     #profilRef
     (closed)="showProfil = false"

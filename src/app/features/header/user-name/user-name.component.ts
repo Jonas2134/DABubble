@@ -58,7 +58,7 @@ export class UserNameComponent {
   get userName() { return this.user()?.name ?? ''; }
   get userEmail() { return this.user()?.email ?? ''; }
   get userImage() { return this.user()?.userImage ?? ''; }
-  get userStatus() { return this.user()?.status ?? false; }
+  readonly userStatus = computed(() => this.user()?.status ?? false);
   get userId() { return this.user()?.id ?? ''; }
 
   toggleLogOut() {

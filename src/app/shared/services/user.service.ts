@@ -17,9 +17,10 @@ export class UserService {
 
   private _users = signal<User[]>([]);
   readonly users = this._users.asReadonly();
+  private loadPromise: Promise<void>;
 
   constructor() {
-    this.loadAllUsers();
+    this.loadPromise = this.loadAllUsers();
     this.subscribeToChanges();
   }
 
@@ -40,9 +41,15 @@ export class UserService {
           case 'INSERT':
             this._users.set([...current, this.mapUser(payload.new as UserRow)]);
             break;
-          case 'UPDATE':
-            this._users.set(current.map(u => u.id === (payload.new as UserRow).id ? this.mapUser(payload.new as UserRow) : u));
+          case 'UPDATE': {
+            const updated = this.mapUser(payload.new as UserRow);
+            const exists = current.some(u => u.id === updated.id);
+            this._users.set(exists
+              ? current.map(u => u.id === updated.id ? updated : u)
+              : [...current, updated]
+            );
             break;
+          }
           case 'DELETE':
             this._users.set(current.filter(u => u.id !== (payload.old as { id: string }).id));
             break;
@@ -97,6 +104,10 @@ export class UserService {
   }
 
   async updateUserStatus(userId: string, status: boolean): Promise<void> {
+    await this.loadPromise;
+    this._users.update(users =>
+      users.map(u => u.id === userId ? { ...u, status } : u)
+    );
     const { error } = await this.supabaseService.supabase
       .from('users')
       .update({ status })
