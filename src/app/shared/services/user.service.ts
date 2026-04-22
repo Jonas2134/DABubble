@@ -96,6 +96,14 @@ export class UserService {
     if (error) throw error;
   }
 
+  async updateUserStatus(userId: string, status: boolean): Promise<void> {
+    const { error } = await this.supabaseService.supabase
+      .from('users')
+      .update({ status })
+      .eq('id', userId);
+    if (error) console.error('updateUserStatus', error);
+  }
+
   async deleteUser(userId: string): Promise<void> {
     const { error } = await this.supabaseService.supabase
       .from('users')

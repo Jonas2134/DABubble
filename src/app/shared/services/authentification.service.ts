@@ -1,5 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { UserService } from './user.service';
+import { environment } from '../../../environments/environment';
 
 interface RegistrationData {
   email: string;
@@ -10,6 +12,7 @@ interface RegistrationData {
 @Injectable({ providedIn: 'root' })
 export class AuthentificationService {
   private supabase = inject(SupabaseService);
+  private userService = inject(UserService);
 
   private _currentUid = signal<string | null>(null);
   readonly currentUid = this._currentUid.asReadonly();
@@ -28,12 +31,32 @@ export class AuthentificationService {
       this._currentUid.set(session?.user?.id ?? null);
       this._isGuest.set(session?.user?.is_anonymous === true);
 
+      if (event === 'SIGNED_IN' && session?.user?.id) {
+        this.userService.updateUserStatus(session.user.id, true);
+      }
       if (event === 'PASSWORD_RECOVERY') {
         this._isRecoveryMode.set(true);
       }
       if (event === 'SIGNED_OUT') {
         this._isGuest.set(false);
       }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      const uid = this._currentUid();
+      if (!uid || this._isGuest()) return;
+      const url = `${environment.supabaseUrl}/rest/v1/users?id=eq.${uid}`;
+      const key = environment.supabaseAnonKey;
+      fetch(url, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': key,
+          'Authorization': `Bearer ${key}`,
+        },
+        body: JSON.stringify({ status: false }),
+        keepalive: true,
+      });
     });
   }
 
@@ -155,9 +178,12 @@ export class AuthentificationService {
   }
 
   async logout(): Promise<void> {
+    const uid = this._currentUid();
     if (this._isGuest()) {
       const { error } = await this.supabase.supabase.rpc('delete_anonymous_user');
       if (error) console.warn('Guest cleanup failed:', error.message);
+    } else if (uid) {
+      await this.userService.updateUserStatus(uid, false);
     }
     const { error } = await this.supabase.supabase.auth.signOut();
     if (error) throw error;
