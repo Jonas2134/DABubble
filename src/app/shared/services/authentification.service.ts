@@ -1,4 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { SupabaseService } from './supabase.service';
 import { UserService } from './user.service';
 import { environment } from '../../../environments/environment';
@@ -13,6 +14,8 @@ interface RegistrationData {
 export class AuthentificationService {
   private supabase = inject(SupabaseService);
   private userService = inject(UserService);
+  private router = inject(Router);
+  private logoutChannel = new BroadcastChannel('da-bubble-auth');
 
   private _currentUid = signal<string | null>(null);
   readonly currentUid = this._currentUid.asReadonly();
@@ -41,6 +44,13 @@ export class AuthentificationService {
         this._isGuest.set(false);
       }
     });
+
+    this.logoutChannel.onmessage = async () => {
+      await this.supabase.supabase.auth.signOut();
+      this._currentUid.set(null);
+      this._isGuest.set(false);
+      this.router.navigate(['/auth/login']);
+    };
 
     window.addEventListener('beforeunload', () => {
       const uid = this._currentUid();
@@ -185,6 +195,7 @@ export class AuthentificationService {
     } else if (uid) {
       await this.userService.updateUserStatus(uid, false);
     }
+    this.logoutChannel.postMessage('LOGOUT');
     const { error } = await this.supabase.supabase.auth.signOut();
     if (error) throw error;
     this._currentUid.set(null);

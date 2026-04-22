@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
+import { noAuthGuard } from './shared/guards/no-auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
@@ -8,7 +9,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/auth/auth.component').then(m => m.AuthComponent),
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
-      { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent) },
+      { path: 'login', loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent), canActivate: [noAuthGuard] },
       { path: 'signup', loadComponent: () => import('./features/auth/create-account/create-account.component').then(m => m.CreateAccountComponent) },
       { path: 'select-avatar', loadComponent: () => import('./features/auth/select-avatar/select-avatar.component').then(m => m.SelectAvatarComponent) },
       { path: 'reset-password', loadComponent: () => import('./features/auth/confirm-email/confirm-email.component').then(m => m.ConfirmEmailComponent) },
