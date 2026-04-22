@@ -3,7 +3,7 @@
   <div class="material-symbols renew-icon rotating-icon">autorenew</div>
 </div>
 }@else {
-<section>
+<div class="message-area-container">
   @if (chatType === 'new' && !isGuest()) {
   <div class="new-header">
     <h1>Neue Nachricht</h1>
@@ -66,7 +66,6 @@
           <h2>{{ channelMembers().length }}</h2>
         </div>
         <app-button class="addButtonBefore" variant="icon" color="white" icon="person_add" ariaLabel="Mitglied hinzufügen" (clicked)="openAddMemberPopUp()"></app-button>
-        <app-button class="addButtonAfter" variant="icon" color="white" icon="person_add" ariaLabel="Mitglieder anzeigen" (clicked)="toggleChannelMembers()"></app-button>
       </div>
     </div>
     } @else if (chatType === 'thread') {
@@ -203,7 +202,7 @@
   ></app-channel-members>
 
   }
-</section>
+</div>
 } @if (addMemberPopUp) {
 <div tabindex="0" role="button" (click)="closeAddMember()" (keydown.enter)="closeAddMember()" class="memberAddMessage" #memberAddWrapper>
   <app-add-new-members

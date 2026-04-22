@@ -9,7 +9,7 @@
   @include mixins.dFlex($direction: column);
 }
 
-section {
+.message-area-container {
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -322,7 +322,7 @@ app-add-new-members {
 }
 
 @media (max-width: vari.$bp-tablet) {
-  section {
+  .message-area-container {
     border-radius: 0px;
     .chatbox-header {
       height: clamp(60px, calc(60px + 36 * (100vw - 450px) / 550), 96px);

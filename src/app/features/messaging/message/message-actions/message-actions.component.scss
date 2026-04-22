@@ -42,24 +42,11 @@
     width: 40px;
     height: 40px;
     font-size: 20px;
+    font-family: "Material Symbols Rounded";
     @include mixins.dFlex();
   }
-
-  .action-btn {
-    width: 40px;
-    height: 40px;
-  }
 }
 
-:host-context(section:hover) .message-actions {
-  opacity: 1;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-:host-context(section:hover) .message-actions.user-message-actions {
-  transform: translateX(0);
-}
 
 .options-menu {
   position: absolute;

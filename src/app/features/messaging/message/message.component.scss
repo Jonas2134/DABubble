@@ -68,6 +68,11 @@ section {
       color: #000000;
       background-color: #ffffff;
     }
+    ::ng-deep .message-actions {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
   }
 }
 
@@ -174,20 +179,8 @@ section {
 }
 
 emoji-mart {
-  position: absolute;
-  bottom: 0px;
-  right: 266px;
-  z-index: 95;
-}
-
-.active-user-emoji {
-  right: inherit;
-  left: 308px;
-}
-
-.thread-emoji {
-  right: initial;
-  left: 68px;
+  position: fixed;
+  z-index: 1000;
 }
 
 @media (max-width: vari.$bp-tablet) {

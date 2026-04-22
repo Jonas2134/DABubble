@@ -66,6 +66,8 @@ export class MessageComponent implements OnInit, OnChanges {
     this._activeUserId() ? this.userService.getUserById(this._activeUserId()!) ?? null : null
   );
 
+  private elementRef = inject(ElementRef);
+
   editText = '';
   replyCount = 0;
   lastReplyTime: Date | string | null = null;
@@ -73,6 +75,9 @@ export class MessageComponent implements OnInit, OnChanges {
   isEmojiPickerOpen = false;
   isPermanentDeleteOpen = false;
   isEditOpen = false;
+
+  emojiPickerTop = 0;
+  emojiPickerLeft = 0;
 
   constructor() {
     this.destroyRef.onDestroy(() => this.cleanupThread?.());
@@ -148,6 +153,33 @@ export class MessageComponent implements OnInit, OnChanges {
   toggleEmojiPicker(e?: MouseEvent) {
     e?.stopPropagation();
     this.isEmojiPickerOpen = !this.isEmojiPickerOpen;
+    if (this.isEmojiPickerOpen) {
+      this.calcEmojiPosition();
+    }
+  }
+
+  private calcEmojiPosition() {
+    const section = (this.elementRef.nativeElement as HTMLElement).querySelector('section');
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const pickerH = 400;
+    const pickerW = 350;
+    const isOwn = this.message.senderId === this.activeUserId;
+    const isThread = this.chatType === 'thread';
+
+    let left = isThread ? rect.left + 68
+      : isOwn ? rect.left + 308
+      : rect.right - 266 - pickerW;
+
+    let top = rect.bottom - pickerH;
+
+    if (left < 0) left = 10;
+    if (left + pickerW > window.innerWidth) left = window.innerWidth - pickerW - 10;
+    if (top < 0) top = 10;
+    if (top + pickerH > window.innerHeight) top = window.innerHeight - pickerH - 10;
+
+    this.emojiPickerTop = top;
+    this.emojiPickerLeft = left;
   }
 
   toggleEdit() {

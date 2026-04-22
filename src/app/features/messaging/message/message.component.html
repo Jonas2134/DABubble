@@ -66,8 +66,8 @@
   <emoji-mart
     #emojiPicker
     (emojiClick)="onEmojiPicked($event)"
-    [class.active-user-emoji]="message.senderId === activeUserId"
-    [class.thread-emoji]="chatType === 'thread'"
+    [style.top.px]="emojiPickerTop"
+    [style.left.px]="emojiPickerLeft"
   ></emoji-mart>
   } @loading {
   <div class="emoji-loading">Laden…</div>
