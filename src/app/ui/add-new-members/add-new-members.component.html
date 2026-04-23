@@ -33,7 +33,7 @@
 @if ((!showInput && selectedOption.value === 'option2') || (showInput)) {
   <ng-container >
     @if (showOverlay) {
-      <div [ngClass]="{ 'overlayAddNewMember': showXLine && showInput, 'overlayAddNewMemberAlternative': showXLine && !showInput }" tabindex="0" role="button" (click)="onFocusOut()" (keydown.enter)="onFocusOut()"></div>
+      <div class="overlayAddNewMember" tabindex="0" role="button" (click)="onFocusOut()" (keydown.enter)="onFocusOut()"></div>
     }
     <div class="popup" tabindex="0" role="group" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
       <div class="addInputField" #inputWrapper>
@@ -73,6 +73,8 @@
               </div>
               <h3>{{ member.name }}</h3>
             </button>
+            } @empty {
+              <span class="no-members-hint">Keine weiteren Mitglieder verfügbar</span>
             }
           </div>
         }

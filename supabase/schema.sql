@@ -40,7 +40,7 @@ CREATE TABLE public.messages (
   sender_id  UUID REFERENCES public.users(id),
   user_id    UUID REFERENCES public.users(id),
   thread_id  UUID REFERENCES public.messages(id),
-  channel_id UUID REFERENCES public.channels(id),
+  channel_id UUID REFERENCES public.channels(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 

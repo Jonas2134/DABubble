@@ -40,10 +40,10 @@ export class PermanentDeleteComponent {
         this.channelService
           .deleteChannel(this.id)
           .then(() => this.closed.emit())
-          .catch((err) =>
-            console.error('Fehler beim Löschen des Channels', err)
-          );
-        this.closed.emit();
+          .catch((err) => {
+            console.error('Fehler beim Löschen des Channels', err);
+            this.closed.emit();
+          });
         break;
       default:
         console.warn('Unbekannter Lösch‑Typ:', this.target);

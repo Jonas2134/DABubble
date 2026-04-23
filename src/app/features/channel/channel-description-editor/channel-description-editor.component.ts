@@ -32,7 +32,7 @@ export class ChannelDescriptionEditorComponent {
   toggleDescription() {
     this.hasInteracted = true;
     this.editDescription = !this.editDescription;
-    if (this.editDescription && this.channelData?.description) {
+    if (!this.editDescription && this.channelData?.description) {
       this.editedDescription.setValue(this.channelData.description);
     }
   }
@@ -44,8 +44,8 @@ export class ChannelDescriptionEditorComponent {
       .then(() => {
         this.channelData!.description = newDesc;
         this.descriptionUpdated.emit(newDesc);
+        this.toggleDescription();
       })
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      .catch(() => {});
+      .catch();
   }
 }

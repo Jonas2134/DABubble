@@ -189,6 +189,11 @@
   margin-bottom: 20px;
 }
 
+.no-members-hint {
+  color: #686868;
+  font-size: 16px;
+  padding: 4px 16px;
+}
 
 .memberItem {
   @include mixins.dFlex($justify: left, $gap: 15px);

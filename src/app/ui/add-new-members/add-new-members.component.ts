@@ -134,22 +134,14 @@ export class AddNewMembersComponent implements OnInit, OnChanges, AfterViewInit,
     if (idx > -1) {
       this.selectedMemberIds.splice(idx, 1);
       this.selectedMembers = this.selectedMembers.filter(m => m.id !== id);
-      this.showOverlay = true;
     } else {
       this.selectedMemberIds.push(id);
       this.selectedMembers.push(member);
     }
-    if (this.searchValue) {
-      this.memberAddElement = true;
-      this.showMember = false;
-    }
-    if (this.selectedMembers.length) {
-      this.memberAddElement = true;
-      this.showMember = true;
-    } else {
-      this.memberAddElement = false;
-      this.showMember = false;
-    }
+    this.memberAddElement = this.selectedMembers.length > 0;
+    this.showMember = false;
+    this.showOverlay = false;
+    this.searchValue = '';
   }
 
   isSelected(member: User): boolean {

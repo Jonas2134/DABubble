@@ -60,6 +60,8 @@ export class ChannelLeaveComponent {
   async removeMember() {
     if (!this.activeUserId || !this.channelData?.id) return;
     await this.channelService.removeUserFromChannel(this.channelData.id, this.activeUserId);
+    this.openChat.emit({ chatType: 'private', chatId: this.activeUserId });
+    this.closeWindow();
   }
 
   closeWindow() {

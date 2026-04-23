@@ -26,7 +26,7 @@ export class ChannelNameEditorComponent {
   toggleEdit() {
     this.hasInteractedName = true;
     this.editMode = !this.editMode;
-    if (this.editMode && this.channelData?.name) {
+    if (!this.editMode && this.channelData?.name) {
       this.editedChannelName.setValue(this.channelData.name);
     }
   }
