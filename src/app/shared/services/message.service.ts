@@ -88,14 +88,11 @@ export class MessageService {
     this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
 
     const channelName = `msgs-${chatType}-${chatId}-${++this.subCounter}`;
+    const refetch = () => this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
     const sub = this.supabaseService.supabase
       .channel(channelName)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
-        this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, () => {
-        this.fetchMessages(chatType, chatId, activeUserId).then(onUpdate);
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, refetch)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, refetch)
       .subscribe();
 
     return () => this.supabaseService.supabase.removeChannel(sub);
@@ -114,11 +111,10 @@ export class MessageService {
     this.fetchThreadMessages(threadId).then(onUpdate);
 
     const channelName = `thread-${threadId}-${++this.subCounter}`;
+    const refetch = () => this.fetchThreadMessages(threadId).then(onUpdate);
     const sub = this.supabaseService.supabase
       .channel(channelName)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, () => {
-        this.fetchThreadMessages(threadId).then(onUpdate);
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, refetch)
       .subscribe();
 
     return () => this.supabaseService.supabase.removeChannel(sub);

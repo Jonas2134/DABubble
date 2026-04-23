@@ -23,6 +23,10 @@ export class ChannelService {
     this.subscribeToChanges();
   }
 
+  reload() {
+    this.loadAllChannels();
+  }
+
   private async loadAllChannels() {
     const { data, error } = await this.supabaseService.supabase
       .from('channels')

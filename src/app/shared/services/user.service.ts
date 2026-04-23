@@ -24,6 +24,10 @@ export class UserService {
     this.subscribeToChanges();
   }
 
+  reload() {
+    this.loadPromise = this.loadAllUsers();
+  }
+
   private async loadAllUsers() {
     const { data, error } = await this.supabaseService.supabase
       .from('users')

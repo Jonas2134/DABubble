@@ -6,6 +6,7 @@ import { CrossTabSessionStorage } from './cross-tab-session-storage';
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
   private client: SupabaseClient;
+  readonly sessionReady: Promise<void>;
 
   constructor() {
     this.client = createClient(
@@ -17,6 +18,10 @@ export class SupabaseService {
         },
       }
     );
+
+    this.sessionReady = new Promise<void>((resolve) => {
+      this.client.auth.onAuthStateChange(() => resolve());
+    });
   }
 
   get supabase(): SupabaseClient {

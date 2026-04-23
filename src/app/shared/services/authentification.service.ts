@@ -2,6 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from './supabase.service';
 import { UserService } from './user.service';
+import { ChannelService } from './channel.service';
 import { environment } from '../../../environments/environment';
 
 interface RegistrationData {
@@ -14,6 +15,7 @@ interface RegistrationData {
 export class AuthentificationService {
   private supabase = inject(SupabaseService);
   private userService = inject(UserService);
+  private channelService = inject(ChannelService);
   private router = inject(Router);
   private logoutChannel = new BroadcastChannel('da-bubble-auth');
 
@@ -34,7 +36,9 @@ export class AuthentificationService {
       this._currentUid.set(session?.user?.id ?? null);
       this._isGuest.set(session?.user?.is_anonymous === true);
 
-      if (event === 'SIGNED_IN' && session?.user?.id) {
+      if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user?.id) {
+        this.userService.reload();
+        this.channelService.reload();
         this.userService.updateUserStatus(session.user.id, true);
       }
       if (event === 'PASSWORD_RECOVERY') {
