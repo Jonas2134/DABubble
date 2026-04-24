@@ -30,7 +30,7 @@ export class DirectMessageComponent {
     this.userService.users().find(user => user.id === this.activeUserId)
   );
 
-  someAction() {
+  closeSidebarOnMobile() {
     if (window.innerWidth < 1000) {
       this.toggleMessage.emit(true);
     }

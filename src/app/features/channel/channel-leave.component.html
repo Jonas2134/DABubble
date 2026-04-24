@@ -37,14 +37,14 @@
 @if (isChannelMemberProfilOpen) {
     <app-profil
     [activeUserId]="activeUserId ?? ''"
-    [userImage]="activChannelMemberProfil?.userImage ?? ''"
-    [userName]="activChannelMemberProfil?.name ?? ''"
-    [userEmail]="activChannelMemberProfil?.email ?? ''"
-    [userStatus]="activChannelMemberProfil?.status ?? false"
-    [userId]="activChannelMemberProfil?.id ?? ''"
+    [userImage]="activeChannelMemberProfil?.userImage ?? ''"
+    [userName]="activeChannelMemberProfil?.name ?? ''"
+    [userEmail]="activeChannelMemberProfil?.email ?? ''"
+    [userStatus]="activeChannelMemberProfil?.status ?? false"
+    [userId]="activeChannelMemberProfil?.id ?? ''"
     #profilRef
     size="big"
-    [showButton]="activeUserId !== activChannelMemberProfil?.id"
+    [showButton]="activeUserId !== activeChannelMemberProfil?.id"
     (closed)="toggleMemberProfil()"
     (openChat)="openChat.emit($event)"
     ></app-profil>

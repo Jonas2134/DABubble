@@ -24,6 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
         [name]="name"
         [placeholder]="placeholder"
         [autocomplete]="autocomplete"
+        [attr.aria-label]="ariaLabel || placeholder"
         [value]="value"
         (input)="onInputChange($event)"
         (blur)="onBlur()"
@@ -44,6 +45,7 @@ export class CustomInputComponent implements ControlValueAccessor {
   @Input() name = '';
   @Input() placeholder = '';
   @Input() autocomplete = 'on';
+  @Input() ariaLabel = '';
 
   @ViewChild('inputElement') inputElement!: ElementRef;
 

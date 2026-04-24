@@ -23,7 +23,7 @@
             <ul class="newChannels" role="list">
                 @for (channel of sortedChannels(); track channel.id) {
                     <li class="everyChannel">
-                        <button (click)="selectChannel(channel.id); someAction()" class="tagName">
+                        <button (click)="selectChannel(channel.id); closeSidebarOnMobile()" class="tagName">
                             <span class="tagImage">
                                 <span class="material-symbols hashtagIcon">tag</span>
                               </span>

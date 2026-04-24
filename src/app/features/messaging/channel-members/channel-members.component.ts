@@ -31,7 +31,7 @@ export class ChannelMembersComponent{
   @Input() activeUserId: string | null = null;
   @Input() channelId = '';
   @Input() channelName = '';
-  @Input() activChannelMemberProfil: User | null = null;
+  @Input() activeChannelMemberProfil: User | null = null;
   @Input() newChannelMembers = false;
   @Input() isChannelMemberProfilOpen = false;
   @Output() newChannelMembersChange = new EventEmitter<boolean>();
@@ -63,7 +63,7 @@ export class ChannelMembersComponent{
   toggleMemberProfil(member?: User) {   
     const isOpen = !this.isChannelMemberProfilOpen;
     this.isChannelMemberProfilOpen = isOpen;
-    this.activChannelMemberProfil = member || null;
+    this.activeChannelMemberProfil = member || null;
   }
 
 

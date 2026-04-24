@@ -46,6 +46,6 @@ export class ChannelDescriptionEditorComponent {
         this.descriptionUpdated.emit(newDesc);
         this.toggleDescription();
       })
-      .catch();
+      .catch(err => console.error('Beschreibung Update fehlgeschlagen:', err));
   }
 }

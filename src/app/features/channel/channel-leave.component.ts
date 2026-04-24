@@ -35,7 +35,7 @@ export class ChannelLeaveComponent {
   @Input() channelData: Channel | null = null;
   @Input() channelMembers: User[] = [];
   @Input() activeUserId: string | null = null;
-  @Input() activChannelMemberProfil: User | null = null;
+  @Input() activeChannelMemberProfil: User | null = null;
   @Input() newChannelMembers = false;
   @Input() channelName = '';
   @Input() isChannelMemberProfilOpen = false;
@@ -54,7 +54,7 @@ export class ChannelLeaveComponent {
 
   toggleMemberProfil(member?: User) {
     this.isChannelMemberProfilOpen = !this.isChannelMemberProfilOpen;
-    this.activChannelMemberProfil = member || null;
+    this.activeChannelMemberProfil = member || null;
   }
 
   async removeMember() {

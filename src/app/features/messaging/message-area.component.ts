@@ -64,7 +64,7 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
   @Input() activeUserId: string | null = null;
 
   @Output() openThread = new EventEmitter<string>();
-  @Output() closeThread = new EventEmitter<string>();
+  @Output() closeThread = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{
     chatType: 'private' | 'channel';
     chatId: string;
@@ -170,7 +170,9 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
 
     if (this.chatType === 'thread') {
       this.threadReplyCount = Math.max(0, msgs.length - 1);
-      this.setThreadContextName(msgs[0]);
+      if (msgs.length > 0) {
+        this.setThreadContextName(msgs[0]);
+      }
     }
 
     if (more) setTimeout(() => this.scrollToBottom(), 100);
@@ -264,7 +266,7 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
     this.finishNewTarget('private', u.id);
   }
   selectChannelNew(c: Channel) {
-    this.finishNewTarget('channel', c.id!);
+    this.finishNewTarget('channel', c.id);
   }
 
   private finishNewTarget(type: 'private' | 'channel', id: string) {
@@ -282,21 +284,21 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
 
   private async sendMessage() {
     const txt = this.newMessageText.trim();
-    if (!txt) return;
+    if (!txt || !this.activeUserId) return;
 
     if (this.chatType === 'thread' && this.chatId) {
       await this.messageService.replyInThread(
         this.chatId,
         txt,
-        this.activeUserId!
+        this.activeUserId
       );
-    } else {
+    } else if (this.chatId) {
       const msg: Partial<Message> = {
         text: txt,
         reactions: [],
-        senderId: this.activeUserId!,
-        userId: this.chatType === 'private' ? this.chatId! : '',
-        channelId: this.chatType === 'channel' ? this.chatId! : '',
+        senderId: this.activeUserId,
+        userId: this.chatType === 'private' ? this.chatId : '',
+        channelId: this.chatType === 'channel' ? this.chatId : '',
         threadId: '',
       };
       await this.messageService.createMessage(msg);

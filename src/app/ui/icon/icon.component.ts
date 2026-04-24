@@ -20,7 +20,10 @@ export class IconComponent {
     });
   }
 
+  private static readonly SAFE_NAME = /^[a-zA-Z0-9_-]+$/;
+
   private async loadIcon(name: string): Promise<void> {
+    if (!IconComponent.SAFE_NAME.test(name)) return;
     const cached = IconComponent.cache.get(name);
     if (cached) {
       this.svgContent.set(cached);

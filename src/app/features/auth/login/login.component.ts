@@ -81,7 +81,9 @@ export class LoginComponent implements OnInit {
 
     setTimeout(() => {
       const uid = this.authService.currentUid();
-      this.router.navigate(['/home', uid]);
+      if (uid) {
+        this.router.navigate(['/home', uid]);
+      }
     }, 3000);
   }
 
@@ -109,6 +111,7 @@ export class LoginComponent implements OnInit {
   onLoginWithGoogle(): void {
     this.authService.loginWithGoogle().catch(error => {
       console.error('Error during Google login:', error);
+      this.authError = 'Google-Anmeldung fehlgeschlagen. Bitte versuche es erneut.';
     });
   }
 
@@ -117,11 +120,17 @@ export class LoginComponent implements OnInit {
     this.authService.loginAsGuest()
     .then(() => {
       const uid = this.authService.currentUid();
-      this.router.navigate(['/home', uid]);
+      if (uid) {
+        this.router.navigate(['/home', uid]);
+      } else {
+        this.visibleBtn.show();
+        this.authError = 'Gast-Login fehlgeschlagen. Bitte versuche es erneut.';
+      }
     })
     .catch(error => {
       this.visibleBtn.show();
       console.error('Guest login error:', error);
+      this.authError = 'Gast-Login fehlgeschlagen. Bitte versuche es erneut.';
     });
   }
 

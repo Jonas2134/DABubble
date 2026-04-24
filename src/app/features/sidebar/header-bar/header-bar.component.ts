@@ -24,7 +24,7 @@ export class HeaderBarComponent {
       });
   }
 
-  someAction() {
+  closeSidebarOnMobile() {
     const screenWidth = window.innerWidth;
     if (screenWidth < 1000) {
       this.toggleMessage.emit(true);

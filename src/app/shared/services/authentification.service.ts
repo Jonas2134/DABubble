@@ -31,10 +31,13 @@ export class AuthentificationService {
   private _isGuest = signal(false);
   readonly isGuest = this._isGuest.asReadonly();
 
+  private _accessToken: string | null = null;
+
   constructor() {
     this.supabase.supabase.auth.onAuthStateChange((event, session) => {
       this._currentUid.set(session?.user?.id ?? null);
       this._isGuest.set(session?.user?.is_anonymous === true);
+      this._accessToken = session?.access_token ?? null;
 
       if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user?.id) {
         this.userService.reload();
@@ -58,15 +61,15 @@ export class AuthentificationService {
 
     window.addEventListener('beforeunload', () => {
       const uid = this._currentUid();
-      if (!uid || this._isGuest()) return;
-      const url = `${environment.supabaseUrl}/rest/v1/users?id=eq.${uid}`;
-      const key = environment.supabaseAnonKey;
+      const token = this._accessToken;
+      if (!uid || !token || this._isGuest()) return;
+      const url = `${environment.supabaseUrl}/rest/v1/users?id=eq.${encodeURIComponent(uid)}`;
       fetch(url, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'apikey': key,
-          'Authorization': `Bearer ${key}`,
+          'apikey': environment.supabaseAnonKey,
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ status: false }),
         keepalive: true,

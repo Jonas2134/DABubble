@@ -106,17 +106,30 @@ CREATE POLICY "channels_update" ON public.channels
 CREATE POLICY "channels_delete" ON public.channels
   FOR DELETE TO authenticated USING (auth.uid() = created_by_user);
 
--- Channel Members: Lesen fuer alle, Einfuegen/Loeschen fuer Mitglieder
+-- Channel Members: Lesen fuer alle, Einfuegen nur sich selbst oder als Channel-Ersteller, Loeschen fuer Mitglieder
 CREATE POLICY "channel_members_select" ON public.channel_members
   FOR SELECT TO authenticated USING (true);
 CREATE POLICY "channel_members_insert" ON public.channel_members
-  FOR INSERT TO authenticated WITH CHECK (true);
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    auth.uid() = user_id
+    OR EXISTS (
+      SELECT 1 FROM channels WHERE id = channel_id AND created_by_user = auth.uid()
+    )
+  );
 CREATE POLICY "channel_members_delete" ON public.channel_members
   FOR DELETE TO authenticated USING (auth.uid() = user_id);
 
--- Messages: Lesen fuer alle, eigene erstellen/bearbeiten/loeschen
+-- Messages: Nur eigene, empfangene und Channel-Nachrichten lesen; eigene erstellen/bearbeiten/loeschen
 CREATE POLICY "messages_select" ON public.messages
-  FOR SELECT TO authenticated USING (true);
+  FOR SELECT TO authenticated
+  USING (
+    sender_id = auth.uid()
+    OR user_id = auth.uid()
+    OR channel_id IN (
+      SELECT channel_id FROM channel_members WHERE user_id = auth.uid()
+    )
+  );
 CREATE POLICY "messages_insert" ON public.messages
   FOR INSERT TO authenticated WITH CHECK (auth.uid() = sender_id);
 CREATE POLICY "messages_update" ON public.messages

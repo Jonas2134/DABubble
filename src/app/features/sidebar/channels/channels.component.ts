@@ -31,10 +31,10 @@ export class ChannelsComponent {
     if (this.isGuest) {
       channels = channels.filter(c => c.name === 'Allgemein');
     }
-    return channels.map(c => ({ id: c.id!, name: c.name, createdAt: c.createdAt }));
+    return channels.map(c => ({ id: c.id, name: c.name, createdAt: c.createdAt }));
   });
 
-  someAction() {
+  closeSidebarOnMobile() {
     if (window.innerWidth < 1000) {
       this.toggleMessage.emit(true);
     }
@@ -59,6 +59,8 @@ export class ChannelsComponent {
     event.stopPropagation();
     this.openChannelId = channelId;
     this.isPermanentDeleteOpen = true;
-    this.selectChannel(this.activeUserId!, 'private');
+    if (this.activeUserId) {
+      this.selectChannel(this.activeUserId, 'private');
+    }
   }
 }

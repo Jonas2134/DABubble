@@ -17,7 +17,7 @@
         <ul class="directMessageList" role="list">
             @for (user of activeUsers(); track user.id) {
                 <li>
-                    <button (click)="selectPrivateChat(user.id); someAction()" class="directUser">
+                    <button (click)="selectPrivateChat(user.id); closeSidebarOnMobile()" class="directUser">
                         <div class="user-img-status">
                             <img [src]="user.userImage" [alt]="user.name + ' Profilbild'" />
                             <span [ngClass]="user.status ? 'online' : 'offline'"></span>
@@ -28,7 +28,7 @@
             }
             @for (user of inactiveUsers(); track user.id) {
                 <li>
-                    <button (click)="selectPrivateChat(user.id); someAction()" class="directUser">
+                    <button (click)="selectPrivateChat(user.id); closeSidebarOnMobile()" class="directUser">
                         <div class="user-img-status">
                             <img [src]="user.userImage" [alt]="user.name + ' Profilbild'" />
                             <span [ngClass]="user.status ? 'online' : 'offline'"></span>
