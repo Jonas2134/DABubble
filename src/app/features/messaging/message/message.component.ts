@@ -43,6 +43,7 @@ export class MessageComponent implements OnInit, OnChanges {
   private destroyRef = inject(DestroyRef);
 
   private cleanupThread?: () => void;
+  private _currentThreadId: string | null = null;
 
   @Input() chatType: 'private' | 'channel' | 'thread' | 'new' | null = null;
   @Input() message!: Message;
@@ -100,14 +101,22 @@ export class MessageComponent implements OnInit, OnChanges {
   }
 
   private loadThreadInfo() {
+    const threadId = this.message.threadId;
+
+    if (!threadId || this.chatType === 'thread' || this.chatType === 'private') {
+      this.cleanupThread?.();
+      this._currentThreadId = null;
+      this.replyCount = 0;
+      this.lastReplyTime = null;
+      return;
+    }
+
+    if (this._currentThreadId === threadId) return;
+    this._currentThreadId = threadId;
+
     this.cleanupThread?.();
-    this.replyCount = 0;
-    this.lastReplyTime = null;
-
-    if (!this.message.threadId || this.chatType === 'thread') return;
-
     this.cleanupThread = this.messageService.subscribeThreadMessages(
-      this.message.threadId,
+      threadId,
       (msgs) => {
         const replies = msgs.filter((m) => m.id !== this.message.id);
         this.replyCount = replies.length;
@@ -133,7 +142,7 @@ export class MessageComponent implements OnInit, OnChanges {
   }
 
   onThreadClick() {
-    if (!this.message.id) return;
+    if (!this.message.id || this.chatType === 'private') return;
 
     const tid = this.message.threadId || this.message.id;
     const ensureThread = this.message.threadId

@@ -36,7 +36,7 @@
         (emojiPickerToggle)="toggleEmojiPicker($event)"
       ></app-message-reactions>
 
-      @if (message.threadId && chatType !== 'thread' && replyCount > 0) {
+      @if (message.threadId && chatType !== 'thread' && chatType !== 'private' && replyCount > 0) {
       <div class="thread-field" tabindex="0" role="button" (click)="onThreadClick()" (keydown.enter)="onThreadClick()" (keydown.space)="$event.preventDefault(); onThreadClick()">
         <h4>{{ replyCount }} Antwort{{ replyCount !== 1 ? "en" : "" }}</h4>
         <h5>

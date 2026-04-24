@@ -17,14 +17,15 @@
     add_reaction
   </button>
 
+  @if (chatType !== 'thread' && chatType !== 'private') {
   <button
     class="material-symbols action-btn"
-    [class.d-none]="chatType === 'thread'"
     aria-label="In Thread antworten"
     (click)="threadOpen.emit()"
   >
     comment
   </button>
+  }
 
   <button
     #optionsBtn

@@ -209,9 +209,7 @@ export class MessageService {
 
   async startThread(parentMessageId: string): Promise<void> {
     const { error } = await this.supabaseService.supabase
-      .from('messages')
-      .update({ thread_id: parentMessageId })
-      .eq('id', parentMessageId);
+      .rpc('start_thread', { p_message_id: parentMessageId });
     if (error) throw error;
   }
 

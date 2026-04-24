@@ -136,9 +136,7 @@ export class ChannelService {
 
   async deleteChannel(channelId: string): Promise<void> {
     const { error } = await this.supabaseService.supabase
-      .from('channels')
-      .delete()
-      .eq('id', channelId);
+      .rpc('delete_channel', { p_channel_id: channelId });
     if (error) throw error;
   }
 

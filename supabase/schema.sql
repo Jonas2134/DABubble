@@ -39,7 +39,7 @@ CREATE TABLE public.messages (
   text       TEXT NOT NULL DEFAULT '',
   sender_id  UUID REFERENCES public.users(id),
   user_id    UUID REFERENCES public.users(id),
-  thread_id  UUID REFERENCES public.messages(id),
+  thread_id  UUID REFERENCES public.messages(id) ON DELETE CASCADE,
   channel_id UUID REFERENCES public.channels(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT now()
 );
@@ -120,7 +120,21 @@ CREATE POLICY "channel_members_insert" ON public.channel_members
 CREATE POLICY "channel_members_delete" ON public.channel_members
   FOR DELETE TO authenticated USING (auth.uid() = user_id);
 
--- Messages: Nur eigene, empfangene und Channel-Nachrichten lesen; eigene erstellen/bearbeiten/loeschen
+-- Messages: Eigene, empfangene, Channel- und Thread-Nachrichten lesen; eigene erstellen/bearbeiten/loeschen
+-- Hilfsfunktion: Prueft ob ein Thread zu einem Channel gehoert, in dem der User Mitglied ist
+-- (SECURITY DEFINER umgeht RLS-Rekursion auf der messages-Tabelle)
+CREATE OR REPLACE FUNCTION public.can_read_thread(p_thread_id UUID)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN EXISTS (
+    SELECT 1 FROM public.messages m
+    JOIN public.channel_members cm ON cm.channel_id = m.channel_id
+    WHERE m.id = p_thread_id
+    AND cm.user_id = auth.uid()
+  );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+
 CREATE POLICY "messages_select" ON public.messages
   FOR SELECT TO authenticated
   USING (
@@ -129,6 +143,7 @@ CREATE POLICY "messages_select" ON public.messages
     OR channel_id IN (
       SELECT channel_id FROM channel_members WHERE user_id = auth.uid()
     )
+    OR (thread_id IS NOT NULL AND public.can_read_thread(thread_id))
   );
 CREATE POLICY "messages_insert" ON public.messages
   FOR INSERT TO authenticated WITH CHECK (auth.uid() = sender_id);
@@ -166,6 +181,51 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 CREATE OR REPLACE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================
+-- RPC: Thread starten (SECURITY DEFINER umgeht messages_update RLS)
+-- ============================================
+
+CREATE OR REPLACE FUNCTION public.start_thread(p_message_id UUID)
+RETURNS void AS $$
+DECLARE
+  v_channel_id UUID;
+BEGIN
+  SELECT channel_id INTO v_channel_id
+  FROM public.messages WHERE id = p_message_id;
+
+  IF v_channel_id IS NULL THEN
+    RAISE EXCEPTION 'Message not found or not in a channel';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.channel_members
+    WHERE channel_id = v_channel_id AND user_id = auth.uid()
+  ) THEN
+    RAISE EXCEPTION 'Not a member of this channel';
+  END IF;
+
+  UPDATE public.messages SET thread_id = p_message_id WHERE id = p_message_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ============================================
+-- RPC: Channel loeschen (jedes Mitglied darf loeschen, CASCADE raeumt auf)
+-- ============================================
+
+CREATE OR REPLACE FUNCTION public.delete_channel(p_channel_id UUID)
+RETURNS void AS $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM public.channel_members
+    WHERE channel_id = p_channel_id AND user_id = auth.uid()
+  ) THEN
+    RAISE EXCEPTION 'Not a member of this channel';
+  END IF;
+
+  DELETE FROM public.channels WHERE id = p_channel_id;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- ============================================
 -- RPC: Anonymen Guest-User loeschen (CASCADE loescht alle Daten)
