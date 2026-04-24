@@ -1,5 +1,6 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { LoggerService } from '../../shared/services/logger.service';
 
 @Component({
   selector: 'app-icon',
@@ -10,6 +11,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class IconComponent {
   private static cache = new Map<string, SafeHtml>();
   private sanitizer = inject(DomSanitizer);
+  private logger = inject(LoggerService);
 
   name = input.required<string>();
   svgContent = signal<SafeHtml>('');
@@ -36,7 +38,7 @@ export class IconComponent {
       IconComponent.cache.set(name, safe);
       this.svgContent.set(safe);
     } catch {
-      console.error(`Icon "${name}" could not be loaded.`);
+      this.logger.error(`Icon "${name}" could not be loaded.`);
     }
   }
 }

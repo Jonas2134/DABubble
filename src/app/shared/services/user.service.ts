@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { User } from '../interfaces/user.interface';
 import { SupabaseService } from './supabase.service';
+import { LoggerService } from './logger.service';
 
 interface UserRow {
   id: string;
@@ -14,6 +15,7 @@ interface UserRow {
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private supabaseService = inject(SupabaseService);
+  private logger = inject(LoggerService);
 
   private _users = signal<User[]>([]);
   readonly users = this._users.asReadonly();
@@ -32,7 +34,7 @@ export class UserService {
     const { data, error } = await this.supabaseService.supabase
       .from('users')
       .select('*');
-    if (error) { console.error('loadAllUsers', error); return; }
+    if (error) { this.logger.error('loadAllUsers', error); return; }
     this._users.set((data ?? []).map(r => this.mapUser(r as UserRow)));
   }
 

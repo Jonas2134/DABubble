@@ -15,6 +15,7 @@ import { AuthentificationService } from '../../../shared/services/authentificati
 import { CustomInputComponent } from '../../../ui/custom-input/custom-input.component';
 import { SuccessIndicatorComponent } from '../../../ui/success-indicator/success-indicator.component';
 import { VisibleButtonService } from '../../../shared/services/visible-button.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-confirm-password',
@@ -32,6 +33,7 @@ export class ConfirmPasswordComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
   private router = inject(Router);
   private authService = inject(AuthentificationService);
+  private logger = inject(LoggerService);
 
   newPassword!: FormGroup;
   isConfirmationVisible = false;
@@ -104,7 +106,7 @@ export class ConfirmPasswordComponent implements OnInit {
   
   private handleResetError(error: unknown): void {
     this.visibleBtn.show();
-    console.error('Error when resetting the password:', error);
+    this.logger.error('Error when resetting the password:', error);
     this.authError = 'Passwort konnte nicht zurückgesetzt werden. Bitte versuche es erneut.';
   }
 

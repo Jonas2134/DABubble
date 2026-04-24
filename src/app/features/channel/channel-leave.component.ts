@@ -4,6 +4,7 @@ import { ButtonComponent } from '../../ui/button/button.component';
 import { Channel } from '../../shared/interfaces/channel.interface';
 import { User } from '../../shared/interfaces/user.interface';
 import { ChannelService } from '../../shared/services/channel.service';
+import { LoggerService } from '../../shared/services/logger.service';
 import { DeviceVisibleComponent } from '../../ui/device-visible/device-visible.component';
 import { MemberListComponent } from '../../ui/member-list/member-list.component';
 import { ProfilComponent } from '../../ui/profil/profil.component';
@@ -31,6 +32,7 @@ import { ChannelDescriptionEditorComponent } from './channel-description-editor/
 })
 export class ChannelLeaveComponent {
   private channelService = inject(ChannelService);
+  private logger = inject(LoggerService);
 
   @Input() channelData: Channel | null = null;
   @Input() channelMembers: User[] = [];
@@ -63,7 +65,7 @@ export class ChannelLeaveComponent {
       this.openChat.emit({ chatType: 'private', chatId: this.activeUserId });
       this.closeWindow();
     } catch (err) {
-      console.error('Channel verlassen fehlgeschlagen:', err);
+      this.logger.error('Channel verlassen fehlgeschlagen:', err);
     }
   }
 

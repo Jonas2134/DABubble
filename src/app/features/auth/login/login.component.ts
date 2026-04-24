@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { CustomInputComponent } from '../../../ui/custom-input/custom-input.component';
 import { SuccessIndicatorComponent } from '../../../ui/success-indicator/success-indicator.component';
 import { VisibleButtonService } from '../../../shared/services/visible-button.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private authService = inject(AuthentificationService);
   private supabaseService = inject(SupabaseService);
+  private logger = inject(LoggerService);
   router = inject(Router);
 
   loginForm!: FormGroup;
@@ -93,7 +95,7 @@ export class LoginComponent implements OnInit {
 
   private handleLoginError(error: unknown): void {
     this.visibleBtn.show();
-    console.error('Login error:', error);
+    this.logger.error('Login error:', error);
     this.authError = this.mapErrorToMessage(error);
   }
 
@@ -110,7 +112,7 @@ export class LoginComponent implements OnInit {
 
   onLoginWithGoogle(): void {
     this.authService.loginWithGoogle().catch(error => {
-      console.error('Error during Google login:', error);
+      this.logger.error('Error during Google login:', error);
       this.authError = 'Google-Anmeldung fehlgeschlagen. Bitte versuche es erneut.';
     });
   }
@@ -129,7 +131,7 @@ export class LoginComponent implements OnInit {
     })
     .catch(error => {
       this.visibleBtn.show();
-      console.error('Guest login error:', error);
+      this.logger.error('Guest login error:', error);
       this.authError = 'Gast-Login fehlgeschlagen. Bitte versuche es erneut.';
     });
   }

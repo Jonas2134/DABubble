@@ -14,6 +14,7 @@ import {
 import { Router } from '@angular/router';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
 import { CustomInputComponent } from '../../../ui/custom-input/custom-input.component';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 function strongPasswordValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -37,6 +38,7 @@ function strongPasswordValidator(): ValidatorFn {
 })
 export class CreateAccountComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
+  private logger = inject(LoggerService);
   router = inject(Router);
   private authService = inject(AuthentificationService);
   registerForm!: FormGroup;
@@ -71,7 +73,7 @@ export class CreateAccountComponent implements OnInit {
   }
 
   private handleRegisterError(error: unknown): void {
-    console.error('Email is taken:', error);
+    this.logger.error('Email is taken:', error);
     this.confError = 'Diese E-Mail ist bereits vorhanden! Bitte geben Sie eine andere E-Mail-Adresse ein.';
   }
 

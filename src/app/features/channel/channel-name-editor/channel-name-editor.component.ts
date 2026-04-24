@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/interfaces/channel.interface';
 import { ChannelService } from '../../../shared/services/channel.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 import { fadeSlide } from '../../../shared/animations/animations';
 
 @Component({
@@ -14,6 +15,7 @@ import { fadeSlide } from '../../../shared/animations/animations';
 })
 export class ChannelNameEditorComponent {
   private channelService = inject(ChannelService);
+  private logger = inject(LoggerService);
 
   @Input() channelData: Channel | null = null;
   @Output() nameUpdated = new EventEmitter<string>();
@@ -53,6 +55,6 @@ export class ChannelNameEditorComponent {
         this.nameUpdated.emit(newName);
         this.toggleEdit();
       })
-      .catch(err => console.error('Channel-Name Update fehlgeschlagen:', err));
+      .catch(err => this.logger.error('Channel-Name Update fehlgeschlagen:', err));
   }
 }

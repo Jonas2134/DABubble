@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
 import { SuccessIndicatorComponent } from '../../../ui/success-indicator/success-indicator.component';
 import { VisibleButtonService } from '../../../shared/services/visible-button.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-select-avatar',
@@ -16,6 +17,7 @@ export class SelectAvatarComponent {
   private visibleBtn = inject(VisibleButtonService);
   private router = inject(Router);
   private authService = inject(AuthentificationService);
+  private logger = inject(LoggerService);
 
   avatars = [
     'avatar-1.png',
@@ -47,7 +49,7 @@ export class SelectAvatarComponent {
 
   onNext(): void {
     if (!this.selectedAvatar) {
-      console.error('No avatar selected!');
+      this.logger.error('No avatar selected!');
       return;
     }
     this.visibleBtn.hide();
@@ -72,7 +74,7 @@ export class SelectAvatarComponent {
 
   private handleAvatarError(error: unknown): void {
     this.visibleBtn.show();
-    console.error('Error when adding the profile picture:', error);
+    this.logger.error('Error when adding the profile picture:', error);
     this.avatarError = 'Registrierung fehlgeschlagen. Bitte versuche es erneut.';
   }
 

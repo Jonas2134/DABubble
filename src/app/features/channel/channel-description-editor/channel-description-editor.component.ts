@@ -3,6 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Channel } from '../../../shared/interfaces/channel.interface';
 import { ChannelService } from '../../../shared/services/channel.service';
 import { UserService } from '../../../shared/services/user.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 import { fadeSlide } from '../../../shared/animations/animations';
 
 @Component({
@@ -16,6 +17,7 @@ import { fadeSlide } from '../../../shared/animations/animations';
 export class ChannelDescriptionEditorComponent {
   private channelService = inject(ChannelService);
   private userService = inject(UserService);
+  private logger = inject(LoggerService);
 
   @Input() channelData: Channel | null = null;
   @Output() descriptionUpdated = new EventEmitter<string>();
@@ -45,6 +47,6 @@ export class ChannelDescriptionEditorComponent {
         this.descriptionUpdated.emit(newDesc);
         this.toggleDescription();
       })
-      .catch(err => console.error('Beschreibung Update fehlgeschlagen:', err));
+      .catch(err => this.logger.error('Beschreibung Update fehlgeschlagen:', err));
   }
 }

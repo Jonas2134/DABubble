@@ -12,6 +12,7 @@ import { ButtonComponent } from '../button/button.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../shared/services/user.service';
+import { LoggerService } from '../../shared/services/logger.service';
 
 @Component({
   selector: 'app-profil',
@@ -26,6 +27,7 @@ export class ProfilComponent implements OnInit {
   
   private router = inject(Router);
   private userService = inject(UserService);
+  private logger = inject(LoggerService);
   isActive = true;
   showEditProfil = false;
   showAvatarChoice = false;
@@ -61,7 +63,7 @@ export class ProfilComponent implements OnInit {
       await this.userService.updateUserImage(this.activeUserId, this.userImage);
       this.originalUserImage = this.userImage;
     } catch (err) {
-      console.error('Avatar-Update fehlgeschlagen:', err);
+      this.logger.error('Avatar-Update fehlgeschlagen:', err);
       this.userImage = this.originalUserImage;
     } finally {
       this.showAvatarChoice = false;
@@ -77,7 +79,7 @@ export class ProfilComponent implements OnInit {
         this.userName = name;
         this.showEditProfil = false;
       })
-      .catch(err => console.error('Name-Update fehlgeschlagen:', err));
+      .catch(err => this.logger.error('Name-Update fehlgeschlagen:', err));
   }
 
 
@@ -102,7 +104,7 @@ export class ProfilComponent implements OnInit {
       await this.userService.deleteUser(this.activeUserId);
       this.router.navigate(['/auth/login']);
     } catch (err) {
-      console.error('Account-Loeschung fehlgeschlagen:', err);
+      this.logger.error('Account-Loeschung fehlgeschlagen:', err);
     }
   }
 

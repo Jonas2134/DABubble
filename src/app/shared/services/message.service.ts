@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Message } from '../interfaces/message.interface';
 import { Reaction } from '../interfaces/reaction.interface';
 import { SupabaseService } from './supabase.service';
+import { LoggerService } from './logger.service';
 
 interface MessageRow {
   id: string;
@@ -23,6 +24,7 @@ interface ReactionRow {
 @Injectable({ providedIn: 'root' })
 export class MessageService {
   private supabaseService = inject(SupabaseService);
+  private logger = inject(LoggerService);
   private subCounter = 0;
 
   private mapMessage(row: MessageRow): Message {
@@ -69,7 +71,7 @@ export class MessageService {
     }
 
     const { data, error } = await query;
-    if (error) { console.error('fetchMessages', error); return []; }
+    if (error) { this.logger.error('fetchMessages', error); return []; }
     return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
 
@@ -127,7 +129,7 @@ export class MessageService {
       .select('*, reactions(*)')
       .eq('thread_id', threadId)
       .order('created_at');
-    if (error) { console.error('fetchThreadMessages', error); return []; }
+    if (error) { this.logger.error('fetchThreadMessages', error); return []; }
     return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
 

@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Channel } from '../interfaces/channel.interface';
 import { SupabaseService } from './supabase.service';
+import { LoggerService } from './logger.service';
 
 interface ChannelRow {
   id: string;
@@ -14,6 +15,7 @@ interface ChannelRow {
 @Injectable({ providedIn: 'root' })
 export class ChannelService {
   private supabaseService = inject(SupabaseService);
+  private logger = inject(LoggerService);
 
   private _channels = signal<Channel[]>([]);
   readonly channels = this._channels.asReadonly();
@@ -32,7 +34,7 @@ export class ChannelService {
       .from('channels')
       .select('*, channel_members(user_id)')
       .order('created_at');
-    if (error) { console.error('loadAllChannels', error); return; }
+    if (error) { this.logger.error('loadAllChannels', error); return; }
     this._channels.set((data ?? []).map(r => this.mapChannel(r as ChannelRow)));
   }
 

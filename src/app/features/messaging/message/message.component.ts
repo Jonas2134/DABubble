@@ -22,6 +22,7 @@ import { TimeInHoursPipe } from '../../../shared/pipes/time-in-hours.pipe';
 import { DayLabelPipe } from '../../../shared/pipes/day-label.pipe';
 import { MessageReactionsComponent } from './message-reactions/message-reactions.component';
 import { MessageActionsComponent } from './message-actions/message-actions.component';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-message',
@@ -41,6 +42,7 @@ export class MessageComponent implements OnInit, OnChanges {
   private userService = inject(UserService);
   private messageService = inject(MessageService);
   private destroyRef = inject(DestroyRef);
+  private logger = inject(LoggerService);
 
   private cleanupThread?: () => void;
   private _currentThreadId: string | null = null;
@@ -130,7 +132,7 @@ export class MessageComponent implements OnInit, OnChanges {
 
     this.userService
       .editLastReactions(this.activeUserId, reaction)
-      .catch(console.error);
+      .catch(err => this.logger.error('editLastReactions failed:', err));
 
     this.messageService
       .toggleReaction(this.message.id, {
@@ -138,7 +140,7 @@ export class MessageComponent implements OnInit, OnChanges {
         userId: this.activeUserId,
         userName: this.activeUserData()?.name ?? '',
       })
-      .catch(console.error);
+      .catch(err => this.logger.error('toggleReaction failed:', err));
   }
 
   private threadPending = false;
@@ -237,7 +239,7 @@ export class MessageComponent implements OnInit, OnChanges {
     this.messageService
       .editMessageText(this.message.id, trimmed)
       .then(() => this.toggleEdit())
-      .catch(console.error);
+      .catch(err => this.logger.error('editMessageText failed:', err));
   }
 
   @HostListener('document:click', ['$event'])

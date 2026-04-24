@@ -5,6 +5,7 @@ import { ChannelService } from '../../shared/services/channel.service';
 import { UserService } from '../../shared/services/user.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
+import { LoggerService } from '../../shared/services/logger.service';
 
 @Component({
   selector: 'app-add-new-members',
@@ -21,6 +22,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges, AfterViewInit,
   private channelService = inject(ChannelService);
   private userService = inject(UserService);
   private destroyRef = inject(DestroyRef);
+  private logger = inject(LoggerService);
   private resizeObserver?: ResizeObserver;
 
   memberAddElement = false;
@@ -172,7 +174,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges, AfterViewInit,
       this.selectedMembers = [];
       this.closed.emit();
     } catch (err) {
-      console.error('Mitglieder hinzufuegen fehlgeschlagen:', err);
+      this.logger.error('Mitglieder hinzufuegen fehlgeschlagen:', err);
     }
   }
 

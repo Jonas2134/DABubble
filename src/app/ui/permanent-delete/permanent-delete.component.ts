@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../button/button.component';
 import { MessageService } from '../../shared/services/message.service';
 import { ChannelService } from '../../shared/services/channel.service';
+import { LoggerService } from '../../shared/services/logger.service';
 
 type DeleteTarget = 'message' | 'channel' | 'user';
 
@@ -15,6 +16,7 @@ type DeleteTarget = 'message' | 'channel' | 'user';
 export class PermanentDeleteComponent {
   private messageService = inject(MessageService);
   private channelService = inject(ChannelService);
+  private logger = inject(LoggerService);
 
   @Input({ required: true }) target!: DeleteTarget;
   @Input({ required: true }) id!: string;
@@ -32,7 +34,7 @@ export class PermanentDeleteComponent {
           .deleteMessage(this.id)
           .then(() => this.closed.emit())
           .catch((err) =>
-            console.error('Fehler beim Löschen der Nachricht', err)
+            this.logger.error('Fehler beim Löschen der Nachricht', err)
           );
         break;
 
@@ -41,12 +43,12 @@ export class PermanentDeleteComponent {
           .deleteChannel(this.id)
           .then(() => this.closed.emit())
           .catch((err) => {
-            console.error('Fehler beim Löschen des Channels', err);
+            this.logger.error('Fehler beim Löschen des Channels', err);
             this.closed.emit();
           });
         break;
       default:
-        console.warn('Unbekannter Lösch‑Typ:', this.target);
+        this.logger.warn('Unbekannter Lösch‑Typ:', this.target);
         this.closed.emit();
     }
   }

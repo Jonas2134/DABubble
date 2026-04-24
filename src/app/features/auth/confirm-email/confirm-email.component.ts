@@ -13,6 +13,7 @@ import { AuthentificationService } from '../../../shared/services/authentificati
 import { CustomInputComponent } from '../../../ui/custom-input/custom-input.component';
 import { SuccessIndicatorComponent } from '../../../ui/success-indicator/success-indicator.component';
 import { VisibleButtonService } from '../../../shared/services/visible-button.service';
+import { LoggerService } from '../../../shared/services/logger.service';
 
 @Component({
   selector: 'app-confirm-email',
@@ -23,6 +24,7 @@ import { VisibleButtonService } from '../../../shared/services/visible-button.se
 export class ConfirmEmailComponent implements OnInit {
   private visibleBtn = inject(VisibleButtonService);
   private destroyRef = inject(DestroyRef);
+  private logger = inject(LoggerService);
   router = inject(Router);
   private authService = inject(AuthentificationService);
 
@@ -73,7 +75,7 @@ export class ConfirmEmailComponent implements OnInit {
 
   private handleSendError(error: unknown): void {
     this.visibleBtn.show();
-    console.error('Error when sending the reset email:', error);
+    this.logger.error('Error when sending the reset email:', error);
     this.findEmail = 'Es wurde keine übereinstimmende E-Mail gefunden.';
   }
 

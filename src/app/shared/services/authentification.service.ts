@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { SupabaseService } from './supabase.service';
 import { UserService } from './user.service';
 import { ChannelService } from './channel.service';
+import { LoggerService } from './logger.service';
 import { environment } from '../../../environments/environment';
 
 interface RegistrationData {
@@ -16,6 +17,7 @@ export class AuthentificationService {
   private supabase = inject(SupabaseService);
   private userService = inject(UserService);
   private channelService = inject(ChannelService);
+  private logger = inject(LoggerService);
   private router = inject(Router);
   private logoutChannel = new BroadcastChannel('da-bubble-auth');
 
@@ -112,7 +114,7 @@ export class AuthentificationService {
         .from('users')
         .update({ user_image: profilePictureUrl })
         .eq('id', data.user.id);
-      if (updateError) console.warn('Fallback user_image update failed:', updateError.message);
+      if (updateError) this.logger.warn('Fallback user_image update failed:', updateError.message);
     }
 
     this._registrationData.set(null);
@@ -200,7 +202,7 @@ export class AuthentificationService {
     const uid = this._currentUid();
     if (this._isGuest()) {
       const { error } = await this.supabase.supabase.rpc('delete_anonymous_user');
-      if (error) console.warn('Guest cleanup failed:', error.message);
+      if (error) this.logger.warn('Guest cleanup failed:', error.message);
     } else if (uid) {
       await this.userService.updateUserStatus(uid, false);
     }
