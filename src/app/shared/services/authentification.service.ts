@@ -188,6 +188,8 @@ export class AuthentificationService {
     });
     if (error) throw error;
     this._isRecoveryMode.set(false);
+    await this.supabase.supabase.auth.signOut();
+    this._currentUid.set(null);
   }
 
   clearRegistrationData(): void {

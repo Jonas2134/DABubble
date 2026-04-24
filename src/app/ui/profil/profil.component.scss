@@ -4,7 +4,7 @@
 @use '../../shared/scss/buttons' as buttons;
 
 .profil-overlay {
-  @include overlays.overlay();
+  @include overlays.overlayFixed();
 }
 
 section{
