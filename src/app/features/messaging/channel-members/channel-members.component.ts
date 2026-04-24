@@ -31,9 +31,9 @@ export class ChannelMembersComponent{
   @Input() activeUserId: string | null = null;
   @Input() channelId = '';
   @Input() channelName = '';
-  @Input() activeChannelMemberProfil: User | null = null;
+  activeChannelMemberProfil: User | null = null;
   @Input() newChannelMembers = false;
-  @Input() isChannelMemberProfilOpen = false;
+  isChannelMemberProfilOpen = false;
   @Output() newChannelMembersChange = new EventEmitter<boolean>();
   @Output() closed = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{chatType: 'private'; chatId: string}>();

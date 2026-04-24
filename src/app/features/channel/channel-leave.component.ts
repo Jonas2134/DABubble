@@ -35,10 +35,9 @@ export class ChannelLeaveComponent {
   @Input() channelData: Channel | null = null;
   @Input() channelMembers: User[] = [];
   @Input() activeUserId: string | null = null;
-  @Input() activeChannelMemberProfil: User | null = null;
+  activeChannelMemberProfil: User | null = null;
   @Input() newChannelMembers = false;
-  @Input() channelName = '';
-  @Input() isChannelMemberProfilOpen = false;
+  isChannelMemberProfilOpen = false;
 
   @Output() newChannelMembersChange = new EventEmitter<boolean>();
   @Output() addMember = new EventEmitter<void>();
@@ -59,9 +58,13 @@ export class ChannelLeaveComponent {
 
   async removeMember() {
     if (!this.activeUserId || !this.channelData?.id) return;
-    await this.channelService.removeUserFromChannel(this.channelData.id, this.activeUserId);
-    this.openChat.emit({ chatType: 'private', chatId: this.activeUserId });
-    this.closeWindow();
+    try {
+      await this.channelService.removeUserFromChannel(this.channelData.id, this.activeUserId);
+      this.openChat.emit({ chatType: 'private', chatId: this.activeUserId });
+      this.closeWindow();
+    } catch (err) {
+      console.error('Channel verlassen fehlgeschlagen:', err);
+    }
   }
 
   closeWindow() {

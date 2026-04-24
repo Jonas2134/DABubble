@@ -6,7 +6,7 @@
 }
 } @if (displaySuggestions) {
 <ul class="suggestions" role="listbox">
-  @for(user of foundUsers; track user) {
+  @for(user of foundUsers; track user.id) {
   <li role="option" tabindex="0" (click)="insertUserSuggestion(user)" (keydown.enter)="insertUserSuggestion(user)">
     <div class="user-img-status">
       <img src="{{ user?.userImage }}" [alt]="user?.name + ' Profilbild'" />
@@ -14,7 +14,7 @@
     </div>
     <span>{{ user?.name }}</span>
   </li>
-  } @for(channel of foundChannels; track channel) {
+  } @for(channel of foundChannels; track channel.id) {
   <li role="option" tabindex="0" (click)="insertChannelSuggestion(channel)" (keydown.enter)="insertChannelSuggestion(channel)">#{{ channel?.name }}</li>
   }
 </ul>

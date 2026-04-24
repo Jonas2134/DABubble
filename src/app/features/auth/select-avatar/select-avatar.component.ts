@@ -28,6 +28,7 @@ export class SelectAvatarComponent {
   selectedAvatar: string | null = null;
   username: string | undefined | null = this.authService.registrationData()?.username;
   isConfirmationVisible = false;
+  avatarError = '';
 
   readonly isButtonVisible = this.visibleBtn.visibleButton;
 
@@ -72,6 +73,7 @@ export class SelectAvatarComponent {
   private handleAvatarError(error: unknown): void {
     this.visibleBtn.show();
     console.error('Error when adding the profile picture:', error);
+    this.avatarError = 'Registrierung fehlgeschlagen. Bitte versuche es erneut.';
   }
 
 }

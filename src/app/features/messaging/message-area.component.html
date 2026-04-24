@@ -58,7 +58,7 @@
       </a>
       <div class="channel-members">
         <div class="channel-every-member" tabindex="0" role="button" (click)="toggleChannelMembers()" (keydown.enter)="toggleChannelMembers()" (keydown.space)="$event.preventDefault(); toggleChannelMembers()">
-          @for (member of channelMembers().slice(0,3); track member) {
+          @for (member of channelMembers().slice(0,3); track member.id) {
           <img src="{{ member.userImage }}" [alt]="member.name" />
           } @if (channelMembers().length > 3) {
           <div>...</div>
@@ -163,7 +163,7 @@
       #composer
       [placeholder]="getPlaceholder()"
       (messageSend)="sendMessageFromComposer($event)"
-      >>
+    >
     </app-message-composer>
   </div>
   } @if (isEditChannelOpen) {
@@ -197,7 +197,6 @@
     [channelMembers]="channelMembers()"
     [activeUserId]="activeUserId"
     [channelId]="channelData()?.id ?? ''"
-    (addMember)="addChannelMember()"
     (closed)="toggleChannelMembers()"
     (openChat)="openChat.emit($event)"
   ></app-channel-members>

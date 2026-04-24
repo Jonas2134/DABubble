@@ -50,7 +50,6 @@ export class ChannelNameEditorComponent {
     this.channelService
       .updateChannelName(this.channelData.id, newName)
       .then(() => {
-        this.channelData!.name = newName;
         this.nameUpdated.emit(newName);
         this.toggleEdit();
       })

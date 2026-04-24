@@ -141,16 +141,18 @@ export class MessageComponent implements OnInit, OnChanges {
       .catch(console.error);
   }
 
+  private threadPending = false;
+
   onThreadClick() {
-    if (!this.message.id || this.chatType === 'private') return;
+    if (!this.message.id || this.chatType === 'private' || this.threadPending) return;
 
     const tid = this.message.threadId || this.message.id;
     const ensureThread = this.message.threadId
       ? Promise.resolve()
-      : this.messageService.startThread(this.message.id);
+      : (this.threadPending = true, this.messageService.startThread(this.message.id));
 
     ensureThread.then(() => {
-      this.message.threadId = tid;
+      this.threadPending = false;
       this.threadOpen.emit(tid);
     });
   }
@@ -234,10 +236,7 @@ export class MessageComponent implements OnInit, OnChanges {
     }
     this.messageService
       .editMessageText(this.message.id, trimmed)
-      .then(() => {
-        this.message.text = trimmed;
-        this.toggleEdit();
-      })
+      .then(() => this.toggleEdit())
       .catch(console.error);
   }
 

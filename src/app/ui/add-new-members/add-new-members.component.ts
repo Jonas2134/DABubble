@@ -163,13 +163,17 @@ export class AddNewMembersComponent implements OnInit, OnChanges, AfterViewInit,
 
   async addNewChannelMembers() {
     if (!this.channelId || this.selectedMemberIds.length === 0) return;
-    await this.channelService.addUsersToChannel(
-      this.channelId,
-      ...this.selectedMemberIds
-    );
-    this.selectedMemberIds = [];
-    this.selectedMembers = [];
-    this.closed.emit();
+    try {
+      await this.channelService.addUsersToChannel(
+        this.channelId,
+        ...this.selectedMemberIds
+      );
+      this.selectedMemberIds = [];
+      this.selectedMembers = [];
+      this.closed.emit();
+    } catch (err) {
+      console.error('Mitglieder hinzufuegen fehlgeschlagen:', err);
+    }
   }
 
   async createNewChannel(name: string, description: string) {

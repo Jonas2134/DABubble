@@ -42,7 +42,7 @@ export class AuthentificationService {
       if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && session?.user?.id) {
         this.userService.reload();
         this.channelService.reload();
-        this.userService.updateUserStatus(session.user.id, true);
+        this.userService.updateUserStatus(session.user.id, true).catch(() => {});
       }
       if (event === 'PASSWORD_RECOVERY') {
         this._isRecoveryMode.set(true);

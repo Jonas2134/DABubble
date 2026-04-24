@@ -1,6 +1,6 @@
 <div class="memberlist">
     <ul class="members" role="list">
-      @for (member of channelMembers; track member) {
+      @for (member of channelMembers; track member.id) {
         <li>
           <button class="member-btn" (click)="showProfil.emit(member)">
             <div class="user-img-status">

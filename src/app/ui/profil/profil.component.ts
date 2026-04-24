@@ -60,19 +60,24 @@ export class ProfilComponent implements OnInit {
     try {
       await this.userService.updateUserImage(this.activeUserId, this.userImage);
       this.originalUserImage = this.userImage;
+    } catch (err) {
+      console.error('Avatar-Update fehlgeschlagen:', err);
+      this.userImage = this.originalUserImage;
     } finally {
       this.showAvatarChoice = false;
-    }    
+    }
   }
 
 
   changeUserName() {
     const name = this.editedUserName.value?.trim();
     if (!this.activeUserId || !name) return;
-    this.userService.updateUserName(this.activeUserId, name).then(() => {
-      this.userName = name;
-      this.showEditProfil = false;
-    });
+    this.userService.updateUserName(this.activeUserId, name)
+      .then(() => {
+        this.userName = name;
+        this.showEditProfil = false;
+      })
+      .catch(err => console.error('Name-Update fehlgeschlagen:', err));
   }
 
 
@@ -93,8 +98,12 @@ export class ProfilComponent implements OnInit {
 
   async deleteMember() {
     if (!this.activeUserId) return;
-    await this.userService.deleteUser(this.activeUserId);
-    this.router.navigate(['/auth/login']);
+    try {
+      await this.userService.deleteUser(this.activeUserId);
+      this.router.navigate(['/auth/login']);
+    } catch (err) {
+      console.error('Account-Loeschung fehlgeschlagen:', err);
+    }
   }
 
 

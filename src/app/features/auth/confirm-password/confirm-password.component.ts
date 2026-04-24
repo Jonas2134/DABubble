@@ -105,6 +105,7 @@ export class ConfirmPasswordComponent implements OnInit {
   private handleResetError(error: unknown): void {
     this.visibleBtn.show();
     console.error('Error when resetting the password:', error);
+    this.authError = 'Passwort konnte nicht zurückgesetzt werden. Bitte versuche es erneut.';
   }
 
   goBackToEmailConfirm(): void {

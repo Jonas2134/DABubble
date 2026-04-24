@@ -116,7 +116,7 @@ export class UserService {
       .from('users')
       .update({ status })
       .eq('id', userId);
-    if (error) console.error('updateUserStatus', error);
+    if (error) throw error;
   }
 
   async deleteUser(userId: string): Promise<void> {

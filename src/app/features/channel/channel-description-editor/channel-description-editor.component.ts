@@ -42,7 +42,6 @@ export class ChannelDescriptionEditorComponent {
     if (!newDesc || !this.channelData?.id) return;
     this.channelService.updateChannelDescription(this.channelData.id, newDesc)
       .then(() => {
-        this.channelData!.description = newDesc;
         this.descriptionUpdated.emit(newDesc);
         this.toggleDescription();
       })

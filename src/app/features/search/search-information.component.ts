@@ -88,7 +88,12 @@ export class SearchInformationComponent implements OnInit {
 
     const users = this.userService.users();
     const channels = this.channelService.channels();
-    const messages = await this.messageService.getAllMessages();
+    let messages: Message[];
+    try {
+      messages = await this.messageService.getAllMessages();
+    } catch {
+      messages = [];
+    }
 
     this.users = this.filterUsers(users, searchText);
     this.channelsWithNames = this.filterChannels(channels, users, searchText);

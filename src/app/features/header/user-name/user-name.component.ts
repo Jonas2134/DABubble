@@ -36,7 +36,6 @@ export class UserNameComponent {
 
   isLogOutVisible = false;
   showProfil = false;
-  windowSize = window.innerWidth;
 
   @ViewChild('tabletToggleBtn') tabletToggleBtn?: ElementRef;
   @ViewChild('desktopToggleBtn') desktopToggleBtn?: ElementRef;

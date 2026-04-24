@@ -22,7 +22,6 @@ import { DeviceVisibleComponent } from '../../../ui/device-visible/device-visibl
 })
 export class SearchBarComponent {
   searchValue = '';
-  searchText = '';
   charCount = 0;
   showInformation = false;
   @ViewChild('searchWrapper', { static: false }) searchWrapper?: ElementRef;

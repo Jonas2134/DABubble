@@ -115,6 +115,7 @@ export class MessageService {
     const sub = this.supabaseService.supabase
       .channel(channelName)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, refetch)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reactions' }, refetch)
       .subscribe();
 
     return () => this.supabaseService.supabase.removeChannel(sub);
@@ -135,7 +136,7 @@ export class MessageService {
       .from('messages')
       .select('*, reactions(*)')
       .order('created_at');
-    if (error) { console.error('getAllMessages', error); return []; }
+    if (error) throw error;
     return (data ?? []).map(r => this.mapMessage(r as MessageRow));
   }
 
