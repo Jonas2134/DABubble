@@ -10,7 +10,7 @@ import {
   inject,
   signal,
   computed,
-  DestroyRef, AfterViewInit,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '../../shared/services/message.service';
@@ -47,7 +47,7 @@ import { DateStringPipe } from '../../shared/pipes/date-string.pipe';
   templateUrl: './message-area.component.html',
   styleUrls: ['./message-area.component.scss'],
 })
-export class MessageAreaComponent implements OnChanges, AfterViewInit {
+export class MessageAreaComponent implements OnChanges {
   private userService = inject(UserService);
   private channelService = inject(ChannelService);
   private messageService = inject(MessageService);
@@ -119,14 +119,6 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
     this.destroyRef.onDestroy(() => this.cleanupMessages?.());
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.isLoading = false;
-      this.scrollToBottom();
-      this.composerRef?.focus();
-    }, 500);
-  }
-
   ngOnChanges(ch: SimpleChanges): void {
     if (ch['chatType'] || ch['chatId'] || ch['activeUserId']) {
       this._chatType.set(this.chatType);
@@ -134,13 +126,12 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
       this.isChannelMemberOpen = false;
       this.prepareForReload();
       this.loadMessages();
-      setTimeout(() => this.composerRef?.focus(), 500);
     }
   }
 
   private prepareForReload() {
     this.isLoading = true;
-    setTimeout(() => (this.isLoading = false), 500);
+    this.messages.set([]);
   }
 
   private loadMessages() {
@@ -160,6 +151,7 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
   private resetMessages() {
     this.messages.set([]);
     this.threadReplyCount = 0;
+    this.isLoading = false;
   }
 
   private handleIncomingMessages(msgs: Message[]) {
@@ -167,6 +159,7 @@ export class MessageAreaComponent implements OnChanges, AfterViewInit {
     const initial = current.length === 0;
     const more = msgs.length > current.length;
     this.messages.set(msgs);
+    this.isLoading = false;
 
     if (this.chatType === 'thread') {
       this.threadReplyCount = Math.max(0, msgs.length - 1);
