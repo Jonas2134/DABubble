@@ -55,6 +55,6 @@ export class ChannelNameEditorComponent {
         this.nameUpdated.emit(newName);
         this.toggleEdit();
       })
-      .catch(err => this.logger.error('Channel-Name Update fehlgeschlagen:', err));
+      .catch(err => this.logger.error('Channel name update failed:', err));
   }
 }

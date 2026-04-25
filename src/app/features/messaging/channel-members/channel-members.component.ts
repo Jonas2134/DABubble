@@ -8,7 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { User } from '../../../shared/interfaces/user.interface';
-import { ProfilComponent } from '../../../ui/profil/profil.component';
+import { ProfileComponent } from '../../../ui/profile/profile.component';
 import { AddNewMembersComponent } from '../../../ui/add-new-members/add-new-members.component';
 import { MemberListComponent } from '../../../ui/member-list/member-list.component';
 import { ButtonComponent } from '../../../ui/button/button.component';
@@ -17,7 +17,7 @@ import { ButtonComponent } from '../../../ui/button/button.component';
   selector: 'app-channel-members',
   imports: [
     CommonModule,
-    ProfilComponent,
+    ProfileComponent,
     AddNewMembersComponent,
     MemberListComponent,
     ButtonComponent,
@@ -31,9 +31,9 @@ export class ChannelMembersComponent{
   @Input() activeUserId: string | null = null;
   @Input() channelId = '';
   @Input() channelName = '';
-  activeChannelMemberProfil: User | null = null;
+  activeChannelMemberProfile: User | null = null;
   @Input() newChannelMembers = false;
-  isChannelMemberProfilOpen = false;
+  isChannelMemberProfileOpen = false;
   @Output() newChannelMembersChange = new EventEmitter<boolean>();
   @Output() closed = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{chatType: 'private'; chatId: string}>();
@@ -60,10 +60,10 @@ export class ChannelMembersComponent{
   }
 
 
-  toggleMemberProfil(member?: User) {   
-    const isOpen = !this.isChannelMemberProfilOpen;
-    this.isChannelMemberProfilOpen = isOpen;
-    this.activeChannelMemberProfil = member || null;
+  toggleMemberProfile(member?: User) {   
+    const isOpen = !this.isChannelMemberProfileOpen;
+    this.isChannelMemberProfileOpen = isOpen;
+    this.activeChannelMemberProfile = member || null;
   }
 
 

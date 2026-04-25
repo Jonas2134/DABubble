@@ -24,7 +24,7 @@ import { Channel } from '../../shared/interfaces/channel.interface';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { MessageComponent } from './message/message.component';
 import { ChannelLeaveComponent } from '../channel/channel-leave.component';
-import { ProfilComponent } from '../../ui/profil/profil.component';
+import { ProfileComponent } from '../../ui/profile/profile.component';
 import { ChannelMembersComponent } from './channel-members/channel-members.component';
 import { AddNewMembersComponent } from '../../ui/add-new-members/add-new-members.component';
 import { MessageComposerComponent } from './message-composer/message-composer.component';
@@ -38,7 +38,7 @@ import { DateStringPipe } from '../../shared/pipes/date-string.pipe';
     ButtonComponent,
     MessageComponent,
     ChannelLeaveComponent,
-    ProfilComponent,
+    ProfileComponent,
     ChannelMembersComponent,
     AddNewMembersComponent,
     MessageComposerComponent,
@@ -102,10 +102,10 @@ export class MessageAreaComponent implements OnChanges {
 
   isLoading = true;
   isEditChannelOpen = false;
-  isProfilOpen = false;
+  isProfileOpen = false;
   isChannelMemberOpen = false;
   messages = signal<Message[]>([]);
-  userProfil: User | null = null;
+  userProfile: User | null = null;
   threadContextName = '';
   threadReplyCount = 0;
   showNewSuggestions = false;
@@ -200,13 +200,13 @@ export class MessageAreaComponent implements OnChanges {
   }
 
   toggleProfile(u: User | null) {
-    this.userProfil = u;
-    this.isProfilOpen = !this.isProfilOpen;
+    this.userProfile = u;
+    this.isProfileOpen = !this.isProfileOpen;
   }
 
-  openUserProfil(id: string) {
-    this.userProfil = this.userService.getUserById(id) ?? null;
-    this.isProfilOpen = true;
+  openUserProfile(id: string) {
+    this.userProfile = this.userService.getUserById(id) ?? null;
+    this.isProfileOpen = true;
   }
 
   toggleChannelMembers() {

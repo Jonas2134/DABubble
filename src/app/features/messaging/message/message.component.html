@@ -22,7 +22,7 @@
     [class.user-message]="message.senderId === activeUserId"
   >
     <div class="message-header">
-      <h3 tabindex="0" role="button" (click)="openProfil()" (keydown.enter)="openProfil()" (keydown.space)="$event.preventDefault(); openProfil()">{{ senderData()?.name }}</h3>
+      <h3 tabindex="0" role="button" (click)="openProfile()" (keydown.enter)="openProfile()" (keydown.space)="$event.preventDefault(); openProfile()">{{ senderData()?.name }}</h3>
       <h5>{{ message.createdAt | timeInHours }} Uhr</h5>
     </div>
 

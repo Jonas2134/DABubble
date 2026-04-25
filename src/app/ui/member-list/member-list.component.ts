@@ -15,5 +15,5 @@ export class MemberListComponent {
   @Input() activeUserId!: string | null;
 
   @Output() addMember = new EventEmitter<void>();
-  @Output() showProfil = new EventEmitter<User>();  
+  @Output() showProfile = new EventEmitter<User>();  
 }

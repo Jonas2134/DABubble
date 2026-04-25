@@ -174,7 +174,7 @@ export class AddNewMembersComponent implements OnInit, OnChanges, AfterViewInit,
       this.selectedMembers = [];
       this.closed.emit();
     } catch (err) {
-      this.logger.error('Mitglieder hinzufuegen fehlgeschlagen:', err);
+      this.logger.error('Failed to add members:', err);
     }
   }
 

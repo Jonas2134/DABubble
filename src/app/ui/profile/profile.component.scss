@@ -3,7 +3,7 @@
 @use '../../shared/scss/overlays' as overlays;
 @use '../../shared/scss/buttons' as buttons;
 
-.profil-overlay {
+.profile-overlay {
   @include overlays.overlayFixed();
 }
 
@@ -87,7 +87,7 @@ header{
     width: 100%;
 }
 
-.closeProfil {
+.closeProfile {
   @include buttons.closeBtn();
 }
 

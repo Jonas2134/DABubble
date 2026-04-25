@@ -1,14 +1,14 @@
 import { Reaction } from './reaction.interface';
 
 /**
- * Nachricht in der messages-Tabelle.
+ * Message row in the messages table.
  *
- * Nachrichtentyp wird durch das gesetzte Zielfeld bestimmt:
- * - Private Nachricht: senderId + userId
- * - Channel-Nachricht:  senderId + channelId
- * - Thread-Antwort:     senderId + threadId
+ * The message type is determined by which target field is set:
+ * - Private message: senderId + userId
+ * - Channel message:  senderId + channelId
+ * - Thread reply:     senderId + threadId
  *
- * Nicht genutzte Zielfelder sind leer ('').
+ * Unused target fields are empty ('').
  */
 export interface Message {
   id: string;

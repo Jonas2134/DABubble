@@ -11,7 +11,7 @@ import {
   computed,
 } from '@angular/core';
 import { ButtonComponent } from '../../../ui/button/button.component';
-import { ProfilComponent } from '../../../ui/profil/profil.component';
+import { ProfileComponent } from '../../../ui/profile/profile.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DeviceVisibleComponent } from '../../../ui/device-visible/device-visible.component';
 import { AuthentificationService } from '../../../shared/services/authentification.service';
@@ -21,7 +21,7 @@ import { slideUpDown } from '../../../shared/animations/animations';
 @Component({
   selector: 'app-user-name',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, ProfilComponent, DeviceVisibleComponent],
+  imports: [CommonModule, ButtonComponent, ProfileComponent, DeviceVisibleComponent],
   templateUrl: './user-name.component.html',
   styleUrl: './user-name.component.scss',
   animations: [slideUpDown],
@@ -35,14 +35,14 @@ export class UserNameComponent {
   @Input() activeUserId!: string | null;
 
   isLogOutVisible = false;
-  showProfil = false;
+  showProfile = false;
   windowSize = window.innerWidth;
 
   @ViewChild('tabletToggleBtn') tabletToggleBtn?: ElementRef;
   @ViewChild('desktopToggleBtn') desktopToggleBtn?: ElementRef;
   @ViewChild('arrowToggleBtn', { read: ElementRef }) arrowToggleBtn?: ElementRef;
   @ViewChild('logOutBox') logOutBox?: ElementRef;
-  @ViewChild('profilWrapper') profilWrapper?: ElementRef;
+  @ViewChild('profileWrapper') profileWrapper?: ElementRef;
 
   @Output() openChat = new EventEmitter<{
     chatType: 'private';
@@ -75,20 +75,20 @@ export class UserNameComponent {
     const clickedToggleTablet = this.tabletToggleBtn?.nativeElement?.contains(event.target);
     const clickedToggleDesktop = this.desktopToggleBtn?.nativeElement?.contains(event.target);
     const clickedArrow = this.arrowToggleBtn?.nativeElement?.contains(event.target);
-    const clickedInsideProfil = this.profilWrapper?.nativeElement?.contains(event.target);
+    const clickedInsideProfile = this.profileWrapper?.nativeElement?.contains(event.target);
     const clickedOutside =
       !clickedInsideLogOut &&
       !clickedToggleTablet &&
       !clickedToggleDesktop &&
       !clickedArrow &&
-      !clickedInsideProfil;
+      !clickedInsideProfile;
     if (this.isLogOutVisible && clickedOutside) {
       this.isLogOutVisible = false;
     }
   }
 
-  openProfil() {
-    this.showProfil = true;
+  openProfile() {
+    this.showProfile = true;
   }
 
   async logOut() {

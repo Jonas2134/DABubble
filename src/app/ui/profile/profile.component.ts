@@ -15,21 +15,21 @@ import { UserService } from '../../shared/services/user.service';
 import { LoggerService } from '../../shared/services/logger.service';
 
 @Component({
-  selector: 'app-profil',
+  selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, ButtonComponent, ReactiveFormsModule],
-  templateUrl: './profil.component.html',
-  styleUrl: './profil.component.scss',
+  templateUrl: './profile.component.html',
+  styleUrl: './profile.component.scss',
 })
 
-export class ProfilComponent implements OnInit {
+export class ProfileComponent implements OnInit {
   private originalUserImage!: string;
   
   private router = inject(Router);
   private userService = inject(UserService);
   private logger = inject(LoggerService);
   isActive = true;
-  showEditProfil = false;
+  showEditProfile = false;
   showAvatarChoice = false;
   editedUserName = new FormControl('');
   items = [1, 2, 3, 4, 5, 6];
@@ -44,7 +44,7 @@ export class ProfilComponent implements OnInit {
   @Input() size: 'small' | 'big' = 'small';
   @Output() closed = new EventEmitter<void>();
   @Output() openChat = new EventEmitter<{chatType: 'private'; chatId: string}>();
-  @ViewChild('profilWrapper') profilWrapper?: ElementRef;
+  @ViewChild('profileWrapper') profileWrapper?: ElementRef;
 
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class ProfilComponent implements OnInit {
     this.originalUserImage = this.userImage;
   }
 
-  closeProfil() {
+  closeProfile() {
     this.showAvatarChoice = false;
     this.closed.emit();
   }
@@ -63,7 +63,7 @@ export class ProfilComponent implements OnInit {
       await this.userService.updateUserImage(this.activeUserId, this.userImage);
       this.originalUserImage = this.userImage;
     } catch (err) {
-      this.logger.error('Avatar-Update fehlgeschlagen:', err);
+      this.logger.error('Avatar update failed:', err);
       this.userImage = this.originalUserImage;
     } finally {
       this.showAvatarChoice = false;
@@ -77,14 +77,14 @@ export class ProfilComponent implements OnInit {
     this.userService.updateUserName(this.activeUserId, name)
       .then(() => {
         this.userName = name;
-        this.showEditProfil = false;
+        this.showEditProfile = false;
       })
-      .catch(err => this.logger.error('Name-Update fehlgeschlagen:', err));
+      .catch(err => this.logger.error('Name update failed:', err));
   }
 
 
   onMainClick(event: MouseEvent) {
-    const insideSection = this.profilWrapper?.nativeElement?.contains(
+    const insideSection = this.profileWrapper?.nativeElement?.contains(
       event.target
     );
     if (!insideSection) {
@@ -94,7 +94,7 @@ export class ProfilComponent implements OnInit {
 
 
   onEditClick() {
-    this.showEditProfil = true;
+    this.showEditProfile = true;
   }
 
 
@@ -104,7 +104,7 @@ export class ProfilComponent implements OnInit {
       await this.userService.deleteUser(this.activeUserId);
       this.router.navigate(['/auth/login']);
     } catch (err) {
-      this.logger.error('Account-Loeschung fehlgeschlagen:', err);
+      this.logger.error('Account deletion failed:', err);
     }
   }
 

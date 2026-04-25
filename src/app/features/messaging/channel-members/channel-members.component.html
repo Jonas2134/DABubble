@@ -18,24 +18,24 @@
       [channelMembers]="channelMembers"
       [activeUserId]="activeUserId"
       (addMember)="addChannelMember()"
-      (showProfil)="toggleMemberProfil($event)"
+      (showProfile)="toggleMemberProfile($event)"
     ></app-member-list>
   </section>
 </div>
 
-@if (isChannelMemberProfilOpen) {
-  <app-profil
+@if (isChannelMemberProfileOpen) {
+  <app-profile
     [activeUserId]="activeUserId ?? ''"
-    [userImage]="activeChannelMemberProfil?.userImage ?? ''"
-    [userName]="activeChannelMemberProfil?.name ?? ''"
-    [userEmail]="activeChannelMemberProfil?.email ?? ''"
-    [userStatus]="activeChannelMemberProfil?.status ?? false"
-    [userId]="activeChannelMemberProfil?.id ?? ''"
-    #profilRef
+    [userImage]="activeChannelMemberProfile?.userImage ?? ''"
+    [userName]="activeChannelMemberProfile?.name ?? ''"
+    [userEmail]="activeChannelMemberProfile?.email ?? ''"
+    [userStatus]="activeChannelMemberProfile?.status ?? false"
+    [userId]="activeChannelMemberProfile?.id ?? ''"
+    #profileRef
     size="big"
-    [showButton]="activeUserId !== activeChannelMemberProfil?.id"
-    (closed)="toggleMemberProfil()"
+    [showButton]="activeUserId !== activeChannelMemberProfile?.id"
+    (closed)="toggleMemberProfile()"
     (openChat)="openChat.emit($event)"
-  ></app-profil>
+  ></app-profile>
 }
 

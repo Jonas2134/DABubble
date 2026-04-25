@@ -20,7 +20,7 @@
           <div class="popUpXLine"></div>
       </app-device-visible>
       <div class="logOut" #logOutBox>
-        <button role="menuitem" (click)="openProfil()">
+        <button role="menuitem" (click)="openProfile()">
           <span class="material-symbols">account_circle</span>
           <span>Profil</span>
         </button>
@@ -32,20 +32,20 @@
     </div>
   </div>
 }
-<div #profilWrapper>
-  @if (showProfil) {
-    <app-profil
+<div #profileWrapper>
+  @if (showProfile) {
+    <app-profile
     [activeUserId]="activeUserId ?? ''"
     [userImage]="userImage"
     [userName]="userName"
     [userEmail]="userEmail"
     [userStatus]="userStatus()"
     [userId]="userId"
-    #profilRef
-    (closed)="showProfil = false"
+    #profileRef
+    (closed)="showProfile = false"
     (openChat)="openChat.emit($event)" 
     size="small"
     [showButton]="false"
-  ></app-profil>
+  ></app-profile>
   }
 </div>

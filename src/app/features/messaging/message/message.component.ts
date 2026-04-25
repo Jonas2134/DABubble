@@ -159,7 +159,7 @@ export class MessageComponent implements OnInit, OnChanges {
     });
   }
 
-  openProfil() {
+  openProfile() {
     if (this.message.senderId) this.profileClick.emit(this.message.senderId);
   }
 

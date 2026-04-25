@@ -34,7 +34,7 @@ export class PermanentDeleteComponent {
           .deleteMessage(this.id)
           .then(() => this.closed.emit())
           .catch((err) =>
-            this.logger.error('Fehler beim Löschen der Nachricht', err)
+            this.logger.error('Failed to delete message', err)
           );
         break;
 
@@ -43,12 +43,12 @@ export class PermanentDeleteComponent {
           .deleteChannel(this.id)
           .then(() => this.closed.emit())
           .catch((err) => {
-            this.logger.error('Fehler beim Löschen des Channels', err);
+            this.logger.error('Failed to delete channel', err);
             this.closed.emit();
           });
         break;
       default:
-        this.logger.warn('Unbekannter Lösch‑Typ:', this.target);
+        this.logger.warn('Unknown delete type:', this.target);
         this.closed.emit();
     }
   }

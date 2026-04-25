@@ -33,7 +33,7 @@ A Slack-inspired real-time messaging application built with **Angular 19** and *
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18+)
-- Optional: [Angular CLI](https://angular.dev/tools/cli) (v19) global installiert — falls nicht vorhanden, kann `npx` verwendet werden
+- Optional: [Angular CLI](https://angular.dev/tools/cli) (v19) installed globally — if not available, `npx` can be used
 
 ### Installation
 
@@ -47,7 +47,7 @@ npm install
 
 ```bash
 ng serve
-# oder ohne globale Angular CLI:
+# or without global Angular CLI:
 npx ng serve
 ```
 
@@ -57,7 +57,7 @@ Open [http://localhost:4200](http://localhost:4200) in your browser. The app rel
 
 ```bash
 ng build
-# oder ohne globale Angular CLI:
+# or without global Angular CLI:
 npx ng build
 ```
 

@@ -29,7 +29,7 @@ export class DateFormatService {
     if (msgMid === todayMid) return 'Heute';
     if (msgMid === todayMid - 86400000) return 'Gestern';
 
-    return this.formatAsGermanDate(d);
+    return this.formatAsLocalDate(d);
   }
 
   getTimeInHours(ts: Date | string | null): string | undefined {
@@ -38,7 +38,7 @@ export class DateFormatService {
     return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
 
-  private formatAsGermanDate(d: Date): string {
+  private formatAsLocalDate(d: Date): string {
     return (
       `${String(d.getDate()).padStart(2, '0')}.` +
       `${String(d.getMonth() + 1).padStart(2, '0')}.` +

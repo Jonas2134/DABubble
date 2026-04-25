@@ -87,7 +87,7 @@
       [message]="messages()[0]"
       [activeUserId]="activeUserId"
       [chatType]="chatType"
-      (profileClick)="openUserProfil($event)"
+      (profileClick)="openUserProfile($event)"
     ></app-message>
 
     <div class="thread-separator">
@@ -110,7 +110,7 @@
       [message]="reply"
       [activeUserId]="activeUserId"
       [chatType]="chatType"
-      (profileClick)="openUserProfil($event)"
+      (profileClick)="openUserProfile($event)"
       (threadOpen)="handleThreadClick($event)"
     ></app-message>
     } } @else { @if (messages().length === 0) { @if(chatType ===
@@ -151,7 +151,7 @@
       [message]="message"
       [activeUserId]="activeUserId"
       [chatType]="chatType"
-      (profileClick)="openUserProfil($event)"
+      (profileClick)="openUserProfile($event)"
       (threadOpen)="handleThreadClick($event)"
     ></app-message>
     } } }
@@ -176,20 +176,20 @@
     (closed)="toggleEdit()"
     (openChat)="openChat.emit($event)"
   ></app-channel-leave>
-  } @if (isProfilOpen) {
-  <app-profil
+  } @if (isProfileOpen) {
+  <app-profile
     [activeUserId]="activeUserId ?? ''"
-    [userImage]="userProfil?.userImage ?? ''"
-    [userName]="userProfil?.name ?? ''"
-    [userEmail]="userProfil?.email ?? ''"
-    [userStatus]="userProfil?.status ?? false"
-    [userId]="userProfil?.id ?? ''"
-    #profilRef
+    [userImage]="userProfile?.userImage ?? ''"
+    [userName]="userProfile?.name ?? ''"
+    [userEmail]="userProfile?.email ?? ''"
+    [userStatus]="userProfile?.status ?? false"
+    [userId]="userProfile?.id ?? ''"
+    #profileRef
     size="big"
-    [showButton]="activeUserId !== userProfil?.id"
+    [showButton]="activeUserId !== userProfile?.id"
     (closed)="toggleProfile(null)"
     (openChat)="openChat.emit($event)"
-  ></app-profil>
+  ></app-profile>
   } @if (isChannelMemberOpen) {
   <app-channel-members
     [newChannelMembers]="newChannelMembers"

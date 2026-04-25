@@ -1,15 +1,15 @@
-<div class="profil-overlay" role="dialog" aria-modal="true" [attr.aria-label]="showEditProfil ? 'Profil bearbeiten' : 'Profil'" (click)="onMainClick($event)" (keydown.escape)="closeProfil()">
-    <section #profilWrapper [ngClass]="size">
+<div class="profile-overlay" role="dialog" aria-modal="true" [attr.aria-label]="showEditProfile ? 'Profil bearbeiten' : 'Profil'" (click)="onMainClick($event)" (keydown.escape)="closeProfile()">
+    <section #profileWrapper [ngClass]="size">
         <header>
-            @if (!showEditProfil) {
+            @if (!showEditProfile) {
                 <h1>Profil</h1>
             }
             @else {
                 <h1>Dein Profil bearbeiten</h1>
             }
-            <app-button variant="icon" color="white" icon="close" ariaLabel="Profil schließen" (clicked)="closeProfil()"></app-button>
+            <app-button variant="icon" color="white" icon="close" ariaLabel="Profil schließen" (clicked)="closeProfile()"></app-button>
         </header>
-        @if (!showEditProfil) {
+        @if (!showEditProfile) {
             <img [src]="userImage" [alt]="userName + ' Profilbild'">
         }
         @else {
@@ -28,7 +28,7 @@
                 }
             </div>
         }
-        @if (!showEditProfil) {
+        @if (!showEditProfile) {
             <div class="nameActive">
                 <div class="nameEdit">
                     <span>{{ userName }}</span>
@@ -54,7 +54,7 @@
             </div>
         }
         @else {
-            @if (showEditProfil) {
+            @if (showEditProfile) {
                 <div class="editInput">
                     <div class="editAccountText">
                         <img src="assets/icons/account_circle.svg" alt="" aria-hidden="true">
@@ -65,7 +65,7 @@
                 </div>
             }
         }
-        @if (!showEditProfil) {
+        @if (!showEditProfile) {
             <div class="mailAdress">
                 <div>
                     <img src="assets/icons/mail.svg" alt="" aria-hidden="true">
@@ -83,7 +83,7 @@
             </div>
         }
         @else {
-            @if (!showEditProfil) {
+            @if (!showEditProfile) {
                 <div class="messageArea">
                     <button (click)="deleteMember()" class="messageButton messageButtonBackgroundPink">
                         <div class="material-symbols closeIcon">delete</div>
@@ -92,10 +92,10 @@
                 </div>
             }
         }
-        @if (showEditProfil) {
+        @if (showEditProfile) {
             <div class="editSaveButtons">
-                <app-button color="white" (clicked)="closeProfil()">Abbrechen</app-button>
-                <app-button color="blue" (clicked)="changeUserName(); closeProfil(); saveAvatarChange()">Speichern</app-button>
+                <app-button color="white" (clicked)="closeProfile()">Abbrechen</app-button>
+                <app-button color="blue" (clicked)="changeUserName(); closeProfile(); saveAvatarChange()">Speichern</app-button>
             </div>
         }
     </section>
