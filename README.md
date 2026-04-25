@@ -1,59 +1,114 @@
-# DaBubble
+# DA Bubble
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+A Slack-inspired real-time messaging application built with **Angular 19** and **Supabase**. Supports channels, direct messages, threaded conversations, emoji reactions, and user profiles.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Real-time Messaging** — Send and receive messages instantly in channels and direct conversations
+- **Channels** — Create, edit, and manage channels with member lists
+- **Threads** — Reply to messages in threaded conversations
+- **Direct Messages** — Private one-on-one messaging between users
+- **Emoji Reactions** — React to messages with emojis
+- **Authentication** — Email/password, Google login, and anonymous guest access
+- **User Profiles** — Manage profile picture, name, and online/offline status
+- **Search** — Global search across channels, messages, and users
+- **Responsive Design** — Optimized for desktop, tablet, and mobile devices
+- **German UI** — All user-facing text is in German
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Framework | Angular 19 |
+| Language | TypeScript 5.7 |
+| Backend | Supabase (Auth + Database + Realtime) |
+| Styling | SCSS (component-scoped + global mixins) |
+| Icons | Material Symbols Rounded |
+| Fonts | Figtree, Nunito |
+| Emoji Picker | @ctrl/ngx-emoji-mart |
+| Testing | Karma + Jasmine |
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18+)
+- Optional: [Angular CLI](https://angular.dev/tools/cli) (v19) global installiert — falls nicht vorhanden, kann `npx` verwendet werden
+
+### Installation
+
+```bash
+git clone https://github.com/Jonas2134/DABubble
+cd da-bubble
+npm install
+```
+
+### Development Server
 
 ```bash
 ng serve
+# oder ohne globale Angular CLI:
+npx ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open [http://localhost:4200](http://localhost:4200) in your browser. The app reloads automatically on file changes.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Build
 
 ```bash
 ng build
+# oder ohne globale Angular CLI:
+npx ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Production artifacts are output to `dist/da-bubble/`.
 
-## Running unit tests
+## Project Structure
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+```
+src/app/
+├── pages/                  # Routed top-level views
+│   ├── auth/               #   Authentication flow shell
+│   └── home/               #   Main messaging interface
+├── features/               # Feature components
+│   ├── auth/               #   Login, signup, password reset, avatar selection
+│   ├── header/             #   App header with search
+│   ├── sidebar/            #   Channel list, direct messages
+│   ├── messaging/          #   Message area, composer, reactions, threads
+│   ├── channel/            #   Channel name/description editors
+│   └── search/             #   Search results
+├── ui/                     # Reusable UI components
+│   ├── button/             #   Generic button
+│   ├── custom-input/       #   Form input
+│   ├── device-visible/     #   Responsive breakpoint wrapper
+│   ├── icon/               #   Icon wrapper
+│   ├── profil/             #   User profile card
+│   └── ...                 #   More shared components
+└── shared/
+    ├── services/           # Injectable services (auth, users, channels, messages)
+    ├── interfaces/         # TypeScript data models (User, Channel, Message, Reaction)
+    ├── guards/             # Route guards (authGuard, noAuthGuard)
+    ├── pipes/              # Custom pipes
+    ├── animations/         # Shared animation triggers
+    └── scss/               # Global SCSS variables & mixins
+```
+
+## Routing
+
+| Route | Description |
+|-------|-------------|
+| `/auth/login` | Login page (default) |
+| `/auth/signup` | Registration |
+| `/auth/select-avatar` | Avatar selection |
+| `/auth/reset-password` | Password reset request |
+| `/auth/confirm-password` | Password reset confirmation |
+| `/home/:activeUserId` | Main app (authenticated) |
+
+## Scripts
 
 ```bash
-ng test
+npm start        # Start dev server
+npm run build    # Production build
+npm test         # Run unit tests
+npm run lint     # Lint code
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
